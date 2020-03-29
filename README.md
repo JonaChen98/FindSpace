@@ -1,5 +1,7 @@
 # FindSpace
 
+Deployed to Heroku: [Link](https://webdev-findspace.herokuapp.com/)
+
 ## Technologies
 - React
 - Redux
