@@ -29,12 +29,12 @@ cd ..
 
 Make sure to open up 2 terminals to run both frontend and backend servers 
 
-To start back end server
+Terminal 1: start back end server
 ```
 npm start
 ```
 
-To start front end 
+Terminal 2: start front end server
 ```
 cd client
 npm start
