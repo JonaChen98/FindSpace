@@ -2,12 +2,31 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
+const { db } = require("./models");
+const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
+const studentsAPI = require("./api/students");
+const Logout = require("./api/logout");
+
+app.use(cookieParser());
 app.use(bodyParser.json()); 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+var sess = {
+  secret: 'nanikore',
+  cookie: {}
+}
+
+app.use(session(sess));
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));
+
+app.use(studentsAPI);
+app.use(Logout);
+
+db.sync().then(() => console.log("Tables created!"));
 
 app.get("/api", function(req, res) {
   res.send("React Redux");
