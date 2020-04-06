@@ -1,10 +1,11 @@
 const db = require("./db");
 const Student = require("./student");
 const Professional = require("./professional");
-// const reviewStudent = require("./reviewStudent");
+const reviewStudentsList = require("./reviewStudentsList");
 
 module.exports = {
   db,
   Student,
   Professional,
+  reviewStudentsList
 }

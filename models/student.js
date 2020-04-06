@@ -1,7 +1,10 @@
 const db = require("./db");
 const Sequelize = require("sequelize");
+const browseProfessionalsList = require("./browseProfessionalsList");
+const pendingProfessionalsList = require("./pendingProfessionalsList");
+const matchedProfessionalsList = require("./matchedProfessionalsList");
 
-const Student = db.define("student", {
+var Student = db.define("student", {
   name: {
     type: Sequelize.STRING,
     allowNull: false
@@ -26,6 +29,10 @@ const Student = db.define("student", {
     type: Sequelize.STRING,
     allowNull: false
   }
-})
+});
+
+Student.hasOne(browseProfessionalsList);
+Student.hasOne(pendingProfessionalsList);
+Student.hasOne(matchedProfessionalsList);
 
 module.exports = Student;

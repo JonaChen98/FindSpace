@@ -1,7 +1,9 @@
 const db = require("./db");
 const Sequelize = require("sequelize");
+const reviewStudentsList = require("./reviewStudentsList");
+const acceptedStudentsList = require("./acceptedStudentsList");
 
-const Professional = db.define("professional", {
+var Professional = db.define("professional", {
   name: {
     type: Sequelize.STRING,
     allowNull: false
@@ -23,5 +25,8 @@ const Professional = db.define("professional", {
     allowNull: false
   }
 })
+
+Professional.hasOne(reviewStudentsList);
+Professional.hasOne(acceptedStudentsList);
 
 module.exports = Professional;
