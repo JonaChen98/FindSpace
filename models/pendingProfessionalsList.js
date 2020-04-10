@@ -6,6 +6,6 @@ var pendingProfessionalsList = db.define("pendingProfessionalsList", {
   foriegnKey: Sequelize.INTEGER
 });
 
-pendingProfessionalsList.hasMany(Professionals)
+// pendingProfessionalsList.hasMany(Professionals)
 
 module.exports = pendingProfessionalsList;

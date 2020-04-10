@@ -31,8 +31,8 @@ var Student = db.define("student", {
   }
 });
 
-Student.hasOne(browseProfessionalsList);
-Student.hasOne(pendingProfessionalsList);
-Student.hasOne(matchedProfessionalsList);
+// Student.hasOne(browseProfessionalsList);
+// Student.hasOne(pendingProfessionalsList);
+// Student.hasOne(matchedProfessionalsList);
 
 module.exports = Student;

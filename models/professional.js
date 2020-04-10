@@ -26,7 +26,7 @@ var Professional = db.define("professional", {
   }
 })
 
-Professional.hasOne(reviewStudentsList);
-Professional.hasOne(acceptedStudentsList);
+// Professional.hasOne(reviewStudentsList);
+// Professional.hasOne(acceptedStudentsList);
 
 module.exports = Professional;

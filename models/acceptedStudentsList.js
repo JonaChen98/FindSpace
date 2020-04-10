@@ -6,6 +6,6 @@ var acceptedStudentsList = db.define("acceptedStudentsList", {
   foreignKey: Sequelize.INTEGER
 });
 
-acceptedStudentsList.hasMany(Student)
+// acceptedStudentsList.hasMany(Student)
 
 module.exports = acceptedStudentsList;

@@ -6,6 +6,6 @@ var matchedProfessionalsList = db.define("matchedProfessionalsList", {
   foreignKey: Sequelize.INTEGER
 });
 
-matchedProfessionalsList.hasMany(Professionals);
+// matchedProfessionalsList.hasMany(Professionals);
 
 module.exports = matchedProfessionalsList;
