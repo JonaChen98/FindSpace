@@ -18,6 +18,8 @@ var sess = {
   cookie: {}
 }
 
+const port = process.env.PORT || 4000;
+
 app.use(session(sess));
 
 // Serve static files from the React app
@@ -26,7 +28,12 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(studentsAPI);
 app.use(Logout);
 
-db.sync().then(() => console.log("Tables created!"));
+db.sync().then(() => {
+  app.listen(port, function() {
+    console.log('App listening on port: ' + port);
+  });
+  console.log("Tables created!");
+});
 
 app.get("/api", function(req, res) {
   res.send("React Redux");
@@ -36,10 +43,4 @@ app.get("/api", function(req, res) {
 // match one above, send back React's index.html file.
 app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
-
-const port = process.env.PORT || 4000;
-
-app.listen(port, function() {
- console.log('App listening on port: ' + port);
 });
