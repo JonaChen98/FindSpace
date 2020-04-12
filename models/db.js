@@ -15,21 +15,24 @@ const Sequelize = require("sequelize");
 //   var db = new Sequelize("postgres://localhost/findspace");
 // }
 
+var sequelize = null;
+
 if (process.env.DATABASE_URL) {
-  var sequelize = new Sequelize(process.env.DATABASE_URL, {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialect:  'postgres',
     protocol: 'postgres',
   });
 }
 else {
-  var sequelize = new Sequelize("postgres://localhost/findspace");
+  sequelize = new Sequelize("postgres://localhost/findspace");
 }
 
-global.models = {
+global.db = {
   Sequelize: Sequelize,
   sequelize: sequelize,
   Student: sequelize.import(__dirname + "/student"),
-  Professional: sequelize.import(__dirname + "/professional")
+  Professional: sequelize.import(__dirname + "/professional"),
+  ReviewStudentsList: sequelize.import(__dirname + "/reviewStudentsList")
   // add your other models here
 };
 
