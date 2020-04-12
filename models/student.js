@@ -1,6 +1,5 @@
 const db = require("./db");
 const Sequelize = require("sequelize");
-const browseProfessionalsList = require("./browseProfessionalsList");
 const pendingProfessionalsList = require("./pendingProfessionalsList");
 const matchedProfessionalsList = require("./matchedProfessionalsList");
 
