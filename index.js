@@ -2,7 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const db = require("./models/db");
+const { db } = require("./models");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(studentsAPI);
 app.use(Logout);
 
-db.sync().then(() => {
+db.sequelize.sync().then(() => {
   app.listen(port, function() {
     console.log('App listening on port: ' + port);
   });
