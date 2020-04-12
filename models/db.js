@@ -10,13 +10,17 @@ const Sequelize = require("sequelize");
 //   },
 // );
 
-var sequelize;
-
 if (process.env.DATABASE_URL) {
-  sequelize = new Sequelize(process.env.DATABASE_URL, {
+  var db = new Sequelize(process.env.DATABASE_URL, {
     dialect:  'postgres',
     protocol: 'postgres',
+    dialectOptions: {
+      ssl: true
+    }
   })
+}
+else {
+  var db = new Sequelize("postgres://localhost/findspace");
 }
 
 module.exports = db;
