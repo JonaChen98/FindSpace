@@ -1,28 +1,26 @@
-const db = require("./db");
-const Student = require("./student");
-const Professional = require("./professional");
-const reviewStudentsList = require("./reviewStudentsList");
+const Sequelize = require("sequelize");
 
-// if (process.env.DATABASE_URL) {
-//   sequelize = new Sequelize(process.env.DATABASE_URL, {
-//     dialect:  'postgres',
-//     protocol: 'postgres',
-//   });
-// }
-// else {
-//   const db = new Sequelize("postgres://localhost/findspace");
-// }
+var sequelize = null;
 
-// global.models = {
-//   Sequelize: Sequelize,
-//   sequelize: sequelize,
-//   User: sequelize.import(__dirname + "/user"),
-//   // add your other models here
-// };
-
-module.exports = {
-  db,
-  Student,
-  Professional,
-  reviewStudentsList
+if (process.env.DATABASE_URL) {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
+    dialect:  'postgres',
+    protocol: 'postgres',
+  });
 }
+else {
+  sequelize = new Sequelize("postgres://localhost/findspace");
+}
+
+global.db = {
+  Sequelize: Sequelize,
+  sequelize: sequelize,
+  Student: sequelize.import(__dirname + "/student"),
+  Professional: sequelize.import(__dirname + "/professional"),
+  ReviewStudentsList: sequelize.import(__dirname + "/reviewStudentsList"),
+  AcceptedStudentsList: sequelize.import(__dirname + "/acceptedStudentsList"),
+  MatchedProfessionalList: sequelize.import(__dirname + "/matchedProfessionalsList"),
+  PendingProfessionalsList: sequelize.import(__dirname + "/pendingProfessionalsList"),
+};
+
+module.exports = global.db;

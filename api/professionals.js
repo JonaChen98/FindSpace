@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Professional } = require("../models");
+const Professional = require("../models").Professional;
 
 router.get("/api/professionals", async(req, res, next) => {
   let professional; 
@@ -31,6 +31,7 @@ router.post("/api/register-professional", (req, res) => {
     else {
       Professional.create({ ...req.body })
         .then(professional => {
+          console.log("Created professional in DB");
           req.session.name = req.body.name;
           res.status(200).json(professional);
         })

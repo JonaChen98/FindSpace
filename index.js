@@ -2,11 +2,12 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const bodyParser = require('body-parser');
-const { db } = require("./models");
+const db = require("./models");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
 const studentsAPI = require("./api/students");
+const professionalsAPI = require("./api/professionals");
 const Logout = require("./api/logout");
 
 app.use(cookieParser());
@@ -26,6 +27,7 @@ app.use(session(sess));
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.use(studentsAPI);
+app.use(professionalsAPI);
 app.use(Logout);
 
 db.sequelize.sync().then(() => {

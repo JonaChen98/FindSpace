@@ -1,19 +1,5 @@
-// const db = require("./db");
-// const Sequelize = require("sequelize");
-// const Student = require("./student");
-
-// var reviewStudentsList = db.sequelize.define("reviewStudentsList", {
-//   foreignKey: Sequelize.INTEGER
-// });
-
-// // reviewStudentsList.hasMany(Student);
-
-// module.exports = reviewStudentsList;
-
-
-
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define("reviewStudentsList", {
+  return sequelize.define("ReviewStudentsList", {
     foreignKey: DataTypes.INTEGER
   })
 }
