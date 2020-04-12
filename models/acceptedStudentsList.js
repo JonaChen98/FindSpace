@@ -2,7 +2,7 @@ const db = require("./db");
 const Sequelize = require("sequelize");
 const Student = require("./student");
 
-var acceptedStudentsList = db.define("acceptedStudentsList", {
+var acceptedStudentsList = db.sequelize.define("acceptedStudentsList", {
   foreignKey: Sequelize.INTEGER
 });
 

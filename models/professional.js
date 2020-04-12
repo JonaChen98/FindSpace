@@ -3,7 +3,7 @@ const Sequelize = require("sequelize");
 const reviewStudentsList = require("./reviewStudentsList");
 const acceptedStudentsList = require("./acceptedStudentsList");
 
-var Professional = db.define("professional", {
+var Professional = db.sequelize.define("professional", {
   name: {
     type: Sequelize.STRING,
     allowNull: false

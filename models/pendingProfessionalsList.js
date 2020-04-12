@@ -2,7 +2,7 @@ const db = require("./db");
 const Sequelize = require("sequelize");
 const Professionals = require("./professional");
 
-var pendingProfessionalsList = db.define("pendingProfessionalsList", {
+var pendingProfessionalsList = db.sequelize.define("pendingProfessionalsList", {
   foriegnKey: Sequelize.INTEGER
 });
 
