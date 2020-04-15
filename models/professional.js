@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define("Professional", {
+  var professional = sequelize.define("Professional", {
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -20,5 +20,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     }
-  })
+  });
+  
+  professional.associate = function(models) {
+    models.professional.hasOne(models.AcceptedStudentsList);
+    models.professional.hasOne(models.ReviewStudentsList);
+  }
 }

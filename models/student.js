@@ -1,5 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
-  return sequelize.define("Student", {
+  var student = sequelize.define("Student", {
     name: {
       type: DataTypes.STRING,
       allowNull: false
@@ -24,5 +24,10 @@ module.exports = function(sequelize, DataTypes) {
       type: DataTypes.STRING,
       allowNull: false
     }
-  })
+  });
+  
+  student.associate = function(models) {
+    models.student.hasOne(models.PendingProfessionalsList);
+    models.student.hasOne(models.MatchedProfessionalsList);
+  }
 }
