@@ -1,6 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
   var matchedProfessionals = sequelize.define("MatchedProfessionalsList", {
-    foreignKey: DataTypes.INTEGER,
     studentPKID: DataTypes.INTEGER,
     professionalPKID: DataTypes.INTEGER
   });
@@ -10,11 +9,4 @@ module.exports = function(sequelize, DataTypes) {
   };
   
   return matchedProfessionals;
-  
-  
-  // return sequelize.define("MatchedProfessionalsList", {
-  //   foriegnKey: DataTypes.INTEGER,
-  //   studentPKID: DataTypes.INTEGER,
-  //   professionalPKID: DataTypes.INTEGER
-  // })
 }

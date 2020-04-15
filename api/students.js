@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Student = require("../models").Student;
+const { Student, PendingProfessionalsList, MatchedProfessionalList, ReviewStudentsList } = require("../models");
 
 // returns list of students
 router.get("/api/students", async(req, res) => {
@@ -63,7 +63,45 @@ router.post("/api/login-student", (req,res) => {
   });
 })
 
-// router.post("/api/accept-student")
+// situation: student picks a professional from the browsing section
+router.post("/api/select-professional", (req, res) => {
+  // add professional to the pending table 
+  PendingProfessionalsList.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+  }).then(response => {
+    res.status(200).send("Added professional to pending list");
+  });
+  
+  ReviewStudentsList.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+  }).then(response => {
+    res.status(200).send("Added student to review students list");
+  });
+  
+});
+
+
+router.post("/api/cancel-selected-professional", (req,res) => {
+  PendingProfessionalsList.destroy({
+    where: {
+      professionalPKID: req.body.professionalPKID
+    }
+  }).then(response => {
+    res.status(200).send("Removed professional from pending list");
+  })
+});
+
+router.post("/api/cancel-matched-professional", (req,res) => {
+  MatchedProfessionalList.destroy({
+    where: {
+      professionalPKID: req.body.professionalPKID
+    }
+  }).then(response => {
+    res.status(200).send("Removed professional from matched list");
+  })
+});
 
 
 module.exports = router;

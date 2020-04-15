@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const Professional = require("../models").Professional;
+const { Professional, ReviewStudentsList, AcceptedStudentsList } = require("../models");
 
 router.get("/api/professionals", async(req, res, next) => {
   let professional; 
@@ -37,7 +37,7 @@ router.post("/api/register-professional", (req, res) => {
         })
     }
   })
-})
+});
 
 router.post("/api/login-professional", (req,res) => {
   Professional.findAll({
@@ -55,9 +55,36 @@ router.post("/api/login-professional", (req,res) => {
       res.status(401).send("User does not exist!");
     }
   });
+});
+
+router.post("/api/accept-student", (req, res) => {
+  AcceptedStudentsList.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+  }).then(response => {
+    res.status(200).send("Added student to accepted students list");
+  });
+});
+
+router.post("/api/reject-student", (req, res) => {
+  ReviewStudentsList.destroy({
+    where: {
+      studentPKID: req.body.studentPKID
+    }
+  }).then(response => {
+    res.status(200).send("Removed student from review student list");
+  });
+});
+
+router.post("/api/cancel-accepted-student", (req, res) => {
+  AcceptedStudentsList.destroy({
+    where: {
+      studentPKID: req.body.studentPKID
+    }
+  }).then(response => {
+    res.status(200).send("Removed student from accepted list");
+  })
 })
 
-// router.post("/api/select-professional")
-// router.post("/api/")
 
 module.exports = router;

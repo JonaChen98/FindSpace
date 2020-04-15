@@ -1,6 +1,5 @@
 module.exports = function(sequelize, DataTypes) {
   var pendingProfessionals = sequelize.define("PendingProfessionalsList", {
-    foreignKey: DataTypes.INTEGER,
     studentPKID: DataTypes.INTEGER,
     professionalPKID: DataTypes.INTEGER
   });
@@ -10,10 +9,4 @@ module.exports = function(sequelize, DataTypes) {
   };
   
   return pendingProfessionals;
-  
-  // return sequelize.define("PendingProfessionalsList", {
-  //   foriegnKey: DataTypes.INTEGER,
-  //   studentPKID: DataTypes.INTEGER,
-  //   professionalPKID: DataTypes.INTEGER
-  // })
 }

@@ -37,8 +37,8 @@ db.sequelize.sync().then(() => {
   console.log("Tables created!");
 });
 
-app.get("/api", function(req, res) {
-  res.send("React Redux");
+app.get("/", function(req, res) {
+  console.log("Helloooo");
 });
 
 // The "catch-all" handler: for any request that doesn't

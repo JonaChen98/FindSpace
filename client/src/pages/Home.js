@@ -3,6 +3,8 @@ import '../App.css';
 import logo from '../logo.svg';
 import axios from 'axios';
 
+import Navbar from '../components/navbar';
+
 const Home = () => {
   const [response, setRes] = useState("");
   
@@ -19,6 +21,7 @@ const Home = () => {
   
   return (
     <div className="App">
+      <Navbar />
       <header className="App-header">
         <h1>{response}</h1>
         <img src={logo} className="App-logo" alt="logo" />

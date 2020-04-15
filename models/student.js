@@ -30,4 +30,6 @@ module.exports = function(sequelize, DataTypes) {
     models.student.hasOne(models.PendingProfessionalsList);
     models.student.hasOne(models.MatchedProfessionalsList);
   }
+  
+  return student;
 }

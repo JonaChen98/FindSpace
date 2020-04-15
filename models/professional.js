@@ -26,4 +26,6 @@ module.exports = function(sequelize, DataTypes) {
     models.professional.hasOne(models.AcceptedStudentsList);
     models.professional.hasOne(models.ReviewStudentsList);
   }
+  
+  return professional;
 }
