@@ -5,6 +5,7 @@ import './App.css';
 import Home from './pages/Home';
 import Login from './pages/Login';
 import Profile from './pages/Profile';
+import Dashboard from './pages/Dashboard';
 
 const App = () => {
   return(
@@ -12,6 +13,7 @@ const App = () => {
       <Route exact path="/" component={Home}/>
       <Route exact path="/login" component={Login} />
       <Route exact path="/profile" component={Profile} />
+      <Route exact path="/dashboard" component={Dashboard} />
     </Router>
   );
 }

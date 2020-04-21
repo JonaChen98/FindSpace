@@ -1,0 +1,8 @@
+.dashboard-content {
+  display: flex;
+  justify-content: center;
+}
+
+.btn-row {
+  margin: 100px 0 100px 0;
+}
