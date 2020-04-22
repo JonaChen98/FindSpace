@@ -7,8 +7,6 @@ const Login = () => {
 
   return( 
     <div className = "background">
-      <div className = "logoandheader">
-      </div>
       <h1 id = "hellomessage">Hello!</h1>
       <div>
         <form className = "loginform">
