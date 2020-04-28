@@ -37,7 +37,7 @@ db.sequelize.sync().then(() => {
   console.log("Tables created!");
 });
 
-app.get("/", function(req, res) {
+app.get("/api/hello", function(req, res) {
   console.log("Helloooo");
   res.status(200).send("/ hello");
 });
