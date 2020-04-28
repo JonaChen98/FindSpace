@@ -1,5 +1,8 @@
 const router = require('express').Router();
 const { Student, PendingProfessionalsList, MatchedProfessionalList, ReviewStudentsList } = require("../models");
+var jwt = require('jsonwebtoken');
+var bcrypt = require('bcryptjs');
+var config = require('../config');
 
 // returns list of students
 router.get("/api/students", async(req, res) => {
@@ -21,7 +24,6 @@ router.post("/api/register-student", (req, res) => {
     where: {
       "name": req.body.name,
       "age": req.body.age,
-      "password": req.body.password,
       "school_email": req.body.school_email,
       "major": req.body.major
     }
@@ -30,16 +32,33 @@ router.post("/api/register-student", (req, res) => {
       res.status(401).send("User already exists!");
     }
     else {
-      Student.create({ ...req.body })
+      var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+      
+      Student.create({ 
+        "name": req.body.name,
+        "age": req.body.age,
+        "password": hashedPassword,
+        "school_email": req.body.school_email,
+        "major": req.body.major
+       })
       .then(student => {
         console.log("Created student in DB");
+        
+        var token = jwt.sign({ id: student.dataValues.id }, config.secret, {
+          expiresIn: 86400 // expires in 24 hours
+        });
+        
         req.session.name = req.body.name;
-        // req.session.auth_token = 
-        res.status(200).json(student);
+        req.session.authtoken = token;
+
+        res.status(200).send({
+          student: student,
+          authtoken: token
+        });
       })
     }
   }).catch(err => {
-    console.log(err);
+    res.status(401).send(err);
   })
 })
 
@@ -48,14 +67,28 @@ router.post("/api/login-student", (req,res) => {
   Student.findAll({
     limit: 1,
     where: {
-      "name": req.body.name,
-      "password": req.body.password
+      "school_email": req.body.school_email,
     }
   }).then(response => {
     if(response.length > 0) {
+      var resPW = response[0].dataValues.password;
+      var resID = response[0].dataValues.id;
+      
       req.session.name = req.body.name;
-      // req.session.auth_token = 
-      res.status(200).send("Authorized Login!");
+      
+      var passwordIsValid = bcrypt.compareSync(req.body.password, resPW);
+      if(!passwordIsValid) return res.status(401).send("Password not valid");
+      
+      var token = jwt.sign({ id: resID }, config.secret, {
+        expiresIn: 86400 // expires in 24 hours
+      });
+      
+      req.session.authtoken = token;
+      
+      res.status(200).send({
+        auth: true,
+        token: token,
+      });
     }
     else {
       res.status(401).send("User does not exist!")
