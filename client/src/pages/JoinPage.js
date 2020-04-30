@@ -27,8 +27,11 @@ export default function ContainedButtons() {
   return (
   <div>
     <Navbar/>
+
+    <h1 style={{textAlign:"center"}}> Tell us who you are.</h1>
+    
     <div style={{marginTop: "40%",margin: "auto", width: "50%", padding: "10px", display: "flex"}}>
-  {/* <div style ={{ display: "flex", margin: "0px auto", position:"absolute"}}> */}
+
       <div id = "studentCard" style={{ width: "40%", float: "left", padding: "20px"}}>
         <Card>
         {/* <Card className={classes.root}> */}
@@ -102,7 +105,7 @@ export default function ContainedButtons() {
               alignItems: "center"
               }}>
             {/* TODO: Change link  */}
-            <Button variant="contained" color="primary" component={Link} to="/Profile">
+            <Button variant="contained" color="primary" component={Link} to="/ProfileSetup">
             Join as a professional
             </Button>
           </CardActions>

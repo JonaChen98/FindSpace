@@ -70,7 +70,7 @@ const Home = () => {
             <Button 
               variant="contained" 
               className="card-signup-btn"
-              component={Link} to="/signup"
+              component={Link} to="/createaccount"
             >
               Sign Up
             </Button>

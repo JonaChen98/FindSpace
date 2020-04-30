@@ -39,7 +39,7 @@ const Navbar = () => {
               </Link>
             </Typography>
             <Button color="inherit" component={Link} to="/login">Login</Button>
-            <Button color="inherit" component={Link} to="/signup">Sign Up</Button>
+            <Button color="inherit" component={Link} to="/createaccount">Sign Up</Button>
           </Toolbar>
         </AppBar>
     </div>
