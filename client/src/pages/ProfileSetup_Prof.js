@@ -1,7 +1,10 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-
+import Navbar from '../components/navbar';
+import { Link } from 'react-router-dom';
+import Button from '@material-ui/core/Button';
+import Footer from '../components/footer';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -19,27 +22,32 @@ export default function LayoutTextFields() {
 
   return (
     <div>
-        <div style={{margin: "auto", width: "50%", display: "flex", padding: "10px"}}>
-            <div id="wrap1"  style={{float: "left"}}>
-                <h4> Company Name:</h4>
-                    <TextField id="standard-basic" label="If you are an individual, please put individual" variant="outlined" />
-            </div>
-            <div id="wrap2"  style={{float: "left", paddingLeft: "10px"}}>
-                <h4> Job Title / Occupation:</h4>
-                    <TextField required id="standard-basic" label="Required" variant="outlined" />
-            </div>
-        </div>
+        <Navbar/>
+        <div>
+        
+          <h1 style={{textAlign:"center"}}> Step 1: Create your account.</h1>
+          <form className={classes.root} noValidate autoComplete="off" style={{margin: "auto", width: "50%", padding: "10px"}}>
+              <h4> Full Name: </h4>
+              <TextField id="margin-none"/>
+              <h4> Email: </h4>
+              <TextField id="margin-none"/>
+              <h4> Password: </h4>
+              <TextField id="margin-none"/>
+              <h4> Company Name: </h4>
+              <TextField id="margin-none"/>
+              <h4> Job Title / Position: </h4>
+              <TextField id="margin-none"/>
+          </form>
 
-        <div id = "prof_quest">
-            <form className={classes.root} noValidate autoComplete="off" style={{margin: "auto", width: "50%", padding: "10px"}}>
-                <h4> What kind of student are you looking to give space to?</h4>
+          <h1 style={{textAlign:"center"}}> Step 2: Tell us about yourself. </h1>
+          <form className={classes.root} noValidate autoComplete="off" style={{margin: "auto", width: "50%", padding: "10px"}}>
+              <h4> What kind of student are you looking to give space to?</h4>
                 <TextField id="outlined-basic" variant="outlined" />
-                <h4> What do you intend to use the desk space if given?</h4>
+              <h4> What do you intend to use the desk space if given?</h4>
                 <TextField id="outlined-basic" variant="outlined" />
             </form>
         </div>
-         
-        
+    <Footer/>
     </div>
   );
 }

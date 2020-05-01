@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Professional from '../assets/professional.png';
 import Student from '../assets/student.png';
 import Navbar from '../components/navbar';
+import Footer from '../components/footer';
 
 const useStyles = makeStyles({
   // root: {
@@ -34,7 +35,6 @@ export default function ContainedButtons() {
 
       <div id = "studentCard" style={{ width: "40%", float: "left", padding: "20px"}}>
         <Card>
-        {/* <Card className={classes.root}> */}
           <CardContent>
             <Typography 
               gutterBottom variant="h5" 
@@ -62,8 +62,7 @@ export default function ContainedButtons() {
               justifyContent: "center",
               alignItems: "center"
               }}>
-            {/* TODO: Change link  */}
-            <Button variant="contained" color="primary" component={Link} to="/Profile">
+            <Button variant="contained" color="primary" component={Link} to="/ProfileSetup_Student">
             Join as a student
             </Button>
           </CardActions>
@@ -105,13 +104,15 @@ export default function ContainedButtons() {
               alignItems: "center"
               }}>
             {/* TODO: Change link  */}
-            <Button variant="contained" color="primary" component={Link} to="/ProfileSetup">
+            <Button variant="contained" color="primary" component={Link} to="/ProfileSetup_Prof">
             Join as a professional
             </Button>
           </CardActions>
         </Card>
       </div>
     </div>
+    <Footer/>
   </div>
-    );
+  
+  );
 }
