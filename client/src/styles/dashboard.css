@@ -6,3 +6,9 @@
 .btn-row {
   margin: 100px 0 100px 0;
 }
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
