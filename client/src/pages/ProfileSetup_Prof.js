@@ -25,7 +25,7 @@ export default function LayoutTextFields() {
         <Navbar/>
         <div>
         
-          <h1 style={{textAlign:"center"}}> Step 1: Create your account.</h1>
+          <h1 style={{textAlign:"center"}}> Let's get you started.</h1>
           <form className={classes.root} noValidate autoComplete="off" style={{margin: "auto", width: "50%", padding: "10px"}}>
               <h4> Full Name: </h4>
               <TextField id="margin-none"/>
@@ -39,13 +39,14 @@ export default function LayoutTextFields() {
               <TextField id="margin-none"/>
           </form>
 
-          <h1 style={{textAlign:"center"}}> Step 2: Tell us about yourself. </h1>
           <form className={classes.root} noValidate autoComplete="off" style={{margin: "auto", width: "50%", padding: "10px"}}>
               <h4> What kind of student are you looking to give space to?</h4>
                 <TextField id="outlined-basic" variant="outlined" />
-              <h4> What do you intend to use the desk space if given?</h4>
-                <TextField id="outlined-basic" variant="outlined" />
-            </form>
+
+            <Button variant="contained" color="primary" component={Link} to="/join" style={{justifyContent: "center", alignItems: "center"}}>
+                Next
+            </Button>
+        </form>
         </div>
     <Footer/>
     </div>
