@@ -21,6 +21,8 @@ global.db = {
   AcceptedStudentsList: sequelize.import(__dirname + "/acceptedStudentsList"),
   MatchedProfessionalList: sequelize.import(__dirname + "/matchedProfessionalsList"),
   PendingProfessionalsList: sequelize.import(__dirname + "/pendingProfessionalsList"),
+  ProfessionalNotifications: sequelize.import(__dirname + "/professionalNotifications"),
+  StudentNotifications: sequelize.import(__dirname + "/studentNotifications"),
 };
 
 module.exports = global.db;

@@ -23,6 +23,10 @@ module.exports = function(sequelize, DataTypes) {
     major: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    browseProfessionals: {
+      type: DataTypes.ARRAY(DataTypes.INTEGER),
+      allowNull: false
     }
   });
   
