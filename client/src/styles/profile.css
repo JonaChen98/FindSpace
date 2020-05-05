@@ -1,5 +1,118 @@
+
+
 .profile-container {
-  background-color: #F9F6FF;
+  background-color: #a493dd71;
   align-self: auto auto;
+  margin-left: 60px;
+  margin-right: 60px;
 
 }
+
+.userInfo-container{
+  
+  text-align: center;
+  justify-content: center;
+  margin: 50px;
+  display: inline-flexbox;
+  
+  
+}
+
+.userInfo-container .profile-image{
+  
+  width: 100%;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: scale-down;
+
+  
+}
+
+.name{
+  background-color: #F2C1B7;
+  max-width: 200px;
+  border-radius: 20px;
+  margin: auto;
+  
+}
+
+.school{
+  background-color: #F2C1B7;
+  margin: auto;
+  max-width: 200px;
+  border-radius: 50px;
+}
+
+.major{
+  background-color: #F2C1B7;
+  margin: auto;
+  max-width: 200px;
+  border-radius: 50px;
+  
+}
+
+.phone{
+  background-color: #F2C1B7;
+  margin: auto;
+  max-width: 200px;
+  border-radius: 50px;
+  
+}
+
+.email{
+  background-color: #F2C1B7;
+  margin: auto;
+  max-width: 200px;
+  border-radius: 20px;
+  text-overflow: auto;
+}
+
+.qform{
+  max-width: 500px;
+  margin: auto auto;
+  margin-top: 10%;
+  
+}
+
+.question{
+  display: inline-block;
+  text-align: left;
+  padding:10px;
+  
+}
+
+.question-box{
+
+/*display: block;*/
+  
+  width: 100%;
+  height: 171px;
+  left: 197px;
+  top: 687px;
+  
+
+  background: #FFFFFF;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 10px;
+}
+
+h1 {
+  text-align: center;
+  width: 100%;
+  margin: auto;
+}
+
+.workspacedesc1{
+  text-align: center;
+  background-color: whitesmoke;
+  width: 50%;
+  margin: auto;
+}
+
+.question1{
+  text-align: center;
+  background-color: whitesmoke;
+  width: 50%;
+  margin: auto;
+}
+
