@@ -6,46 +6,8 @@ import { Button } from '@material-ui/core';
 import '../styles/dashboard.css';
 import axios from 'axios';
 
-const StudentFilterBtns = (fetchBrowse, fetchPending, fetchAccepted) => {
-  return(
-    <div className="btn-row">
-      <Button 
-        variant="contained" 
-        className="filter-btn" 
-        onClick={fetchBrowse}
-      >
-        Browse
-      </Button>
-      <Button 
-        variant="contained" 
-        className="filter-btn" 
-        onClick={fetchPending}
-      >
-        Pending
-      </Button>
-      <Button 
-        variant="contained" 
-        className="filter-btn" 
-        onClick={fetchAccepted}
-      >
-        Accepted
-      </Button>
-    </div>
-  );
-}
 
-const ProfessionalFilterBtns = () => {
-  return(
-    <div>
-      <Button variant="contained" className="filter-btn">Review</Button>
-      <Button variant="contained" className="filter-btn">Cancel</Button>
-    </div>
-  );
-}
-
-
-
-const DashboardPage = () => {
+const StudentDashboard = () => {
   const [response, setRes] = useState([]);
   const [currPage, setCurrPage] = useState(1);
   const [cardsPerPage] = useState(5);
@@ -54,12 +16,14 @@ const DashboardPage = () => {
   const [browse, toggleBrowse] = useState(true);
   const [pending, togglePending] = useState(false);
   const [accepted, toggleAccepted] = useState(false);
-  // filter btns - professional
-  const [review, toggleAccept] = useState(false);
   
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get('/api/professionals');
+      const res = await axios.get('/api/browse-professionals', {
+        params: {
+          studentID: 2
+        }
+      });
       setRes(res.data);
     }
     fetchData();
@@ -73,12 +37,18 @@ const DashboardPage = () => {
     console.log("fetch browse");
     if(browse === false) {
       toggleBrowse(true);
-      axios.get('/api/professionals')
+      togglePending(false);
+      toggleAccepted(false);
+      axios.get('/api/browse-professionals', {
+        params: {
+          studentID: 2
+        }
+      })
       .then(res => {
         setRes(res.data);
       })
       .catch(err => {
-        // console.log(err);
+        console.log(err);
       })
     }
   }
@@ -87,9 +57,10 @@ const DashboardPage = () => {
     console.log("fetch pending");
     if(pending === false) {
       togglePending(true);
+      toggleBrowse(false);
+      toggleAccepted(false);
       axios.get('/api/pending-professionals')
       .then(res => {
-        console.log(res.data);
         setRes(res.data);
       })
       .catch(err => {
@@ -102,6 +73,8 @@ const DashboardPage = () => {
     console.log("fetch accepted");
     if(accepted === false) {
       toggleAccepted(true);
+      toggleBrowse(false);
+      togglePending(false);
       axios.get('/api/accepted-professionals')
       .then(res => {
         setRes(res.data);
@@ -111,36 +84,6 @@ const DashboardPage = () => {
       })
     }
   }
-  
-  // // toggle browse   
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("toggle browse");
-  //     const res = await axios.get('/api/professionals');
-  //     setRes(res.data);
-  //   }
-  //   fetchData();
-  // }, [browse]);
-  
-  // // toggle pending   
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("toggle pending");
-  //     const res = await axios.get('/api/pending-professionals');
-  //     setRes(res.data);
-  //   }
-  //   fetchData();
-  // }, [pending]);
-  
-  // // toggle accepted   
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("toggle accepted");
-  //     const res = await axios.get('/api/accepted-professionals');
-  //     setRes(res.data);
-  //   }
-  //   fetchData();
-  // }, [accepted]);
   
   const paginate = (event, value) => {
     setCurrPage(value);
@@ -153,16 +96,42 @@ const DashboardPage = () => {
   return(
     <div className="dashboard-page-container">
       <Navbar />
-      {StudentFilterBtns(fetchBrowse, fetchPending, fetchAccepted)}
+      <div className="btn-row">
+        <Button 
+          variant="contained" 
+          className="filter-btn" 
+          onClick={fetchBrowse}
+        >
+          Browse
+        </Button>
+        <Button 
+          variant="contained" 
+          className="filter-btn" 
+          onClick={fetchPending}
+        >
+          Pending
+        </Button>
+        <Button 
+          variant="contained" 
+          className="filter-btn" 
+          onClick={fetchAccepted}
+        >
+          Accepted
+        </Button>
+      </div>
       <Dashboard 
         totalCards={response.length} 
         data={currCards} 
         cardsPerPage={cardsPerPage}
         paginate={paginate}
         currentPage={currPage}
+        browseBool={browse}
+        pendingBool={pending}
+        acceptedBool={accepted}
+        setRes={setRes}
       />
     </div>
   );
 }
 
-export default DashboardPage;
+export default StudentDashboard;
