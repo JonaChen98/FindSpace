@@ -30,6 +30,16 @@ app.use(studentsAPI);
 app.use(professionalsAPI);
 app.use(Logout);
 
+// drop all tables in the database 
+app.get('/api/drop-tables', (req, res) => {
+  db.sequelize.sync()
+    .then(() => {
+      console.log("Dropping all tables . . .");
+      db.sequelize.drop();
+      res.status(200).send("Dropped all tables");
+    })
+})
+
 db.sequelize.sync().then(() => {
   app.listen(port, function() {
     console.log('App listening on port: ' + port);

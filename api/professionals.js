@@ -1,8 +1,16 @@
 const router = require('express').Router();
-const { Professional, ReviewStudentsList, AcceptedStudentsList } = require("../models");
+const { 
+  Professional, 
+  Student,
+  ReviewStudentsList, 
+  AcceptedStudentsList, 
+  PendingProfessionalsList,
+  MatchedProfessionalsList
+} = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
+const { Op } = require('sequelize');
 
 router.get("/api/professionals", async(req, res, next) => {
   let professional; 
@@ -16,6 +24,81 @@ router.get("/api/professionals", async(req, res, next) => {
   
   res.status(200).json(professional);
 });
+
+router.get("/api/browse-professionals", async (req, res) => {
+  // req = { studentID: 1 }
+  let list_of_students;
+  let browse_professionals = [];
+  
+  try {
+    list_of_students = await Student.findAll({
+      where: {
+        "id": req.query.studentID
+      }
+    });
+  }
+  catch(err) {
+    res.send(err);
+  }
+  
+  let list_of_prof_ids = list_of_students[0].dataValues.browseProfessionals;
+    
+  for(const id of list_of_prof_ids) {
+    let professional = await Professional.findByPk(id);
+    browse_professionals.push(professional.dataValues);
+  }
+  
+  res.status(200).json(browse_professionals);
+    
+})
+
+router.get("/api/pending-professionals", async (req, res, next) => {
+  let pending_prof_list; 
+  let pending_professionals = [];
+  
+  try {
+    pending_prof_list = await PendingProfessionalsList.findAll();
+  }
+  catch(err) {
+    res.send(err);
+  }
+  
+  async function getPendingProfs() {
+    for (const item of pending_prof_list) {
+      let professional = await Professional.findByPk(item.dataValues.professionalPKID);
+      pending_professionals.push(professional.dataValues);
+    }
+    
+    res.status(200).json(pending_professionals);
+  }
+  
+  getPendingProfs();
+});
+
+
+router.get("/api/matched-professionals", async (req, res, next) => {
+  let matched_prof_list; 
+  let matched_professionals = [];
+  
+  try {
+    matched_prof_list = await MatchedProfessionalsList.findAll();
+  }
+  catch(err) {
+    res.send(err);
+  }
+  
+  async function getMatchedProfs() {
+    for (const item of matched_prof_list) {
+      let professional = await Professional.findByPk(item.dataValues.professionalPKID);
+      matched_professionals.push(professional.dataValues);
+    }
+    
+    res.status(200).json(matched_professionals);
+  }
+  
+  getMatchedProfs();
+});
+
 
 router.post("/api/register-professional", (req, res) => {
   Professional.findAll({
@@ -32,28 +115,46 @@ router.post("/api/register-professional", (req, res) => {
     }
     else {
       var hashedPassword = bcrypt.hashSync(req.body.password, 8);
+      let profPKID; 
       Professional.create({ 
         "name": req.body.name,
         "password": hashedPassword,
         "email": req.body.email,
         "company": req.body.company,
         "job": req.body.job
-       })
-        .then(professional => {
-          console.log("Created professional in DB");
-          
-          var token = jwt.sign({ id: professional.dataValues.id }, config.secret, {
-            expiresIn: 86400 // expires in 24 hours
+       }).then(professional => {
+        console.log("Created professional in DB");
+        profPKID = professional.dataValues.id;
+        
+        var token = jwt.sign({ id: professional.dataValues.id }, config.secret, {
+          expiresIn: 86400 // expires in 24 hours
+        });
+        
+        req.session.name = req.body.name;
+        req.session.authtoken = token;
+        
+        // add pkid to student's prof list 
+        Student.findAll()
+          .then(list_of_students => {
+            list_of_students.forEach(student => {
+              student.dataValues.browseProfessionals.push(profPKID);
+              Student.update({
+                browseProfessionals: student.dataValues.browseProfessionals
+              }, {
+                where: {
+                  id: student.dataValues.id
+                }
+              })
+            })
+          }).catch(err => {
+            res.status(401).send("Can't find students");
           });
-          
-          req.session.name = req.body.name;
-          req.session.authtoken = token;
-          
-          res.status(200).send({
-            professional: professional,
-            authtoken: token
-          });
-        })
+        
+        res.status(200).send({
+          professional: professional,
+          authtoken: token
+        });
+      })
     }
   })
 });

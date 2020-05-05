@@ -4,5 +4,14 @@
 }
 
 .btn-row {
-  margin: 100px 0 100px 0;
+  display: flex;
+  justify-content: space-evenly;
+  width: 70%;
+  margin: 100px auto 100px auto;
+}
+
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
 }

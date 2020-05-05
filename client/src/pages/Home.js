@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../styles/home.css';
 import headerImage from '../assets/interaction.svg';
-import axios from 'axios';
 import Footer from '../components/footer';
 
 import { Link } from 'react-router-dom';
@@ -10,18 +9,6 @@ import Navbar from '../components/navbar';
 import Button from '@material-ui/core/Button';
 
 const Home = () => {
-  const [response, setRes] = useState("");
-  
-  useEffect(() => {
-    axios.get('/api')
-      .then(res => {
-        console.log(res.data);
-        setRes(res.data);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-  }, []);
   
   return (
     <div className="home-container">
