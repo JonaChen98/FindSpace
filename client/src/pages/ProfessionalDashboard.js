@@ -13,12 +13,16 @@ const ProfessionalDashboard = () => {
   const [cardsPerPage] = useState(5);
   
   // filter btns - professional
-  const [review, toggleReview] = useState(false);
+  const [review, toggleReview] = useState(true);
   const [accepted, toggleAccepted] = useState(false);
   
   useEffect(() => {
     const fetchData = async () => {
-      const res = await axios.get('/api/students');
+      const res = await axios.get('/api/review-students', {
+        params: {
+          profID: 1
+        }
+      });
       setRes(res.data);
     }
     fetchData();
@@ -32,7 +36,12 @@ const ProfessionalDashboard = () => {
     console.log("fetch review");
     if(review === false) {
       toggleReview(true);
-      axios.get('/api/professionals')
+      toggleAccepted(false);
+      axios.get('/api/review-students', {
+        params: {
+          profID: 1
+        }
+      })
       .then(res => {
         setRes(res.data);
       })
@@ -46,7 +55,8 @@ const ProfessionalDashboard = () => {
     console.log("fetch accepted");
     if(accepted === false) {
       toggleAccepted(true);
-      axios.get('/api/accepted-professionals')
+      toggleReview(false);
+      axios.get('/api/accepted-students')
       .then(res => {
         setRes(res.data);
       })
@@ -69,8 +79,20 @@ const ProfessionalDashboard = () => {
     <div className="dashboard-page-container">
       <Navbar />
       <div className="btn-row">
-        <Button variant="contained" className="filter-btn">Review</Button>
-        <Button variant="contained" className="filter-btn">Cancel</Button>
+        <Button 
+          variant="contained" 
+          className="filter-btn"
+          onClick={fetchReview}
+        >
+          Review
+        </Button>
+        <Button 
+          variant="contained" 
+          className="filter-btn"
+          onClick={fetchAccepted}
+        >
+          Accepted
+        </Button>
       </div>
       <Dashboard 
         totalCards={response.length} 
@@ -78,6 +100,9 @@ const ProfessionalDashboard = () => {
         cardsPerPage={cardsPerPage}
         paginate={paginate}
         currentPage={currPage}
+        profReview={review}
+        profAccepted={accepted}
+        setRes={setRes}
       />
     </div>
   );

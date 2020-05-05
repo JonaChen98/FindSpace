@@ -28,9 +28,13 @@ router.get("/api/students", async(req, res) => {
 router.get("/api/review-students", async (req, res, next) => {
   let review_students_list; 
   let review_students = [];
-  
+
   try {
-    review_students_list = await ReviewStudentsList.findAll();
+    review_students_list = await ReviewStudentsList.findAll({
+      where: {
+        professionalPKID: req.query.profID
+      }
+    });
   }
   catch(err) {
     res.send(err);
@@ -41,10 +45,9 @@ router.get("/api/review-students", async (req, res, next) => {
       let student = await Student.findByPk(item.dataValues.studentPKID);
       review_students.push(student.dataValues);
     }
-    
     res.status(200).json(review_students);
   }
-  
+    
   getReviewStudents();
 });
 
@@ -215,6 +218,10 @@ router.post("/api/cancel-pending-professional", async (req,res) => {
   
   let prof_to_browse = await Student.update({
     browseProfessionals: list_of_prof_ids
+  }, {
+    where: {
+      id: req.body.studentPKID
+    }
   });
   
   let remove_prof = await PendingProfessionalsList.destroy({
@@ -231,14 +238,37 @@ router.post("/api/cancel-pending-professional", async (req,res) => {
   }
 });
 
-router.post("/api/cancel-matched-professional", (req,res) => {
-  MatchedProfessionalList.destroy({
+router.post("/api/cancel-matched-professional", async (req,res) => {
+  let student = await Student.findAll({
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let list_of_prof_ids = student[0].dataValues.browseProfessionals;
+  list_of_prof_ids.push(req.body.professionalPKID);
+  
+  let prof_to_browse = await Student.update({
+    browseProfessionals: list_of_prof_ids
+  }, {
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let remove_prof = await MatchedProfessionalList.destroy({
     where: {
       professionalPKID: req.body.professionalPKID
     }
-  }).then(response => {
-    res.status(200).send("Removed professional from matched list");
-  })
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err) {
+    res.status(200).send("Removed professional from matched list and put back to browsing");
+  }
+  else {
+    res.status(401).send("Failed to remove professional");
+  }
+
 });
 
 

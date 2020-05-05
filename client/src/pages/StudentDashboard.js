@@ -17,11 +17,13 @@ const StudentDashboard = () => {
   const [pending, togglePending] = useState(false);
   const [accepted, toggleAccepted] = useState(false);
   
+  const student = true; 
+  
   useEffect(() => {
     const fetchData = async () => {
       const res = await axios.get('/api/browse-professionals', {
         params: {
-          studentID: 2
+          studentID: 1
         }
       });
       setRes(res.data);
@@ -41,11 +43,16 @@ const StudentDashboard = () => {
       toggleAccepted(false);
       axios.get('/api/browse-professionals', {
         params: {
-          studentID: 2
+          studentID: 1
         }
       })
       .then(res => {
-        setRes(res.data);
+        if(res.data.constructor === Object && res.data.length === undefined) {
+          setRes([]);
+        }
+        else {
+          setRes(res.data);  
+        }
       })
       .catch(err => {
         console.log(err);
@@ -59,9 +66,18 @@ const StudentDashboard = () => {
       togglePending(true);
       toggleBrowse(false);
       toggleAccepted(false);
-      axios.get('/api/pending-professionals')
+      axios.get('/api/pending-professionals', {
+        params: {
+          studentPKID: 1
+        }
+      })
       .then(res => {
-        setRes(res.data);
+        if(res.data.constructor === Object && res.data.length === undefined) {
+          setRes([]);
+        }
+        else {
+          setRes(res.data);  
+        }
       })
       .catch(err => {
         // console.log(err);
@@ -75,9 +91,18 @@ const StudentDashboard = () => {
       toggleAccepted(true);
       toggleBrowse(false);
       togglePending(false);
-      axios.get('/api/accepted-professionals')
+      axios.get('/api/matched-professionals', {
+        params: {
+          studentPKID: 1,
+        }
+      })
       .then(res => {
-        setRes(res.data);
+        if(res.data.constructor === Object && res.data.length === undefined) {
+          setRes([]);
+        }
+        else {
+          setRes(res.data);  
+        }
       })
       .catch(err => {
         // console.log(err);
@@ -129,6 +154,7 @@ const StudentDashboard = () => {
         pendingBool={pending}
         acceptedBool={accepted}
         setRes={setRes}
+        studentBool={student}
       />
     </div>
   );
