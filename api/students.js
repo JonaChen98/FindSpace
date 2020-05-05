@@ -62,23 +62,26 @@ router.post("/api/register-student", (req, res) => {
   })
 })
 
-
+// for login
+// find a student by their school email
 router.post("/api/login-student", (req,res) => {
   Student.findAll({
     limit: 1,
     where: {
       "school_email": req.body.school_email,
     }
+    //if found create var to hold the password and ID of that studen
+    // sessions to hold student name why?
   }).then(response => {
     if(response.length > 0) {
       var resPW = response[0].dataValues.password;
       var resID = response[0].dataValues.id;
       
       req.session.name = req.body.name;
-      
+      // bcrypt compares whether the given password matches with the password or coressponding student
       var passwordIsValid = bcrypt.compareSync(req.body.password, resPW);
       if(!passwordIsValid) return res.status(401).send("Password not valid");
-      
+      // token to keep logged in for 24 hours?
       var token = jwt.sign({ id: resID }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
       });

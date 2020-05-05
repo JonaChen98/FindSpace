@@ -1,10 +1,20 @@
 import React from 'react';
 import '../styles/login.css';
-import logo from '../assets/FindspaceLogo.png'
+import {useState} from 'react';
+const router = require('express').Router();
+import logo from '../assets/FindspaceLogo.png';
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
+
+function Login () {
+  const [username, setusername] = useState("");
+  const [password, setpassword] = useState("");
 
 
-
-const Login = () => {
+  const handleLogin = (event) => {
+    event.preventDefault();
+    router.post("/api/login-student", {school_email:username, password:password})
+  }
 
   return( 
     <div className = "background">
@@ -15,13 +25,14 @@ const Login = () => {
         </div>
         <h1 className = "hellomessage">Hello!</h1>
         <form className = "loginform">
-          <input className = "logininput" type ="text" id="Email" name ="Email"/><br/>
-          <input className = "logininput" type="password" id="pass" name="pass"/> <br />
-          <input type="submit" value="Login" id="submitbutton"/>
+          {/* event.target.value for each input */}
+          <TextField className = "logininput" label = "school_email" id = "Email" onChange = {event => setusername(event.target.value)}/><br/>
+          <TextField className = "logininput" label = "password" id = "pass" onChange = {event => setpassword(event.target.value)}/> <br />
+          <Button type="submit" id="submitbutton" onClick = {handleLogin}/>
         </form>  
       </div> 
     </div>
-  )
+  );
 }
 
 export default Login;
