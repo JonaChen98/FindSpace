@@ -110,6 +110,8 @@ export default function ContainedButtons() {
           </CardActions>
         </Card>
       </div>
+      <hr>
+      </hr>
     </div>
     <Footer/>
   </div>

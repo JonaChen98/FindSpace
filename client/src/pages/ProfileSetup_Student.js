@@ -25,7 +25,7 @@ export default function ProfileSetupStudent() {
   const [major, setMajor] = useState("");
   const [age, setAge] = useState("");
 
-  const signUp = (e) =>{
+  const signUp = (e) => {
       e.preventDefault();
       axios.post('/api/register-student'), {
           "name": name, 
@@ -34,6 +34,14 @@ export default function ProfileSetupStudent() {
           "school_email": email, 
           "major": major
         }
+        .then(res => {
+          console.log(res);
+          //console.log(res.data);
+        })
+        // .catch((err) => {
+        //   console.error(err.response);
+        //   setError(!error);
+        // })
 
   }
   return (
@@ -44,7 +52,7 @@ export default function ProfileSetupStudent() {
         <h1 style={{textAlign:"center"}}> Tell us about yourself.</h1>
           <form className={classes.root} noValidate autoComplete="off" style={{margin: "auto", width: "50%", padding: "10px"}}>
               <h4> Full Name: </h4>
-              <TextField id="margin-none" onChange={event => setName(event.target.value)}/>
+              <TextField id="margin-none-standard-multiline-flexible" onChange={event => setName(event.target.value)}/>
               <h4> Age: </h4>
               <TextField id="margin-none" onChange={event => setAge(event.target.value)}/>
               <h4> School Email: </h4>
