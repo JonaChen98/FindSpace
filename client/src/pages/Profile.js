@@ -9,11 +9,12 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Button from '@material-ui/core/Button';
 
-import UserData from '../pages/usertest.json'
-import ProfData from '../pages/proftest.json'
+import UserData from '../pages/jsontest/usertest.json';
+import ProfData from '../pages/jsontest/proftest.json';
 
 const Profile = () => {
   const [response, setRes] = useState("");
+
   
   useEffect(() => {
     axios.get('/api')
@@ -25,6 +26,19 @@ const Profile = () => {
         console.log(err);
       })
   }, []);
+
+
+  useEffect(() => {
+
+    const fetchData = async () => {
+
+      const res = await axios.get('/api/students');
+      setRes(res.data);
+      const data = await response.json();
+      this.setState({ person: data.results[0] });
+    }
+    fetchData();
+  }, []); 
 
   var x = 1;
   if(x === 1){
@@ -39,9 +53,7 @@ const Profile = () => {
               <img className="profile-image" src="https://www.petlandflorida.com/wp-content/uploads/2019/09/Petland_Florida_Cavalier_King_Charles_Spaniel_puppy.jpg" alt="did not load"></img>
             </div>
             <div className="name">
-              {UserData.map((UserJson, index)=>{
-                return <p><b>{UserJson.name}</b></p>
-                })}
+              {this.state.person.name}
             </div>
             <div className="major">
               {UserData.map((UserJson, index)=>{
@@ -65,37 +77,21 @@ const Profile = () => {
             </div>
           </div>
           
-          <div className="question1">
+          <div className="question">
             {UserData.map((UserJson, index)=>{
               return <p><b>Name one strength about you:</b> 
                 <br></br>
                 {UserJson.question1}</p>
               })}
           </div>
-
-            <form className="qform">
-              <div className="question">
-              <label>
-              Input Question here/description of workspace 
-              <textarea className="question-box" type="text" name="Question" />
-              </label>
-              <Button variant="contained" color="primary" 
-              type="submit" value="submit" size="small" >
-                Submit
-              </Button>
-              </div>
-              <br></br>
-              <div className="question">
-              <label>
-              Input Question here/description of workspace 
-              <textarea className="question-box" type="text" name="Question" />
-              </label>
-              <Button variant="contained" color="primary" 
-              type="submit" value="submit" size="small" >
-                Submit
-              </Button>
-              </div>
-            </form>
+          <br></br>
+          <div className="question">
+            {UserData.map((UserJson, index)=>{
+              return <p><b>Name one strength about you:</b> 
+                <br></br>
+                {UserJson.question1}</p>
+              })}
+          </div>
           </div>
        </div>
       <Footer />
@@ -147,30 +143,6 @@ const Profile = () => {
                 })
               }
               </div>
-              <form className="qform">
-                <br></br> 
-                <div className="question">
-                <label>
-                Input Question here/description of workspace 
-                <textarea className="question-box" type="text" name="Question" />
-                </label>
-                <Button variant="contained" color="primary" 
-                type="submit" value="submit" size="small" >
-                  Submit
-                </Button>
-                </div>
-                <br></br>
-                <div className="question">
-                <label>
-                Input Question here/description of workspace 
-                <textarea className="question-box" type="text" name="Question" />
-                </label>
-                <Button variant="contained" color="primary" 
-                type="submit" value="submit" size="small" >
-                  Submit
-                </Button>
-                </div>
-              </form>
             </div>
          </div>
         <Footer />
