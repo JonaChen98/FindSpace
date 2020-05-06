@@ -8,20 +8,23 @@ import axios from 'axios';
 import {useHistory} from 'react-router-dom';
 
 
-function Login(event) {
+function Login() {
   const [school_email, setschool_email] = useState("");
   const [password, setpassword] = useState("");
-    const handleLogin = (event) => {
+  
+  const history = useHistory();
+  
+  const handleLogin = (event) => {
     event.preventDefault();
-    axios.post('/api/login-student', {school_email:school_email, password:password})
-    
+    axios.post('/api/login-student', {
+      "school_email": school_email, 
+      "password": password
+    })
     .then(res =>{
-      //  localStorage.setItem(school_email,school_email);
-      //  localStorage.setItem(password,password);
       console.log(res);
+      history.push('/student-dashboard');
     })
     .catch((err) => {
-
       console.log("this is the error message:" + err);
     })
   }
@@ -36,9 +39,9 @@ function Login(event) {
         <h1 className = "hellomessage">Hello!</h1>
         <form className = "loginform">
           {/* event.target.value for each input */}
-          <TextField className = "logininput" label = "school_email" id = "school_email" onChange = {event => setschool_email(event.target.value)} /><br/>
-          <TextField className = "logininput" label = "password" id = "password" onChange = {event => setpassword(event.target.value)} /> <br />
-          <input type = "submit" id = "submitbutton" onClick = {handleLogin}/>
+          <TextField className="logininput" label="school_email" onChange = {event => setschool_email(event.target.value)} /><br/>
+          <TextField className="logininput" label="password" onChange = {event => setpassword(event.target.value)} /> <br />
+          <input type = "submit" id = "submitbutton" onClick = {(e) => handleLogin(e)}/>
         </form>  
       </div> 
     </div>

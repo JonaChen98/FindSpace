@@ -162,7 +162,7 @@ router.post("/api/login-student", (req,res) => {
       });
     }
     else {
-      res.status(401).send("User does not exist!")
+      res.status(401).send("User does not exist!");
     }
   });
 })
