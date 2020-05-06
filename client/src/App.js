@@ -9,6 +9,8 @@ import Signup from './pages/Signup';
 import ProfileSetup from './pages/ProfileSetup';
 import StudentDashboard from './pages/StudentDashboard';
 import ProfessionalDashboard from './pages/ProfessionalDashboard';
+import ProfileSetup_Student from './pages/ProfileSetup_Student';
+import ProfileSetup_Prof from './pages/ProfileSetup_Prof';
 
 const App = () => {
   return(
@@ -20,6 +22,10 @@ const App = () => {
       <Route exact path="/student-dashboard" component={StudentDashboard} />
       <Route exact path="/professional-dashboard" component={ProfessionalDashboard} />
       <Route exact path="/profilesetup" component={ProfileSetup} />
+      <Route exact path="/dashboard" component={Dashboard} />
+      <Route exact path="/signup" component={Signup} />
+      <Route exact path="/profilesetup_student" component={ProfileSetup_Student} />
+      <Route exact path="/profilesetup_prof" component={ProfileSetup_Prof} />
     </Router>
   );
 }

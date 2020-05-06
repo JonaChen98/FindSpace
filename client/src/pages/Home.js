@@ -40,7 +40,7 @@ const Home = () => {
             <Button 
               variant="contained" 
               className="card-signup-btn"
-              component={Link} to="/signup"
+              component={Link} to="/profilesetup_student"
             >
               Sign Up
             </Button>
@@ -57,7 +57,7 @@ const Home = () => {
             <Button 
               variant="contained" 
               className="card-signup-btn"
-              component={Link} to="/signup"
+              component={Link} to="/profilesetup_prof"
             >
               Sign Up
             </Button>
