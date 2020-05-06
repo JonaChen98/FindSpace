@@ -17,17 +17,18 @@ const Dashboard = (props) => {
     setRes,
     studentBool,
     profReview,
-    profAccepted
+    profAccepted,
+    id
   } = props;
   
   const getProfBtns = (student) => {
     if(profReview) {
       return(
         <CardActions>
-          <Button onClick={() => sendProfRequest(student.id, 1, "accept")}>
+          <Button onClick={() => ProfSendRequest(student.id, id, "accept")}>
             Accept
           </Button>
-          <Button onClick={() => sendProfRequest(student.id, 1, "reject")}>
+          <Button onClick={() => ProfSendRequest(student.id, id, "reject")}>
             Reject
           </Button>
         </CardActions>
@@ -36,7 +37,7 @@ const Dashboard = (props) => {
     else {
       return(
         <CardActions>
-          <Button onClick={() => sendProfRequest(student.id, 1, "cancel")}>
+          <Button onClick={() => ProfSendRequest(student.id, id, "cancel")}>
             Cancel
           </Button>
         </CardActions>
@@ -44,7 +45,7 @@ const Dashboard = (props) => {
     }
   }
   
-  const sendProfRequest = async (studentPKID, professionalPKID, btnAction) => {
+  const ProfSendRequest = async (studentPKID, professionalPKID, btnAction) => {
     switch(btnAction) {
       case "accept":
         let accept_student = await axios.post('/api/accept-student', {
@@ -74,6 +75,8 @@ const Dashboard = (props) => {
         }
         break;
       // case "cancel":
+      //   if(pendingBool) {}  
+      
       //   let cancel_student = await axios.post('/api/cancel-accepted-student', {
       //     studentPKID: studentPKID
       //   });
@@ -92,7 +95,7 @@ const Dashboard = (props) => {
     if(browseBool) {
       return(
         <CardActions>
-          <Button onClick={() => sendStudentRequest(1, prof.id)}>
+          <Button onClick={() => StudentSendRequest(id, prof.id)}>
             Send A Request
           </Button>
         </CardActions>
@@ -101,7 +104,7 @@ const Dashboard = (props) => {
     else {
       return(
         <CardActions>
-          <Button onClick={() => sendStudentRequest(1, prof.id)}>
+          <Button onClick={() => StudentSendRequest(id, prof.id)}>
             Cancel
           </Button>
         </CardActions>
@@ -109,7 +112,7 @@ const Dashboard = (props) => {
     }
   }
   
-  const sendStudentRequest = async (studentPKID, professionalPKID) => {
+  const StudentSendRequest = async (studentPKID, professionalPKID) => {
     if(browseBool) {
       let select_prof = await axios.post('/api/select-professional', {
         studentPKID: studentPKID,
@@ -136,6 +139,20 @@ const Dashboard = (props) => {
           }
         });
         setRes(pending_profs.data);
+      }
+    }
+    else if(acceptedBool) {
+      let cancel_prof = await axios.post('/api/cancel-matched-professional', {
+        studentPKID: studentPKID,
+        professionalPKID: professionalPKID
+      });
+      if(!cancel_prof.err) {
+        let accepted_profs = await axios.post('/api/matched-professionals', {
+          params: {
+            studentPKID: studentPKID
+          }
+        });
+        setRes(accepted_profs.data);
       }
     }
   }

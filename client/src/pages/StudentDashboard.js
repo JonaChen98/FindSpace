@@ -12,6 +12,8 @@ const StudentDashboard = () => {
   const [currPage, setCurrPage] = useState(1);
   const [cardsPerPage] = useState(5);
   
+  const [id, setID] = useState(0);
+  
   // filter buttons - student
   const [browse, toggleBrowse] = useState(true);
   const [pending, togglePending] = useState(false);
@@ -23,6 +25,7 @@ const StudentDashboard = () => {
     let studentInfo = localStorage.getItem("studentInfo");
     studentInfo = JSON.parse(studentInfo);
     const { id } = studentInfo;
+    setID(id);
 
     const fetchData = async () => {
       const res = await axios.get('/api/browse-professionals', {
@@ -47,7 +50,7 @@ const StudentDashboard = () => {
       toggleAccepted(false);
       axios.get('/api/browse-professionals', {
         params: {
-          studentID: 1
+          studentID: id
         }
       })
       .then(res => {
@@ -72,7 +75,7 @@ const StudentDashboard = () => {
       toggleAccepted(false);
       axios.get('/api/pending-professionals', {
         params: {
-          studentPKID: 1
+          studentPKID: id
         }
       })
       .then(res => {
@@ -97,7 +100,7 @@ const StudentDashboard = () => {
       togglePending(false);
       axios.get('/api/matched-professionals', {
         params: {
-          studentPKID: 1,
+          studentPKID: id,
         }
       })
       .then(res => {
@@ -159,6 +162,7 @@ const StudentDashboard = () => {
         acceptedBool={accepted}
         setRes={setRes}
         studentBool={student}
+        id={id}
       />
     </div>
   );
