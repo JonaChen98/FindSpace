@@ -250,7 +250,13 @@ router.post("/api/cancel-pending-professional", async (req,res) => {
     }
   });
   
-  if(!prof_to_browse.err && !remove_prof.err) {
+  let remove_student = await ReviewStudentsList.destroy({
+    where: {
+      studentPKID: req.body.studentPKID
+    }
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err) {
     res.status(200).send("Removed professional from pending list and put back to browsing");
   }
   else {
@@ -282,8 +288,14 @@ router.post("/api/cancel-matched-professional", async (req,res) => {
     }
   });
   
-  if(!prof_to_browse.err && !remove_prof.err) {
-    res.status(200).send("Removed professional from matched list and put back to browsing");
+  let remove_student = await AcceptedStudentsList.destroy({
+    where: {
+      studentPKID: req.body.studentPKID
+    }
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err) {
+    res.status(200).send("Removed professional from matched list, removed student from accepted students list.");
   }
   else {
     res.status(401).send("Failed to remove professional");

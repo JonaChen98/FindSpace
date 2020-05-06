@@ -266,7 +266,7 @@ router.post("/api/accept-student", async (req, res) => {
     }
   });
   
-  if(!create_student.err && !matched_prof.err && !remove_student.err) {
+  if(!create_student.err && !matched_prof.err && !remove_student.err && !accepted_student.err) {
     res.status(200).send("Added student in accepted, added prof to matched list, removed student from review");
   }
   else {
@@ -275,24 +275,44 @@ router.post("/api/accept-student", async (req, res) => {
 
 });
 
-router.post("/api/reject-student", (req, res) => {
-  ReviewStudentsList.destroy({
+router.post("/api/reject-student", async (req, res) => {
+  // remove student from professional's review students list 
+  let remove_student = await ReviewStudentsList.destroy({
     where: {
       studentPKID: req.body.studentPKID
     }
-  }).then(response => {
-    res.status(200).send("Removed student from review student list");
   });
+  
+  // remove professional from student's pending professionals list 
+  let delete_pending_prof = await PendingProfessionalsList.destroy({
+    where: {
+      professionalPKID: req.body.professionalPKID
+    }
+  });
+  
+  if(!remove_student.err && !delete_pending_prof.err) {
+    res.status(200).send("Removed student from review and removed professional from studne'ts pending list");
+  }
 });
 
-router.post("/api/cancel-accepted-student", (req, res) => {
-  AcceptedStudentsList.destroy({
+router.post("/api/cancel-accepted-student", async (req, res) => {
+  // remove student from accepted list 
+  let remove_student = await AcceptedStudentsList.destroy({
     where: {
       studentPKID: req.body.studentPKID
     }
-  }).then(response => {
-    res.status(200).send("Removed student from accepted list");
-  })
+  });
+  
+  // remove professional from student's matched list 
+  let delete_matched_prof = await MatchedProfessionalsList.destroy({
+    where: {
+      professionalPKID: req.body.professionalPKID
+    }
+  });
+  
+  if(!remove_student.err && !delete_matched_prof.err) {
+    res.status(200).send("Removed student from accepted list and removed professional from student's matched list.");
+  }
 })
 
 
