@@ -28,23 +28,22 @@ function ProfileSetupStudent() {
   const [age, setAge] = useState(0);
 
   const signUp = (e) => {
-      e.preventDefault();
-      console.log(name, password, age, email, major);
-      axios.post('/api/register-student', {
-          "name": name, 
-          "password": password, 
-          "age": age, 
-          "school_email": email, 
-          "major": major
-        })
-        .then(res => {
-          console.log(res.data);
-          history.push('/student-dashboard');
-        })
-        .catch((err) => {
-          console.log("Error");
-        })
-
+    e.preventDefault();
+    
+    axios.post('/api/register-student', {
+        "name": name, 
+        "password": password, 
+        "age": age, 
+        "school_email": email, 
+        "major": major
+      })
+      .then(res => {
+        localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
+        history.push('/student-dashboard');
+      })
+      .catch((err) => {
+        console.log("Error");
+      })
   }
   return (
     <div>

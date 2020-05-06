@@ -114,9 +114,17 @@ router.post("/api/register-student", (req, res) => {
             
             req.session.name = req.body.name;
             req.session.authtoken = token;
+            
+            let student_res = {
+              id: student.dataValues.id,
+              name: student.dataValues.name,
+              school_email: student.dataValues.school_email,
+              major: student.dataValues.major,
+              age: student.dataValues.age,
+            }
     
             res.status(200).send({
-              student: student,
+              student: student_res,
               authtoken: token
             });
           })
@@ -140,10 +148,10 @@ router.post("/api/login-student", (req,res) => {
     }
     //if found create var to hold the password and ID of that studen
     // sessions to hold student name why?
-  }).then(response => {
-    if(response.length > 0) {
-      var resPW = response[0].dataValues.password;
-      var resID = response[0].dataValues.id;
+  }).then(student => {
+    if(student.length > 0) {
+      var resPW = student[0].dataValues.password;
+      var resID = student[0].dataValues.id;
       
       req.session.name = req.body.name;
       // bcrypt compares whether the given password matches with the password or coressponding student
@@ -156,9 +164,18 @@ router.post("/api/login-student", (req,res) => {
       
       req.session.authtoken = token;
       
+      let student_res = {
+        id: student[0].dataValues.id,
+        name: student[0].dataValues.name,
+        school_email: student[0].dataValues.school_email,
+        major: student[0].dataValues.major,
+        age: student[0].dataValues.age,
+      }
+      
       res.status(200).send({
         auth: true,
         token: token,
+        student: student_res
       });
     }
     else {

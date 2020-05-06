@@ -186,8 +186,16 @@ router.post("/api/register-professional", (req, res) => {
             res.status(401).send("Can't find students");
           });
         
+        let prof_res = {
+          "id": professional.dataValues.id,
+          "name": professional.dataValues.name,
+          "email": professional.dataValues.email,
+          "company": professional.dataValues.company,
+          "job": professional.dataValues.job
+        }
+      
         res.status(200).send({
-          professional: professional,
+          professional: prof_res,
           authtoken: token
         });
       })
@@ -201,11 +209,11 @@ router.post("/api/login-professional", (req,res) => {
     where: {
       "email": req.body.email,
     }
-  }).then(response => {
-    if(response.length > 0) {
+  }).then(professional => {
+    if(professional.length > 0) {
 
-      var resPW = response[0].dataValues.password;
-      var resID = response[0].dataValues.id;
+      var resPW = professional[0].dataValues.password;
+      var resID = professional[0].dataValues.id;
       
       var passwordIsValid = bcrypt.compareSync(req.body.password, resPW);
       
@@ -218,9 +226,18 @@ router.post("/api/login-professional", (req,res) => {
       req.session.name = req.body.name;
       req.session.authtoken = token;
       
+      let prof_res = {
+        "id": professional[0].dataValues.id,
+        "name": professional[0].dataValues.name,
+        "email": professional[0].dataValues.email,
+        "company": professional[0].dataValues.company,
+        "job": professional[0].dataValues.job
+      }
+      
       res.status(200).send({
         auth: true,
         token: token,
+        professional: prof_res
       });
     }
     else {

@@ -17,10 +17,14 @@ const ProfessionalDashboard = () => {
   const [accepted, toggleAccepted] = useState(false);
   
   useEffect(() => {
+    let profInfo = localStorage.getItem("profInfo");
+    profInfo = JSON.parse(profInfo);
+    const { id } = profInfo;
+    
     const fetchData = async () => {
       const res = await axios.get('/api/review-students', {
         params: {
-          profID: 1
+          profID: id
         }
       });
       setRes(res.data);

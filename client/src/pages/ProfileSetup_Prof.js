@@ -38,7 +38,7 @@ export default function LayoutTextFields() {
         "job": job
       })
       .then(res => {
-        console.log(res.data);
+        localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
         history.push('/professional-dashboard');
       })
       .catch((err) => {

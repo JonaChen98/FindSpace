@@ -17,11 +17,12 @@ function Login() {
   const handleLogin = (event) => {
     event.preventDefault();
     axios.post('/api/login-student', {
-      "school_email": school_email, 
-      "password": password
+      school_email: school_email, 
+      password: password
     })
     .then(res =>{
-      console.log(res);
+      console.log(res.data.student);
+      localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
       history.push('/student-dashboard');
     })
     .catch((err) => {

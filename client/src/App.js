@@ -4,7 +4,7 @@ import './App.css';
 
 import Home from './pages/Home';
 import Login from './pages/Login';
-import Profile from './pages/Profile';
+// import Profile from './pages/Profile';
 import Signup from './pages/Signup';
 // import ProfileSetup from './pages/ProfileSetup';
 import StudentDashboard from './pages/StudentDashboard';
@@ -17,13 +17,12 @@ const App = () => {
     <Router>
       <Route exact path="/" component={Home}/>
       <Route exact path="/login" component={Login} />
-      <Route exact path="/profile" component={Profile} />
+      {/* <Route exact path="/profile" component={Profile} /> */}
       <Route exact path="/signup" component={Signup} />
       <Route exact path="/student-dashboard" component={StudentDashboard} />
       <Route exact path="/professional-dashboard" component={ProfessionalDashboard} />
       {/* <Route exact path="/profilesetup" component={ProfileSetup} /> */}
       {/* <Route exact path="/dashboard" component={Dashboard} /> */}
-      <Route exact path="/signup" component={Signup} />
       <Route exact path="/profilesetup_student" component={ProfileSetup_Student} />
       <Route exact path="/profilesetup_prof" component={ProfileSetup_Prof} />
     </Router>

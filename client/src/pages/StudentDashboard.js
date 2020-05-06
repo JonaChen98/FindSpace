@@ -20,10 +20,14 @@ const StudentDashboard = () => {
   const student = true; 
   
   useEffect(() => {
+    let studentInfo = localStorage.getItem("studentInfo");
+    studentInfo = JSON.parse(studentInfo);
+    const { id } = studentInfo;
+
     const fetchData = async () => {
       const res = await axios.get('/api/browse-professionals', {
         params: {
-          studentID: 1
+          studentID: id
         }
       });
       setRes(res.data);
