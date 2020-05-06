@@ -10,7 +10,6 @@ const {
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
-const { Op } = require('sequelize');
 
 router.get("/api/professionals", async(req, res, next) => {
   let professional; 
@@ -24,6 +23,31 @@ router.get("/api/professionals", async(req, res, next) => {
   
   res.status(200).json(professional);
 });
+
+router.get("/api/accepted-students", async (req, res) => {
+  let list_of_students; 
+  let accepted_students = [];
+  
+  try {
+    list_of_students = await AcceptedStudentsList.findAll({
+      where: {
+        professionalPKID: req.query.profPKID
+      }
+    });
+  }
+  catch(err) {
+    res.send(err);
+  }
+  
+  if(list_of_students != null) {
+    for(const student_obj of list_of_students) {
+      let student = await Student.findByPk(student_obj.dataValues.id);
+      accepted_students.push(student.dataValues);
+    }
+  }
+  
+  res.status(200).json(accepted_students);
+})
 
 router.get("/api/browse-professionals", async (req, res) => {
   // req = { studentID: 1 }
@@ -41,11 +65,13 @@ router.get("/api/browse-professionals", async (req, res) => {
     res.send(err);
   }
   
-  let list_of_prof_ids = list_of_students[0].dataValues.browseProfessionals;
+  if(list_of_students != null) {
+    let list_of_prof_ids = list_of_students[0].dataValues.browseProfessionals;
     
-  for(const id of list_of_prof_ids) {
-    let professional = await Professional.findByPk(id);
-    browse_professionals.push(professional.dataValues);
+    for(const id of list_of_prof_ids) {
+      let professional = await Professional.findByPk(id);
+      browse_professionals.push(professional.dataValues);
+    } 
   }
   
   res.status(200).json(browse_professionals);
@@ -57,7 +83,11 @@ router.get("/api/pending-professionals", async (req, res, next) => {
   let pending_professionals = [];
   
   try {
-    pending_prof_list = await PendingProfessionalsList.findAll();
+    pending_prof_list = await PendingProfessionalsList.findAll({
+      where: {
+        studentPKID: req.query.studentPKID
+      }
+    });
   }
   catch(err) {
     res.send(err);
@@ -68,7 +98,6 @@ router.get("/api/pending-professionals", async (req, res, next) => {
       let professional = await Professional.findByPk(item.dataValues.professionalPKID);
       pending_professionals.push(professional.dataValues);
     }
-    
     res.status(200).json(pending_professionals);
   }
   
@@ -81,7 +110,11 @@ router.get("/api/matched-professionals", async (req, res, next) => {
   let matched_professionals = [];
   
   try {
-    matched_prof_list = await MatchedProfessionalsList.findAll();
+    matched_prof_list = await MatchedProfessionalsList.findAll({
+      where: {
+        studentPKID: req.query.studentPKID
+      }
+    });
   }
   catch(err) {
     res.send(err);
@@ -92,11 +125,14 @@ router.get("/api/matched-professionals", async (req, res, next) => {
       let professional = await Professional.findByPk(item.dataValues.professionalPKID);
       matched_professionals.push(professional.dataValues);
     }
-    
-    res.status(200).json(matched_professionals);
   }
   
-  getMatchedProfs();
+  if(matched_prof_list != null) {
+    getMatchedProfs();
+  }
+  
+  res.status(200).json(matched_professionals);
+  
 });
 
 
@@ -193,16 +229,33 @@ router.post("/api/login-professional", (req,res) => {
   });
 });
 
-router.post("/api/accept-student", (req, res) => {
-  var token = req.headers['x-access-token'];
-  if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+router.post("/api/accept-student", async (req, res) => {
+  // var token = req.headers['x-access-token'];
+  // if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
   
-  AcceptedStudentsList.create({
+  let accepted_student = await AcceptedStudentsList.create({
     studentPKID: req.body.studentPKID,
     professionalPKID: req.body.professionalPKID,
-  }).then(response => {
-    res.status(200).send("Added student to accepted students list");
   });
+  
+  let matched_prof = await MatchedProfessionalsList.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+  });
+  
+  let remove_student = await ReviewStudentsList.destroy({
+    where: {
+      studentPKID: req.body.studentPKID
+    }
+  });
+  
+  if(!create_student.err && !matched_prof.err && !remove_student.err) {
+    res.status(200).send("Added student in accepted, added prof to matched list, removed student from review");
+  }
+  else {
+    res.status(401).send("Failed to accept student");
+  }
+
 });
 
 router.post("/api/reject-student", (req, res) => {

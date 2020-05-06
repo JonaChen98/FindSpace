@@ -14,19 +14,102 @@ const Dashboard = (props) => {
     browseBool,
     pendingBool,
     acceptedBool,
-    setRes
+    setRes,
+    studentBool,
+    profReview,
+    profAccepted
   } = props;
   
-  const getButtonText = (browse) => {
-    if(browse) {
-      return "Send A Request";
+  const getProfBtns = (student) => {
+    if(profReview) {
+      return(
+        <CardActions>
+          <Button onClick={() => sendProfRequest(student.id, 1, "accept")}>
+            Accept
+          </Button>
+          <Button onClick={() => sendProfRequest(student.id, 1, "reject")}>
+            Reject
+          </Button>
+        </CardActions>
+      );
     }
     else {
-      return "Cancel";
+      return(
+        <CardActions>
+          <Button onClick={() => sendProfRequest(student.id, 1, "cancel")}>
+            Cancel
+          </Button>
+        </CardActions>
+      );
     }
   }
   
-  const sendRequest = async (studentPKID, professionalPKID) => {
+  const sendProfRequest = async (studentPKID, professionalPKID, btnAction) => {
+    switch(btnAction) {
+      case "accept":
+        let accept_student = await axios.post('/api/accept-student', {
+          studentPKID: studentPKID,
+          professionalPKID: professionalPKID
+        });
+        if(!accept_student.err) {
+          let review_students = await axios.get('/api/review-students', {
+            params: {
+              profID: professionalPKID
+            }
+          });
+          setRes(review_students.data);
+        }
+        break; 
+      case "reject": 
+        let reject_student = await axios.post('/api/reject-student', {
+          studentPKID: studentPKID
+        });
+        if(!reject_student.err) {
+          let review_students = await axios.get('/api/review-students', {
+            params: {
+              profID: professionalPKID
+            }
+          });
+          setRes(review_students.data);
+        }
+        break;
+      // case "cancel":
+      //   let cancel_student = await axios.post('/api/cancel-accepted-student', {
+      //     studentPKID: studentPKID
+      //   });
+      //   if(!cancel_student.err) {
+      //     let review_students = await axios.get('/api/review-students', {
+      //       params: {
+      //         profID: professionalPKID
+      //       }
+      //     });
+      //     setRes(review_students.data);
+      //   }
+    }
+  }
+  
+  const getStudentBtns = (prof) => {
+    if(browseBool) {
+      return(
+        <CardActions>
+          <Button onClick={() => sendStudentRequest(1, prof.id)}>
+            Send A Request
+          </Button>
+        </CardActions>
+      );
+    }
+    else {
+      return(
+        <CardActions>
+          <Button onClick={() => sendStudentRequest(1, prof.id)}>
+            Cancel
+          </Button>
+        </CardActions>
+      );
+    }
+  }
+  
+  const sendStudentRequest = async (studentPKID, professionalPKID) => {
     if(browseBool) {
       let select_prof = await axios.post('/api/select-professional', {
         studentPKID: studentPKID,
@@ -35,7 +118,7 @@ const Dashboard = (props) => {
       if(!select_prof.err) {
         let browse_prof = await axios.get('/api/browse-professionals', {
           params: {
-            studentID: 2
+            studentID: studentPKID
           }
         });
         setRes(browse_prof.data);
@@ -46,10 +129,14 @@ const Dashboard = (props) => {
         studentPKID: studentPKID,
         professionalPKID: professionalPKID
       });
-      // if(!cancel_prof.err) {
-      //   let pending_profs = await axios.get('/api/pending-professionals');
-        
-      // }
+      if(!cancel_prof.err) {
+        let pending_profs = await axios.get('/api/pending-professionals', {
+          params: {
+            studentPKID: studentPKID
+          }
+        });
+        setRes(pending_profs.data);
+      }
     }
   }
   
@@ -59,27 +146,25 @@ const Dashboard = (props) => {
       <div className="row">
         <div className="cards-container">
           {
-            data.map((prof) => {
+            data.map((item) => {
               return(
-                <Card key={prof.id}>
+                <Card key={item.id}>
                   <CardActionArea>
                     <CardContent>
                       <Typography>
-                        name: {prof.name},
+                        name: {item.name},
                         <br />
-                        id: {prof.id},
+                        id: {item.id},
                         <br />
-                        email: {prof.email},
+                        email: {item.email},
                         <br/>
-                        company: {prof.company}
+                        company: {item.company}
                       </Typography>
                     </CardContent>
                   </CardActionArea>
-                  <CardActions>
-                    <Button onClick={() => sendRequest(2, prof.id)}>
-                      {getButtonText(browseBool)}
-                    </Button>
-                  </CardActions>
+                  {
+                    studentBool ? getStudentBtns(item) : getProfBtns(item)
+                  }
                 </Card>
               );
             })

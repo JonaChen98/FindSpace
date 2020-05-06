@@ -28,9 +28,13 @@ router.get("/api/students", async(req, res) => {
 router.get("/api/review-students", async (req, res, next) => {
   let review_students_list; 
   let review_students = [];
-  
+
   try {
-    review_students_list = await ReviewStudentsList.findAll();
+    review_students_list = await ReviewStudentsList.findAll({
+      where: {
+        professionalPKID: req.query.profID
+      }
+    });
   }
   catch(err) {
     res.send(err);
@@ -41,10 +45,9 @@ router.get("/api/review-students", async (req, res, next) => {
       let student = await Student.findByPk(item.dataValues.studentPKID);
       review_students.push(student.dataValues);
     }
-    
     res.status(200).json(review_students);
   }
-  
+    
   getReviewStudents();
 });
 
@@ -127,23 +130,26 @@ router.post("/api/register-student", (req, res) => {
   })
 })
 
-
+// for login
+// find a student by their school email
 router.post("/api/login-student", (req,res) => {
   Student.findAll({
     limit: 1,
     where: {
       "school_email": req.body.school_email,
     }
+    //if found create var to hold the password and ID of that studen
+    // sessions to hold student name why?
   }).then(response => {
     if(response.length > 0) {
       var resPW = response[0].dataValues.password;
       var resID = response[0].dataValues.id;
       
       req.session.name = req.body.name;
-      
+      // bcrypt compares whether the given password matches with the password or coressponding student
       var passwordIsValid = bcrypt.compareSync(req.body.password, resPW);
       if(!passwordIsValid) return res.status(401).send("Password not valid");
-      
+      // token to keep logged in for 24 hours?
       var token = jwt.sign({ id: resID }, config.secret, {
         expiresIn: 86400 // expires in 24 hours
       });
@@ -215,6 +221,10 @@ router.post("/api/cancel-pending-professional", async (req,res) => {
   
   let prof_to_browse = await Student.update({
     browseProfessionals: list_of_prof_ids
+  }, {
+    where: {
+      id: req.body.studentPKID
+    }
   });
   
   let remove_prof = await PendingProfessionalsList.destroy({
@@ -231,14 +241,37 @@ router.post("/api/cancel-pending-professional", async (req,res) => {
   }
 });
 
-router.post("/api/cancel-matched-professional", (req,res) => {
-  MatchedProfessionalList.destroy({
+router.post("/api/cancel-matched-professional", async (req,res) => {
+  let student = await Student.findAll({
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let list_of_prof_ids = student[0].dataValues.browseProfessionals;
+  list_of_prof_ids.push(req.body.professionalPKID);
+  
+  let prof_to_browse = await Student.update({
+    browseProfessionals: list_of_prof_ids
+  }, {
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let remove_prof = await MatchedProfessionalList.destroy({
     where: {
       professionalPKID: req.body.professionalPKID
     }
-  }).then(response => {
-    res.status(200).send("Removed professional from matched list");
-  })
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err) {
+    res.status(200).send("Removed professional from matched list and put back to browsing");
+  }
+  else {
+    res.status(401).send("Failed to remove professional");
+  }
+
 });
 
 
