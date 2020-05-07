@@ -55,7 +55,7 @@ const Dashboard = (props) => {
         if(!accept_student.err) {
           let review_students = await axios.get('/api/review-students', {
             params: {
-              profID: professionalPKID
+              profID: professionalPKID,
             }
           });
           setRes(review_students.data);
@@ -63,7 +63,8 @@ const Dashboard = (props) => {
         break; 
       case "reject": 
         let reject_student = await axios.post('/api/reject-student', {
-          studentPKID: studentPKID
+          studentPKID: studentPKID,
+          professionalPKID: professionalPKID
         });
         if(!reject_student.err) {
           let review_students = await axios.get('/api/review-students', {
@@ -74,20 +75,19 @@ const Dashboard = (props) => {
           setRes(review_students.data);
         }
         break;
-      // case "cancel":
-      //   if(pendingBool) {}  
-      
-      //   let cancel_student = await axios.post('/api/cancel-accepted-student', {
-      //     studentPKID: studentPKID
-      //   });
-      //   if(!cancel_student.err) {
-      //     let review_students = await axios.get('/api/review-students', {
-      //       params: {
-      //         profID: professionalPKID
-      //       }
-      //     });
-      //     setRes(review_students.data);
-      //   }
+      case "cancel":
+        let cancel_student = await axios.post('/api/cancel-accepted-student', {
+          studentPKID: studentPKID,
+          professionalPKID: professionalPKID
+        });
+        if(!cancel_student.err) {
+          let accepted_students = await axios.get('/api/accepted-students', {
+            params: {
+              profID: professionalPKID
+            }
+          });
+          setRes(accepted_students.data);
+        }
     }
   }
   
