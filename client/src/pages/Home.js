@@ -51,7 +51,7 @@ const Home = () => {
             <Typography variant="h4"> 
               1. Create your account.
               
-              <Typography variant="h5" style={{paddingBottom: "10px", paddingTop: "10px"}}> 
+              <Typography variant="h5">
                 Sign up as a student to browse spaces freely offered or
                 sign up as a professional to join the list of providers.
               </Typography>
@@ -70,7 +70,7 @@ const Home = () => {
             <Typography variant="h4"> 
               2. Set up your profile.
 
-              <Typography variant="h5" style={{paddingBottom: "5px", paddingTop: "10px"}}> 
+              <Typography variant="h5">
                 As a student, you'll answer a few questions so a professional reviewing
                 your profile can get to know who you are.
 
@@ -92,7 +92,7 @@ const Home = () => {
             <Typography variant="h4"> 
               3. Browse and request.
               
-              <Typography variant="h5" style={{paddingBottom: "10px", paddingTop: "10px"}}> 
+              <Typography variant="h5">
                 Students have the chance to browse spaces offered by professionals as well as 
                 requesting a desired space.
               </Typography>
@@ -111,7 +111,7 @@ const Home = () => {
             <Typography variant="h4">
               4. Review and accept.
               
-              <Typography variant="h5" style={{paddingBottom: "5px", paddingTop: "10px"}}> 
+              <Typography variant="h5">
                 Professionals will review requests made for their and accept if it's a match.
               </Typography>
             
@@ -130,7 +130,7 @@ const Home = () => {
             <Typography variant="h4">
               5. Connect!
               
-              <Typography variant="h5" style={{paddingBottom: "5px", paddingTop: "10px"}}> 
+              <Typography variant="h5">
                 Once a match has been made, connect with each other to confirm the time and date
                 for arrangement and any additional logistics.
               </Typography>

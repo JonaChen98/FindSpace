@@ -32,7 +32,7 @@
 .getting-started-content {
   justify-content: space-evenly;
   mix-blend-mode: screen;
-  padding: 50px 100px 120px 120px;
+  padding: 0px 100px 100px 100px;
   background-color: #F5F5F5;
 }
 
@@ -40,13 +40,14 @@
 .container {
   padding: 20px;
   display: flex;
+  /* border: 2px solid red; */
 }
 .text {
   width: 70%;
   float: left;
-  padding: 20px;
-  padding-right: 80px;
   margin-right: 20px;
+  justify-content: left;
+  text-align: left;
   /* border: 2px solid green; */
 }
 .img-container{
@@ -54,11 +55,11 @@
   justify-content: center;
   text-align: center;
   display: block;
-  padding: 20px;
+  /* padding: 20px; */
   margin-left: 20px;
 }
 .step1-img {
-  max-width:80%;
+  max-width:70%;
   height:auto;
 } 
 
