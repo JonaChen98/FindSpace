@@ -18,9 +18,13 @@ const ProfessionalDashboard = () => {
   const [review, toggleReview] = useState(true);
   const [accepted, toggleAccepted] = useState(false);
   
+  const [info, setInfo] = useState({})
+  const [notifs, setNotifs] = useState([])
+  
   useEffect(() => {
     let profInfo = localStorage.getItem("profInfo");
     profInfo = JSON.parse(profInfo);
+    setInfo(profInfo);
     const { id } = profInfo;
     setID(id);
     
@@ -37,6 +41,16 @@ const ProfessionalDashboard = () => {
   
   useEffect(() => {
     console.log("refresh");
+    // fetch notifications 
+    axios.get("/api/get-prof-notifications", {
+      params: {
+        id: id
+      }
+    }).then(res => {
+      setNotifs(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
   }, [response]);
   
   const fetchReview = () => {
@@ -84,7 +98,7 @@ const ProfessionalDashboard = () => {
   
   return(
     <div className="dashboard-page-container">
-      <Navbar />
+      <Navbar numOfNotifs={notifs.length}/>
       <div className="btn-row">
         <Button 
           variant="contained" 
@@ -111,6 +125,7 @@ const ProfessionalDashboard = () => {
         profAccepted={accepted}
         setRes={setRes}
         id={id}
+        info={info}
       />
     </div>
   );

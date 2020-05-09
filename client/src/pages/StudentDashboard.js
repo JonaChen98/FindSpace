@@ -19,11 +19,15 @@ const StudentDashboard = () => {
   const [pending, togglePending] = useState(false);
   const [accepted, toggleAccepted] = useState(false);
   
+  const [info, setInfo] = useState({})
+  const [notifs, setNotifs] = useState([])
+  
   const student = true; 
   
   useEffect(() => {
     let studentInfo = localStorage.getItem("studentInfo");
     studentInfo = JSON.parse(studentInfo);
+    setInfo(studentInfo);
     const { id } = studentInfo;
     setID(id);
 
@@ -40,6 +44,16 @@ const StudentDashboard = () => {
   
   useEffect(() => {
     console.log("refresh");
+    // fetch notifications 
+    axios.get("/api/get-student-notifications", {
+      params: {
+        id: id
+      }
+    }).then(res => {
+      setNotifs(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
   }, [response]);
   
   const fetchBrowse = () => {
@@ -127,7 +141,7 @@ const StudentDashboard = () => {
   
   return(
     <div className="dashboard-page-container">
-      <Navbar />
+      <Navbar numOfNotifs={notifs.length}/>
       <div className="btn-row">
         <Button 
           variant="contained" 
@@ -163,6 +177,7 @@ const StudentDashboard = () => {
         setRes={setRes}
         studentBool={student}
         id={id}
+        info={info}
       />
     </div>
   );

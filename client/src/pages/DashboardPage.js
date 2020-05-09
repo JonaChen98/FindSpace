@@ -89,7 +89,6 @@ const DashboardPage = () => {
       togglePending(true);
       axios.get('/api/pending-professionals')
       .then(res => {
-        console.log(res.data);
         setRes(res.data);
       })
       .catch(err => {
@@ -111,36 +110,6 @@ const DashboardPage = () => {
       })
     }
   }
-  
-  // // toggle browse   
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("toggle browse");
-  //     const res = await axios.get('/api/professionals');
-  //     setRes(res.data);
-  //   }
-  //   fetchData();
-  // }, [browse]);
-  
-  // // toggle pending   
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("toggle pending");
-  //     const res = await axios.get('/api/pending-professionals');
-  //     setRes(res.data);
-  //   }
-  //   fetchData();
-  // }, [pending]);
-  
-  // // toggle accepted   
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     console.log("toggle accepted");
-  //     const res = await axios.get('/api/accepted-professionals');
-  //     setRes(res.data);
-  //   }
-  //   fetchData();
-  // }, [accepted]);
   
   const paginate = (event, value) => {
     setCurrPage(value);

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
 
 import Pagination from '@material-ui/lab/Pagination';
 import { Button, CardActionArea, CardActions, Typography, Card, CardContent } from '@material-ui/core';
@@ -18,8 +19,12 @@ const Dashboard = (props) => {
     studentBool,
     profReview,
     profAccepted,
-    id
+    id,
+    info
   } = props;
+  
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  
   
   const getProfBtns = (student) => {
     if(profReview) {
@@ -50,7 +55,8 @@ const Dashboard = (props) => {
       case "accept":
         let accept_student = await axios.post('/api/accept-student', {
           studentPKID: studentPKID,
-          professionalPKID: professionalPKID
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!accept_student.err) {
           let review_students = await axios.get('/api/review-students', {
@@ -58,13 +64,15 @@ const Dashboard = (props) => {
               profID: professionalPKID,
             }
           });
+          enqueueSnackbar("Accepted Student!");
           setRes(review_students.data);
         }
         break; 
       case "reject": 
         let reject_student = await axios.post('/api/reject-student', {
           studentPKID: studentPKID,
-          professionalPKID: professionalPKID
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!reject_student.err) {
           let review_students = await axios.get('/api/review-students', {
@@ -72,13 +80,15 @@ const Dashboard = (props) => {
               profID: professionalPKID
             }
           });
+          enqueueSnackbar("Rejected Student");
           setRes(review_students.data);
         }
         break;
       case "cancel":
         let cancel_student = await axios.post('/api/cancel-accepted-student', {
           studentPKID: studentPKID,
-          professionalPKID: professionalPKID
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!cancel_student.err) {
           let accepted_students = await axios.get('/api/accepted-students', {
@@ -86,6 +96,7 @@ const Dashboard = (props) => {
               profID: professionalPKID
             }
           });
+          enqueueSnackbar("Cancelled Accepted Student");
           setRes(accepted_students.data);
         }
     }
@@ -116,7 +127,8 @@ const Dashboard = (props) => {
     if(browseBool) {
       let select_prof = await axios.post('/api/select-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!select_prof.err) {
         let browse_prof = await axios.get('/api/browse-professionals', {
@@ -124,13 +136,15 @@ const Dashboard = (props) => {
             studentID: studentPKID
           }
         });
+        enqueueSnackbar("Request Sent!");
         setRes(browse_prof.data);
       }
     }
     else if(pendingBool) {
       let cancel_prof = await axios.post('/api/cancel-pending-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!cancel_prof.err) {
         let pending_profs = await axios.get('/api/pending-professionals', {
@@ -138,13 +152,15 @@ const Dashboard = (props) => {
             studentPKID: studentPKID
           }
         });
+        enqueueSnackbar("Pending Request Cancelled");
         setRes(pending_profs.data);
       }
     }
     else if(acceptedBool) {
       let cancel_prof = await axios.post('/api/cancel-matched-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!cancel_prof.err) {
         let accepted_profs = await axios.post('/api/matched-professionals', {
@@ -152,6 +168,7 @@ const Dashboard = (props) => {
             studentPKID: studentPKID
           }
         });
+        enqueueSnackbar("Accepted Request Cancelled");
         setRes(accepted_profs.data);
       }
     }

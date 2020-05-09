@@ -5,7 +5,9 @@ const {
   ReviewStudentsList, 
   AcceptedStudentsList, 
   PendingProfessionalsList,
-  MatchedProfessionalList
+  MatchedProfessionalList,
+  StudentNotifications,
+  ProfessionalNotifications
 } = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -265,7 +267,13 @@ router.post("/api/accept-student", async (req, res) => {
     }
   });
   
-  if(!accepted_student.err && !matched_prof.err && !remove_student.err && !accepted_student.err && !remove_prof.err) {
+  let send_notif_student = await StudentNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.profName} accepted the request`
+  });
+  
+  if(!accepted_student.err && !matched_prof.err && !remove_student.err && !accepted_student.err && !remove_prof.err && !send_notif_student.err) {
     res.status(200).send("Added student in accepted, added prof to matched list, removed student from review");
   }
   else {
@@ -307,7 +315,13 @@ router.post("/api/reject-student", async (req, res) => {
     }
   });
   
-  if(!remove_student.err && !delete_pending_prof.err && !prof_to_browse.err) {
+  let send_notif_student = await StudentNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.profName} rejected the request`
+  });
+  
+  if(!remove_student.err && !delete_pending_prof.err && !prof_to_browse.err && !send_notif_student.err) {
     res.status(200).send("Removed student from review and removed professional from studne'ts pending list");
   }
 });
@@ -345,9 +359,36 @@ router.post("/api/cancel-accepted-student", async (req, res) => {
     }
   });
   
-  if(!remove_student.err && !delete_matched_prof.err && !prof_to_browse.err) {
+  let send_notif_student = await StudentNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.profName} cancelled the match`
+  });
+  
+  if(!remove_student.err && !delete_matched_prof.err && !prof_to_browse.err && !send_notif_student.err) {
     res.status(200).send("Removed student from accepted list, removed professional from student's matched list, moved profssional back to browsing");
   }
+});
+
+router.get("/api/get-prof-notifications", async (req, res) => {
+  let notif_objs = await ProfessionalNotifications.findAll({
+    where: {
+      professionalPKID: req.query.id
+    }
+  });
+  
+  if(!notif_objs.err) {
+    let notifications = []
+    notif_objs.forEach(notif => {
+      notifications.unshift(notif.message)
+    });
+
+    res.status(200).json(notifications);
+  }
+  else {
+    res.status(401).send("Couldn't get notifications");
+  }
+  
 })
 
 
