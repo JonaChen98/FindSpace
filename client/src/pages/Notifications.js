@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
 import axios from 'axios';
+import Pagination from '@material-ui/lab/Pagination';
 
 
 const NotificationsPage = () => {
   const [notifs, setNotifs] = useState([]);
   
-  const [response, setRes] = useState([]);
   const [currPage, setCurrPage] = useState(1);
   const [cardsPerPage] = useState(5);
   
@@ -44,20 +44,24 @@ const NotificationsPage = () => {
     }
   }, [])
   
+  const paginate = (event, value) => {
+    setCurrPage(value);
+  }
+  
   return(
     <div>
       <Navbar home={false}/>
       
       {
-        notifs.map(notification => {
+        notifs.map((notification, key) => {
           return(
-            <div>
+            <div key={key}>
               {notification}
             </div>
           );
         })
       }
-      
+      <Pagination count={Math.ceil(notifs.length / cardsPerPage)} page={currPage} onChange={paginate}/>
     </div>
   );
 }
