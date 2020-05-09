@@ -18,6 +18,7 @@ const Profile = () => {
   const [school, setSchool] = useState("");
   const [email, setEmail] = useState("");
   const [major, setMajor] = useState("");
+  const [age, setAge] = useState("");
   // etc... more data points 
   
   // componentdidMount
@@ -25,24 +26,41 @@ const Profile = () => {
   //test ProfileInfo display
   //const myobj = {"name":"John", "school":"no", "school_email":"a@a.com", "major":"comp sci"};
 
+  const myobj2 = {"name":"bob", "company":"yeah no", "email":"a@a.com", "job":"coding"};
+
   useEffect(() => {
     
       let studentInfo = localStorage.getItem("studentInfo");
+      let profInfo = localStorage.getItem("profInfo");
       studentInfo = JSON.parse(studentInfo);
+      profInfo = JSON.parse(profInfo);
       
-      //if(studentInfo){
+      if(studentInfo){
       setName(studentInfo.name);
       setSchool(studentInfo.school);
       setEmail(studentInfo.school_email);
       setMajor(studentInfo.major);
-  //}
+      setAge(studentInfo.age);
+      }
+      else if(profInfo){
+        setName(profInfo.name);
+        setSchool(profInfo.company);
+        setEmail(profInfo.email);
+        setMajor(profInfo.job);
+      }
+
     }, []);
 
     //Test ProfileInfo Display
-    /* 
-    useEffect(() => {
+    
+    /*useEffect(() => {
       localStorage.setItem("studentInfo", JSON.stringify(myobj));
     });*/
+
+     
+    useEffect(() => {
+      localStorage.setItem("profInfo", JSON.stringify(myobj2));
+    });
 
  
   return(
@@ -52,14 +70,11 @@ const Profile = () => {
       </div>
 
       <div>
-        <h1>Student Profile</h1>
+        <h1>{name}</h1>
       </div>
               
       <div className="userInfo-container">
         <Container />
-        <div className="name">
-            {name}
-        </div>
         <div className="email">
           {email}
         </div>
@@ -68,6 +83,9 @@ const Profile = () => {
         </div>
         <div className="school">
           {school}
+        </div>
+        <div className="age">
+          {age}
         </div>
         <Container />
       </div>
