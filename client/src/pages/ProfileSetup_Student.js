@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import TextField from '@material-ui/core/TextField';
 import Navbar from '../components/navbar';
 import { useHistory } from 'react-router-dom';
@@ -8,30 +8,15 @@ import axios from 'axios';
 import '../styles/profilesetup.css';
 
 
-
-
-const initialState = {
-  name: "",
-  email: "",
-  age: "",
-  password: "",
-  major: "",
-  nameError: "",
-  emailError: "",
-  passwordError: ""
-};
-
-export default class ValiationForm extends React.Component {
-  state = initialState;
-
-  handleChange = event => {
-    const isCheckbox = event.target.type === "checkbox";
-    this.setState({
-      [event.target.name]: isCheckbox
-        ? event.target.checked
-        : event.target.value
-    });
-  };
+const ProfileSetupStudent = () => {
+  const history = useHistory();
+  
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [major, setMajor] = useState("");
+  const [age, setAge] = useState(0);
+  
 
   // onChange = (e) => {
   //   /*
@@ -44,9 +29,6 @@ export default class ValiationForm extends React.Component {
 
   // signUp = (e) => {
   //   e.preventDefault();
-
-    
-
     // const [name, setName] = useState("");
     // const [email, setEmail] = useState("");
     // const [password, setPassword] = useState("");
@@ -69,82 +51,99 @@ export default class ValiationForm extends React.Component {
   //     })
   // }
 
-  validate = () => {
-    let nameError = "";
-    let emailError = "";
-    let passwordError = "";
-    let ageError = "";
-    let majorError = "";
+  // const validate = () => {
+  //   let nameError = "";
+  //   let emailError = "";
+  //   let passwordError = "";
+  //   let ageError = "";
+  //   let majorError = "";
 
-    if (!this.state.name) {
-      nameError = "Please enter your first and last name.";
-    }
+  //   if (name) {
+  //     nameError = "Please enter your first and last name.";
+  //   }
 
-    if (!this.state.email.includes(".edu")){
-      emailError = "invalid email";
-    }
-    if (isNaN(this.state.age)){
-      ageError = "Enter a number.";
-    }
+  //   if (email.includes(".edu")){
+  //     emailError = "invalid email";
+  //   }
+  //   if (isNaN(age)){
+  //     ageError = "Enter a number.";
+  //   }
     
-    if (this.state.password.length < 8){
-      passwordError = "Password must be 8 characters";
-    }
+  //   if (password.length < 8){
+  //     passwordError = "Password must be 8 characters";
+  //   }
 
-    if (emailError || nameError || passwordError|| ageError || majorError) {
-      this.setState({ emailError, nameError, passwordError, 
-        ageError, majorError });
-      return false;
-    }
+  //   if (emailError || nameError || passwordError|| ageError || majorError) {
+      
+      
+  //     this.setState({ emailError, nameError, passwordError, 
+  //       ageError, majorError });
+        
+  //     return false;
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
   
-  handleSubmit = event => {
+  const handleSubmit = event => {
     event.preventDefault();
-    const isValid = this.validate();
-    const history = useHistory();
-      
-    if (isValid) {
-      console.log(this.state);
-      // clear form
-      this.setState(initialState);
-      // console.log(this.state.name);
-      axios.post('/api/register-student', {
-              name: this.state.name, 
-              password: this.state.password, 
-              age: this.state.age, 
-              school_email: this.state.email, 
-              major: this.state.major
-            })
-            .then(res => {
-              localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
-             history.push('/student-dashboard');
-            })
-            .catch((err) => {
-              console.log("Error");
-            })
-      
+    // const isValid = this.validate();
+    
+    const registerStudent = async () => {
+      const res = await axios.post("/api/register-student", {
+        name: name, 
+        password: password, 
+        age: age, 
+        school_email: email, 
+        major: major
+      });
+      console.log(res.data.student);
+      localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
+      history.push('/student-dashboard');
     }
+    
+    registerStudent();
+      
+    // if (isValid) {
+    //   console.log(this.state);
+    //   // clear form
+    //   this.setState(initialState);
+    //   // console.log(this.state.name);
+    //   axios.post('/api/register-student', {
+    //           name: state.name, 
+    //           password: state.password, 
+    //           age: state.age, 
+    //           school_email: state.email, 
+    //           major: state.major
+    //         })
+    //         .then(res => {
+    //           localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
+    //          history.push('/student-dashboard');
+    //         })
+    //         .catch((err) => {
+    //           console.log("Error");
+    //         })
+      
+    // }
   };
 
-  render() {
+
     return (
     <div>
       <Navbar/>
         <div  className="center">
-          <form onSubmit={this.handleSubmit} className="form">
+          <form onSubmit={handleSubmit} className="form">
             <div>
             <label> Full Name: </label>
               <TextField
                 name="name"
                 placeholder="name"
-                value={this.state.name}
-                onChange={this.handleChange}
+                // value={state.name}
+                onChange={event => setName(event.target.value)}
               />
               <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.nameError}
+                {state.nameError}
               </div>
             </div>
 
@@ -154,13 +153,13 @@ export default class ValiationForm extends React.Component {
                 label="Required*"
                 name="age"
                 placeholder="age"
-                value={this.state.age}
-                onChange={this.handleChange}
+                // value={state.age}
+                onChange={event => setAge(event.target.value)}
                 
               />
               
               {/* <div style={{ fontSize: 12, color: "red" }}> */}
-                {this.state.ageError}
+                {state.ageError}
               {/* </div> */}
             </div>
 
@@ -169,11 +168,11 @@ export default class ValiationForm extends React.Component {
             <TextField
                 name="major"
                 placeholder="major"
-                value={this.state.major}
-                onChange={this.handleChange}
+                // value={state.major}
+                onChange={event => setMajor(event.target.value)}
               />
               <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.majorError}
+                {state.majorError}
               </div>
             </div>
             <div>
@@ -181,11 +180,11 @@ export default class ValiationForm extends React.Component {
                 name="email"
                 fullWidth
                 placeholder="email"
-                value={this.state.email}
-                onChange={this.handleChange}
+                // value={state.email}
+                onChange={event => setEmail(event.target.value)}
               />
               <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.emailError}
+                {state.emailError}
               </div>
             </div>
             <div>
@@ -193,11 +192,11 @@ export default class ValiationForm extends React.Component {
                 type="password"
                 name="password"
                 placeholder="password"
-                value={this.state.password}
-                onChange={this.handleChange}
+                // value={state.password}
+                onChange={event => setPassword(event.target.value)}
               />
               <div style={{ fontSize: 12, color: "red" }}>
-                {this.state.passwordError}
+                {state.passwordError}
               </div>
             </div>
             <div>
@@ -218,7 +217,6 @@ export default class ValiationForm extends React.Component {
     </div>
       
     );
-  }
 }
 
 // function ProfileSetupStudent() {
@@ -280,4 +278,4 @@ export default class ValiationForm extends React.Component {
           
 // };
 
-// export default ProfileSetupStudent;
+export default ProfileSetupStudent;
