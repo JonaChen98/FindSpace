@@ -4,7 +4,11 @@ import axios from 'axios';
 
 
 const NotificationsPage = () => {
-  const [notifs, setNotifs] = useState([])
+  const [notifs, setNotifs] = useState([]);
+  
+  const [response, setRes] = useState([]);
+  const [currPage, setCurrPage] = useState(1);
+  const [cardsPerPage] = useState(5);
   
   useEffect(() => {
     let profInfo = localStorage.getItem("profInfo");
