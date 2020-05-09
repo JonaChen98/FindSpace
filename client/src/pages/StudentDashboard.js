@@ -19,11 +19,14 @@ const StudentDashboard = () => {
   const [pending, togglePending] = useState(false);
   const [accepted, toggleAccepted] = useState(false);
   
+  const [info, setInfo] = useState({})
+  
   const student = true; 
   
   useEffect(() => {
     let studentInfo = localStorage.getItem("studentInfo");
     studentInfo = JSON.parse(studentInfo);
+    setInfo(studentInfo);
     const { id } = studentInfo;
     setID(id);
 
@@ -163,6 +166,7 @@ const StudentDashboard = () => {
         setRes={setRes}
         studentBool={student}
         id={id}
+        info={info}
       />
     </div>
   );

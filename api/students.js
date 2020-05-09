@@ -5,7 +5,8 @@ const {
   PendingProfessionalsList, 
   MatchedProfessionalList, 
   ReviewStudentsList,
-  AcceptedStudentsList
+  AcceptedStudentsList,
+  ProfessionalNotifications
 } = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -192,6 +193,7 @@ router.post("/api/select-professional", async (req, res) => {
     professionalPKID: req.body.professionalPKID,
   });
   
+  // add student in review list 
   let review_students = await ReviewStudentsList.create({
     studentPKID: req.body.studentPKID,
     professionalPKID: req.body.professionalPKID,
@@ -202,12 +204,12 @@ router.post("/api/select-professional", async (req, res) => {
       "id": req.body.studentPKID,
     }
   });
-  
+  // remove prof from browse list 
   let list_of_prof_ids = student[0].dataValues.browseProfessionals;
   let index_of_id = list_of_prof_ids.indexOf(req.body.professionalPKID);
   
   list_of_prof_ids.splice(index_of_id, 1);
-  
+  // update student browse list 
   let student_update = await Student.update({
     browseProfessionals: list_of_prof_ids
   }, {
@@ -216,11 +218,17 @@ router.post("/api/select-professional", async (req, res) => {
     }
   })
   
-  if(pending_profs.err && review_students.err && student.err && student_update.err) {
+  let send_notif_prof = await ProfessionalNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.studentName} sent a request`
+  });
+  
+  if(pending_profs.err && review_students.err && student.err && student_update.err && !send_notif_prof.err) {
     res.status(401).send("Select professional api error");
   }
   else {
-    res.status(200).send("Good to go!");
+    res.status(200).send("Successfully selected Professional");
   }
   
 });
@@ -256,7 +264,13 @@ router.post("/api/cancel-pending-professional", async (req,res) => {
     }
   });
   
-  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err) {
+  let send_notif_prof = await ProfessionalNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.studentName} has cancelled the request`
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err &&!send_notif_prof.err) {
     res.status(200).send("Removed professional from pending list and put back to browsing");
   }
   else {
@@ -294,7 +308,13 @@ router.post("/api/cancel-matched-professional", async (req,res) => {
     }
   });
   
-  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err) {
+  let send_notif_prof = await ProfessionalNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.studentName} has cancelled the match`
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err && !send_notif_prof.err) {
     res.status(200).send("Removed professional from matched list, removed student from accepted students list.");
   }
   else {

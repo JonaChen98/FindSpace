@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 import Pagination from '@material-ui/lab/Pagination';
 import { Button, CardActionArea, CardActions, Typography, Card, CardContent } from '@material-ui/core';
@@ -18,7 +18,8 @@ const Dashboard = (props) => {
     studentBool,
     profReview,
     profAccepted,
-    id
+    id,
+    info
   } = props;
   
   const getProfBtns = (student) => {
@@ -50,7 +51,8 @@ const Dashboard = (props) => {
       case "accept":
         let accept_student = await axios.post('/api/accept-student', {
           studentPKID: studentPKID,
-          professionalPKID: professionalPKID
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!accept_student.err) {
           let review_students = await axios.get('/api/review-students', {
@@ -64,7 +66,8 @@ const Dashboard = (props) => {
       case "reject": 
         let reject_student = await axios.post('/api/reject-student', {
           studentPKID: studentPKID,
-          professionalPKID: professionalPKID
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!reject_student.err) {
           let review_students = await axios.get('/api/review-students', {
@@ -78,7 +81,8 @@ const Dashboard = (props) => {
       case "cancel":
         let cancel_student = await axios.post('/api/cancel-accepted-student', {
           studentPKID: studentPKID,
-          professionalPKID: professionalPKID
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!cancel_student.err) {
           let accepted_students = await axios.get('/api/accepted-students', {
@@ -116,7 +120,8 @@ const Dashboard = (props) => {
     if(browseBool) {
       let select_prof = await axios.post('/api/select-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!select_prof.err) {
         let browse_prof = await axios.get('/api/browse-professionals', {
@@ -130,7 +135,8 @@ const Dashboard = (props) => {
     else if(pendingBool) {
       let cancel_prof = await axios.post('/api/cancel-pending-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!cancel_prof.err) {
         let pending_profs = await axios.get('/api/pending-professionals', {
@@ -144,7 +150,8 @@ const Dashboard = (props) => {
     else if(acceptedBool) {
       let cancel_prof = await axios.post('/api/cancel-matched-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!cancel_prof.err) {
         let accepted_profs = await axios.post('/api/matched-professionals', {

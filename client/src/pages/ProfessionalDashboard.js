@@ -18,9 +18,12 @@ const ProfessionalDashboard = () => {
   const [review, toggleReview] = useState(true);
   const [accepted, toggleAccepted] = useState(false);
   
+  const [info, setInfo] = useState({})
+  
   useEffect(() => {
     let profInfo = localStorage.getItem("profInfo");
     profInfo = JSON.parse(profInfo);
+    setInfo(profInfo);
     const { id } = profInfo;
     setID(id);
     
@@ -111,6 +114,7 @@ const ProfessionalDashboard = () => {
         profAccepted={accepted}
         setRes={setRes}
         id={id}
+        info={info}
       />
     </div>
   );
