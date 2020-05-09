@@ -39,7 +39,7 @@ const NavBtns = (home, numOfNotifs) => {
         <Badge color="secondary" badgeContent={numOfNotifs} component={Link} to="/notifications">
           <NotificationsIcon />
         </Badge>
-        <Link to="/">
+        <Link to="/profile">
           <AccountCircleIcon />
         </Link> 
         <Link to="/">Logout</Link>

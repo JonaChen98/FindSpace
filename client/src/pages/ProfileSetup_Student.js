@@ -142,9 +142,9 @@ const ProfileSetupStudent = () => {
                 // value={state.name}
                 onChange={event => setName(event.target.value)}
               />
-              <div style={{ fontSize: 12, color: "red" }}>
+              {/* <div style={{ fontSize: 12, color: "red" }}>
                 {state.nameError}
-              </div>
+              </div> */}
             </div>
 
             <div className="text-field">
@@ -159,7 +159,7 @@ const ProfileSetupStudent = () => {
               />
               
               {/* <div style={{ fontSize: 12, color: "red" }}> */}
-                {state.ageError}
+                {/* {state.ageError} */}
               {/* </div> */}
             </div>
 
@@ -171,9 +171,9 @@ const ProfileSetupStudent = () => {
                 // value={state.major}
                 onChange={event => setMajor(event.target.value)}
               />
-              <div style={{ fontSize: 12, color: "red" }}>
+              {/* <div style={{ fontSize: 12, color: "red" }}>
                 {state.majorError}
-              </div>
+              </div> */}
             </div>
             <div>
             <TextField
@@ -183,9 +183,9 @@ const ProfileSetupStudent = () => {
                 // value={state.email}
                 onChange={event => setEmail(event.target.value)}
               />
-              <div style={{ fontSize: 12, color: "red" }}>
+              {/* <div style={{ fontSize: 12, color: "red" }}>
                 {state.emailError}
-              </div>
+              </div> */}
             </div>
             <div>
             <TextField
@@ -195,9 +195,9 @@ const ProfileSetupStudent = () => {
                 // value={state.password}
                 onChange={event => setPassword(event.target.value)}
               />
-              <div style={{ fontSize: 12, color: "red" }}>
+              {/* <div style={{ fontSize: 12, color: "red" }}>
                 {state.passwordError}
-              </div>
+              </div> */}
             </div>
             <div>
               <h4> Briefly describe yourself</h4>
