@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSnackbar } from 'notistack';
 
 import Pagination from '@material-ui/lab/Pagination';
 import { Button, CardActionArea, CardActions, Typography, Card, CardContent } from '@material-ui/core';
@@ -21,6 +22,9 @@ const Dashboard = (props) => {
     id,
     info
   } = props;
+  
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  
   
   const getProfBtns = (student) => {
     if(profReview) {
@@ -60,6 +64,7 @@ const Dashboard = (props) => {
               profID: professionalPKID,
             }
           });
+          enqueueSnackbar("Accepted Student!");
           setRes(review_students.data);
         }
         break; 
@@ -75,6 +80,7 @@ const Dashboard = (props) => {
               profID: professionalPKID
             }
           });
+          enqueueSnackbar("Rejected Student");
           setRes(review_students.data);
         }
         break;
@@ -90,6 +96,7 @@ const Dashboard = (props) => {
               profID: professionalPKID
             }
           });
+          enqueueSnackbar("Cancelled Accepted Student");
           setRes(accepted_students.data);
         }
     }
@@ -129,6 +136,7 @@ const Dashboard = (props) => {
             studentID: studentPKID
           }
         });
+        enqueueSnackbar("Request Sent!");
         setRes(browse_prof.data);
       }
     }
@@ -144,6 +152,7 @@ const Dashboard = (props) => {
             studentPKID: studentPKID
           }
         });
+        enqueueSnackbar("Pending Request Cancelled");
         setRes(pending_profs.data);
       }
     }
@@ -159,6 +168,7 @@ const Dashboard = (props) => {
             studentPKID: studentPKID
           }
         });
+        enqueueSnackbar("Accepted Request Cancelled");
         setRes(accepted_profs.data);
       }
     }

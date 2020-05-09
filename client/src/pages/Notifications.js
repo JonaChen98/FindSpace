@@ -30,7 +30,6 @@ const NotificationsPage = () => {
     
     if(profInfo) {
       profInfo = JSON.parse(profInfo);
-      console.log("prof: ", profInfo);
       let id = profInfo.id;
       fetchProfNotifs(id);
     }

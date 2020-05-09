@@ -48,7 +48,6 @@ const ProfessionalDashboard = () => {
       }
     }).then(res => {
       setNotifs(res.data);
-      console.log(res.data);
     }).catch(err => {
       console.log(err);
     })
