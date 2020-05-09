@@ -1,10 +1,14 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
 import { Link } from 'react-router-dom';
+
+import AccountCircleIcon from '@material-ui/icons/AccountCircle';
+import NotificationsIcon from '@material-ui/icons/Notifications';
+import Badge from '@material-ui/core/Badge';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -19,7 +23,32 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Navbar = () => {
+const NavBtns = (home, numOfNotifs) => {
+  
+  if(home) {
+    return(
+      <div>
+        <Button color="inherit" component={Link} to="/login">Login</Button>
+        <Button color="inherit" component={Link} to="/signup">Sign Up</Button>
+      </div>
+    );
+  }
+  else {
+    return(
+      <div>
+        <Badge color="secondary" badgeContent={numOfNotifs} component={Link} to="/notifications">
+          <NotificationsIcon />
+        </Badge>
+        <Link to="/">
+          <AccountCircleIcon />
+        </Link> 
+        <Link to="/">Logout</Link>
+      </div>
+    );
+  }
+}
+
+const Navbar = ({ home, numOfNotifs }) => {
   const classes = useStyles();
   
   return(
@@ -38,8 +67,7 @@ const Navbar = () => {
                 FindSpace
               </Link>
             </Typography>
-            <Button color="inherit" component={Link} to="/login">Login</Button>
-            <Button color="inherit" component={Link} to="/signup">Sign Up</Button>
+            { NavBtns(home, numOfNotifs) }
           </Toolbar>
         </AppBar>
     </div>

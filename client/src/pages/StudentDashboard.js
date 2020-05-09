@@ -20,6 +20,7 @@ const StudentDashboard = () => {
   const [accepted, toggleAccepted] = useState(false);
   
   const [info, setInfo] = useState({})
+  const [notifs, setNotifs] = useState([])
   
   const student = true; 
   
@@ -43,6 +44,16 @@ const StudentDashboard = () => {
   
   useEffect(() => {
     console.log("refresh");
+    // fetch notifications 
+    axios.get("/api/get-student-notifications", {
+      params: {
+        id: id
+      }
+    }).then(res => {
+      setNotifs(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
   }, [response]);
   
   const fetchBrowse = () => {
@@ -130,7 +141,7 @@ const StudentDashboard = () => {
   
   return(
     <div className="dashboard-page-container">
-      <Navbar />
+      <Navbar numOfNotifs={notifs.length}/>
       <div className="btn-row">
         <Button 
           variant="contained" 

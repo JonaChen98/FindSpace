@@ -6,7 +6,8 @@ const {
   AcceptedStudentsList, 
   PendingProfessionalsList,
   MatchedProfessionalList,
-  StudentNotifications
+  StudentNotifications,
+  ProfessionalNotifications
 } = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -367,6 +368,27 @@ router.post("/api/cancel-accepted-student", async (req, res) => {
   if(!remove_student.err && !delete_matched_prof.err && !prof_to_browse.err && !send_notif_student.err) {
     res.status(200).send("Removed student from accepted list, removed professional from student's matched list, moved profssional back to browsing");
   }
+});
+
+router.get("/api/get-prof-notifications", async (req, res) => {
+  let notif_objs = await ProfessionalNotifications.findAll({
+    where: {
+      professionalPKID: req.query.id
+    }
+  });
+  
+  if(!notif_objs.err) {
+    let notifications = []
+    notif_objs.forEach(notif => {
+      notifications.unshift(notif.message)
+    });
+
+    res.status(200).json(notifications);
+  }
+  else {
+    res.status(401).send("Couldn't get notifications");
+  }
+  
 })
 
 

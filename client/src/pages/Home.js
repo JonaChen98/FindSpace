@@ -17,10 +17,11 @@ import Typography from '@material-ui/core/Typography';
 
 
 const Home = () => {
+  localStorage.clear();
   
   return (
     <div className="home-container">
-      <Navbar />
+      <Navbar home={true}/>
       
       <div className="header-container">
         <div className="header-left">

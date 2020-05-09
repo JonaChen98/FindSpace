@@ -6,7 +6,8 @@ const {
   MatchedProfessionalList, 
   ReviewStudentsList,
   AcceptedStudentsList,
-  ProfessionalNotifications
+  ProfessionalNotifications,
+  StudentNotifications
 } = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -320,8 +321,28 @@ router.post("/api/cancel-matched-professional", async (req,res) => {
   else {
     res.status(401).send("Failed to remove professional");
   }
-
 });
+
+router.get("/api/get-student-notifications", async (req, res) => {
+  let notif_objs = await StudentNotifications.findAll({
+    where: {
+      studentPKID: req.query.id
+    }
+  });
+  
+  if(!notif_objs.err) {
+    let notifications = []
+    notif_objs.forEach(notif => {
+      notifications.unshift(notif.message)
+    });
+
+    res.status(200).json(notifications);
+  }
+  else {
+    res.status(401).send("Couldn't get notifications");
+  }
+  
+})
 
 
 
