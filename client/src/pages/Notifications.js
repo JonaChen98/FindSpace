@@ -1,12 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
 import axios from 'axios';
+import Pagination from '@material-ui/lab/Pagination';
+import { Typography, Card, CardContent } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Link } from 'react-router-dom';
 
+import '../styles/notifs.css';
 
 const NotificationsPage = () => {
   const [notifs, setNotifs] = useState([]);
   
-  const [response, setRes] = useState([]);
   const [currPage, setCurrPage] = useState(1);
   const [cardsPerPage] = useState(5);
   
@@ -44,20 +48,49 @@ const NotificationsPage = () => {
     }
   }, [])
   
+  const paginate = (event, value) => {
+    setCurrPage(value);
+  }
+  
+  const indexOfLastCard = currPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currCards = notifs.slice(indexOfFirstCard, indexOfLastCard);
+  
   return(
-    <div>
+    <div className="notif-page-container">
       <Navbar home={false}/>
+      <div>
+        <Link style={{
+          display: "flex",
+          textDecoration: "none",
+          color: "black",
+          marginLeft: 55,
+          marginTop: 50
+        }}
+        >
+          <ArrowBackIcon />
+          <span style={{ marginTop: 3, marginLeft: 8 }}>Back</span>
+        </Link>
+        <div className="notifs-container">
+          {
+            currCards.map((notification, key) => {
+              return(
+                <div key={key} className="notif-card">
+                  <Card key="key">
+                    <CardContent>
+                      <Typography>
+                        {notification}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })
+          }
+        </div>
+      </div>
       
-      {
-        notifs.map(notification => {
-          return(
-            <div>
-              {notification}
-            </div>
-          );
-        })
-      }
-      
+      <Pagination count={Math.ceil(notifs.length / cardsPerPage)} page={currPage} onChange={paginate} className="pagination"/>
     </div>
   );
 }

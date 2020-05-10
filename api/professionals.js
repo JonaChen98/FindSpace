@@ -12,6 +12,7 @@ const {
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
+const S3 = require('aws-sdk/clients/s3');
 
 router.get("/api/professionals", async(req, res, next) => {
   let professional; 
@@ -389,6 +390,42 @@ router.get("/api/get-prof-notifications", async (req, res) => {
     res.status(401).send("Couldn't get notifications");
   }
   
+});
+
+const cfDomain = process.env.AWS_CF_DOMAIN;
+const s3 = new S3({
+  accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+});
+const Bucket = 'bucket-name';
+
+router.put("/api/upload-space-img", async(req, res) => {
+  const fileExtensionMatch = req.files.image.name.match(/\.([a-zA-Z])+$/);
+  const fileExtension = fileExtensionMatch ? fileExtensionMatch[0] : '';
+  const profilePicturePath = `${req.params.id}/${new Date().getTime()}${fileExtension}`;
+  
+  s3.putObject({ Bucket, Body: req.files.image.data, Key: profilePicturePath }, (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'unable to upload image to AWS S3' });
+    }
+    
+    // update user - pic url 
+    
+    // knex(db.USER_TABLE_NAME)
+    //   .where(whereClause)
+    //   .update({ profile_picture_url: `https://${cfDomain}/${profilePicturePath}` })
+    //   .then(() => {
+    //     return knex(db.USER_TABLE_NAME).where(whereClause);
+    //   })
+    //   .then((data) => {
+    //     return res.json(data);
+    //   })
+    //   .catch((e) => {
+    //     console.error(e);
+    //     res.status(500).json({ error: 'something weird happened with the API' });
+    //   });
+  });
 })
 
 

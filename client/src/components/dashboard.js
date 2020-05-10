@@ -182,7 +182,7 @@ const Dashboard = (props) => {
           {
             data.map((item) => {
               return(
-                <Card key={item.id}>
+                <Card key={item.id} className="user-card">
                   <CardActionArea>
                     <CardContent>
                       <Typography>
@@ -204,7 +204,7 @@ const Dashboard = (props) => {
             })
           }
         </div>
-        <Pagination count={Math.ceil(totalCards / cardsPerPage)} page={currentPage} onChange={paginate}/>
+        <Pagination count={Math.ceil(totalCards / cardsPerPage)} page={currentPage} onChange={paginate} className="pagination"/>
       </div>
     </div>
   ); 
