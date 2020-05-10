@@ -21,7 +21,7 @@ const Home = () => {
   
   return (
     <div className="home-container">
-      <Navbar home={true}/>
+      <Navbar/>
       
       <div className="header-container">
         <div className="header-left">

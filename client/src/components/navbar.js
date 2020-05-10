@@ -4,7 +4,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import { makeStyles } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
 import NotificationsIcon from '@material-ui/icons/Notifications';
@@ -23,9 +23,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const NavBtns = (home, numOfNotifs) => {
+const NavBtns = (numOfNotifs) => {
+  let location = useLocation();
   
-  if(home) {
+  if(location.pathname == "/") {
     return(
       <div>
         <Button color="inherit" component={Link} to="/login">Login</Button>
@@ -33,7 +34,7 @@ const NavBtns = (home, numOfNotifs) => {
       </div>
     );
   }
-  else {
+  else if(location.pathname != "/signup" && location.pathname != "/ProfileSetup_Student" && location.pathname != "/ProfileSetup_Prof") {
     return(
       <div>
         <Badge color="secondary" badgeContent={numOfNotifs} component={Link} to="/notifications">
@@ -48,7 +49,7 @@ const NavBtns = (home, numOfNotifs) => {
   }
 }
 
-const Navbar = ({ home, numOfNotifs }) => {
+const Navbar = ({ numOfNotifs }) => {
   const classes = useStyles();
   
   return(
@@ -67,7 +68,7 @@ const Navbar = ({ home, numOfNotifs }) => {
                 FindSpace
               </Link>
             </Typography>
-            { NavBtns(home, numOfNotifs) }
+            { NavBtns(numOfNotifs) }
           </Toolbar>
         </AppBar>
     </div>
