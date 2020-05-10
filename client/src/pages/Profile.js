@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import Navbar from '../components/navbar';
 import Button from '@material-ui/core/Button';
 import { TableBody, Container } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 
 
 const Profile = () => {
@@ -51,10 +52,22 @@ const Profile = () => {
         <Navbar />
       </div>
 
+      <Link style={{
+          display: "flex",
+          textDecoration: "none",
+          color: "black",
+          marginLeft: 55,
+          marginTop: 50
+        }}
+        >
+        <ArrowBackIcon />
+        <span style={{ marginTop: 3, marginLeft: 8 }}>Back</span>
+      </Link>
+
       <div>
         <h1>Student Profile</h1>
       </div>
-              
+      
       <div className="userInfo-container">
         <Container />
         <div className="name">

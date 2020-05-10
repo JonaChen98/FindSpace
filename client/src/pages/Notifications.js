@@ -3,8 +3,10 @@ import Navbar from '../components/navbar';
 import axios from 'axios';
 import Pagination from '@material-ui/lab/Pagination';
 import { Typography, Card, CardContent } from '@material-ui/core';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import { Link } from 'react-router-dom';
 
-import '../styles/navbar.css';
+import '../styles/notifs.css';
 
 const NotificationsPage = () => {
   const [notifs, setNotifs] = useState([]);
@@ -57,23 +59,37 @@ const NotificationsPage = () => {
   return(
     <div className="notif-page-container">
       <Navbar home={false}/>
-      <div className="notifs-container">
-        {
-          currCards.map((notification, key) => {
-            return(
-              <div key={key} className="notif-card">
-                <Card key="key">
-                  <CardContent>
-                    <Typography>
-                      {notification}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </div>
-            );
-          })
-        }
+      <div>
+        <Link style={{
+          display: "flex",
+          textDecoration: "none",
+          color: "black",
+          marginLeft: 55,
+          marginTop: 50
+        }}
+        >
+          <ArrowBackIcon />
+          <span style={{ marginTop: 3, marginLeft: 8 }}>Back</span>
+        </Link>
+        <div className="notifs-container">
+          {
+            currCards.map((notification, key) => {
+              return(
+                <div key={key} className="notif-card">
+                  <Card key="key">
+                    <CardContent>
+                      <Typography>
+                        {notification}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </div>
+              );
+            })
+          }
+        </div>
       </div>
+      
       <Pagination count={Math.ceil(notifs.length / cardsPerPage)} page={currPage} onChange={paginate} className="pagination"/>
     </div>
   );
