@@ -8,8 +8,9 @@ import { Link } from 'react-router-dom';
 
 import Navbar from '../components/navbar';
 import Button from '@material-ui/core/Button';
-import { TableBody, Container } from '@material-ui/core';
+import { TableBody, Container, Card } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import CardContent from '@material-ui/core/CardContent'
 
 
 const Profile = () => {
@@ -83,11 +84,18 @@ const Profile = () => {
       </Link>
 
       <div>
+        {/*<Avatar  
+        src="https://www.thesprucepets.com/thmb/mERLXPcXz4U9G702HlsORXJqZrU=/4231x2380/smart/filters:no_upscale()/adorable-white-pomeranian-puppy-spitz-921029690-5c8be25d46e0fb000172effe.jpg"
+        className="profile-image"
+        />*/}
+        <img className="profile-image" src="https://www.thesprucepets.com/thmb/mERLXPcXz4U9G702HlsORXJqZrU=/4231x2380/smart/filters:no_upscale()/adorable-white-pomeranian-puppy-spitz-921029690-5c8be25d46e0fb000172effe.jpg" alt="Avatar"></img>
         <h1>{name}</h1>
       </div>
       
       <div className="userInfo-container">
-        <Container />
+        <Card 
+        maxWidth='lg'
+        />
         <div className="email">
           {email}
         </div>

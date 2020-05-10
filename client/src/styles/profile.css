@@ -14,23 +14,22 @@
   justify-content: center;
   margin: 50px;
   display: inline-flexbox;
+  padding-bottom: 100px;
   
   
 }
 
-.userInfo-container .profile-image{
+.profile-image{
   
   width: 100%;
-  height: 200px;
+  height: 350px;
   border-radius: 50%;
   object-fit: scale-down;
  
-
-  
 }
 
 .name{
-  background-color: #F2C1B7;
+  /*background-color: #F2C1B7;*/
   max-width: 200px;
   border-radius: 20px;
   margin: auto;
@@ -40,7 +39,7 @@
 }
 
 .school{
-  background-color: #F2C1B7;
+  
   margin: auto;
   max-width: 200px;
   border-radius: 50px;
@@ -48,7 +47,7 @@
 }
 
 .major{
-  background-color: #F2C1B7;
+  
   margin: auto;
   max-width: 200px;
   border-radius: 50px;
@@ -56,7 +55,7 @@
 }
 
 .phone{
-  background-color: #F2C1B7;
+  
   margin: auto;
   max-width: 200px;
   border-radius: 50px;
@@ -64,9 +63,10 @@
 }
 
 .email{
-  background-color: #F2C1B7;
+  
   margin: auto;
-  max-width: 200px;
+  max-width: 100%;
+  height: auto;
   border-radius: 20px;
   text-overflow: auto;
 }
@@ -104,6 +104,8 @@ h1 {
   text-align: center;
   width: 100%;
   margin: auto;
+  text-transform: capitalize;
+  padding-top: 50px;
 }
 
 .workspacedesc1{
@@ -120,4 +122,15 @@ h1 {
   margin: auto;
   padding: 1rem;
 }
+
+/*.profile-image{
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  
+  
+  height: 100%;
+  object-fit: fill;
+  width: 100%;
+}*/
 
