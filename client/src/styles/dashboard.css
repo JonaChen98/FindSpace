@@ -15,3 +15,7 @@
   flex-wrap: wrap;
   justify-content: space-around;
 }
+
+.user-card {
+  margin: 0 0 50px 0;
+}

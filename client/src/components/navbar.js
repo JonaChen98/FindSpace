@@ -36,14 +36,41 @@ const NavBtns = (numOfNotifs) => {
   }
   else if(location.pathname != "/signup" && location.pathname != "/ProfileSetup_Student" && location.pathname != "/ProfileSetup_Prof") {
     return(
-      <div>
-        <Badge color="secondary" badgeContent={numOfNotifs} component={Link} to="/notifications">
+      <div style={{ 
+        display: "flex",
+        paddingRight: 20,
+        paddingLeft: 20,
+      }}>
+        <Badge 
+          color="secondary" 
+          badgeContent={numOfNotifs} 
+          component={Link} 
+          to="/notifications"
+          style={{ 
+            marginRight: 20,
+            color: "black"
+          }}
+        >
           <NotificationsIcon />
         </Badge>
-        <Link to="/profile">
+        <Link 
+          to="/profile" 
+          style={{ 
+            marginRight: 20,
+            color: "black"
+          }}
+        >
           <AccountCircleIcon />
         </Link> 
-        <Link to="/">Logout</Link>
+        <Link 
+          to="/"
+          style={{ 
+            color: "black",
+            textDecoration: "none"
+          }}
+        >
+          Logout
+        </Link>
       </div>
     );
   }

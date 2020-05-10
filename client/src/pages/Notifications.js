@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
 import axios from 'axios';
 import Pagination from '@material-ui/lab/Pagination';
+import { Typography, Card, CardContent } from '@material-ui/core';
 
+import '../styles/navbar.css';
 
 const NotificationsPage = () => {
   const [notifs, setNotifs] = useState([]);
@@ -48,20 +50,31 @@ const NotificationsPage = () => {
     setCurrPage(value);
   }
   
+  const indexOfLastCard = currPage * cardsPerPage;
+  const indexOfFirstCard = indexOfLastCard - cardsPerPage;
+  const currCards = notifs.slice(indexOfFirstCard, indexOfLastCard);
+  
   return(
-    <div>
+    <div className="notif-page-container">
       <Navbar home={false}/>
-      
-      {
-        notifs.map((notification, key) => {
-          return(
-            <div key={key}>
-              {notification}
-            </div>
-          );
-        })
-      }
-      <Pagination count={Math.ceil(notifs.length / cardsPerPage)} page={currPage} onChange={paginate}/>
+      <div className="notifs-container">
+        {
+          currCards.map((notification, key) => {
+            return(
+              <div key={key} className="notif-card">
+                <Card key="key">
+                  <CardContent>
+                    <Typography>
+                      {notification}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </div>
+            );
+          })
+        }
+      </div>
+      <Pagination count={Math.ceil(notifs.length / cardsPerPage)} page={currPage} onChange={paginate} className="pagination"/>
     </div>
   );
 }
