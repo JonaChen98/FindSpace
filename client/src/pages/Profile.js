@@ -28,7 +28,7 @@ const Profile = () => {
   //test ProfileInfo display
   //const myobj = {"name":"John", "school":"no", "school_email":"a@a.com", "major":"comp sci"};
 
-  const myobj2 = {"name":"bob", "company":"yeah no", "email":"a@a.com", "job":"coding"};
+  //const myobj2 = {"name":"bob", "company":"yeah no", "email":"a@a.com", "job":"coding"};
 
   useEffect(() => {
     
@@ -60,9 +60,9 @@ const Profile = () => {
     });*/
 
      
-    useEffect(() => {
+   /* useEffect(() => {
       localStorage.setItem("profInfo", JSON.stringify(myobj2));
-    });
+    });*/
 
  
   return(
