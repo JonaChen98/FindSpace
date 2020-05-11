@@ -10,7 +10,7 @@ import Navbar from '../components/navbar';
 import Button from '@material-ui/core/Button';
 import { TableBody, Container, Card } from '@material-ui/core';
 import ArrowBackIcon from '@material-ui/icons/ArrowBack';
-import CardContent from '@material-ui/core/CardContent'
+import CardContent from '@material-ui/core/CardContent';
 
 
 const Profile = () => {
