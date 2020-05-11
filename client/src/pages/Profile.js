@@ -26,7 +26,7 @@ const Profile = () => {
   // componentdidMount
 
   //test ProfileInfo display
-  //const myobj = {"name":"John", "school":"no", "school_email":"a@a.com", "major":"comp sci"};
+  //const myobj = {"name":"John", "school":"no", "school_email":"a@a.com", "major":"comp sci", "age":"69"};
 
   //const myobj2 = {"name":"bob", "company":"yeah no", "email":"a@a.com", "job":"coding"};
 
@@ -38,17 +38,18 @@ const Profile = () => {
       profInfo = JSON.parse(profInfo);
       
       if(studentInfo){
-      setName(studentInfo.name);
-      setSchool(studentInfo.school);
-      setEmail(studentInfo.school_email);
-      setMajor(studentInfo.major);
-      setAge(studentInfo.age);
+        setName(studentInfo.name);
+        setSchool(studentInfo.school);
+        setEmail(studentInfo.school_email);
+        setMajor(studentInfo.major);
+        setAge(studentInfo.age);
       }
       else if(profInfo){
         setName(profInfo.name);
         setSchool(profInfo.company);
         setEmail(profInfo.email);
         setMajor(profInfo.job);
+        setAge(profInfo.age);
       }
 
     }, []);
@@ -60,7 +61,7 @@ const Profile = () => {
     });*/
 
      
-   /* useEffect(() => {
+    /*useEffect(() => {
       localStorage.setItem("profInfo", JSON.stringify(myobj2));
     });*/
 
@@ -82,30 +83,38 @@ const Profile = () => {
         <ArrowBackIcon />
         <span style={{ marginTop: 3, marginLeft: 8 }}>Back</span>
       </Link>
-
-      <div>
-        {/*<img className="profile-image" src="https://www.thesprucepets.com/thmb/mERLXPcXz4U9G702HlsORXJqZrU=/4231x2380/smart/filters:no_upscale()/adorable-white-pomeranian-puppy-spitz-921029690-5c8be25d46e0fb000172effe.jpg" alt="Avatar"></img>*/}
-        <h1>{name}</h1>
-      </div>
       
       <div className="userInfo-container">
-        <Card 
+        <Container
         maxWidth='lg'
         />
+        <div>
+    {/*<img className="profile-image" src="https://www.thesprucepets.com/thmb/mERLXPcXz4U9G702HlsORXJqZrU=/4231x2380/smart/filters:no_upscale()/adorable-white-pomeranian-puppy-spitz-921029690-5c8be25d46e0fb000172effe.jpg" alt="Avatar"></img>*/}
+        <h1>{name}</h1>
+        <hr></hr>
+      </div>
+
         <div className="email">
-          {email}
+        <b><p>Email:</p></b>
+          <b>{email}</b>
         </div>
-        <div className="major">
-          {major}
-        </div>
+        <hr></hr>
         <div className="school">
-          {school}
+          <b>{school}</b>
         </div>
+        <hr></hr>
+        <div className="major">
+          <b>{major}</b>
+        </div>
+        <hr></hr>
         <div className="age">
-          {age}
+          <b><p>Age:</p></b>
+          <b>{age}</b>
         </div>
         <Container />
       </div>
+
+      <hr></hr>
               
       <div>
         <Footer />
