@@ -13,7 +13,7 @@ function Login(event) {
   const [password, setpassword] = useState("");
     const handleLogin = (event) => {
     event.preventDefault();
-    axios.post('/api/login-student', {school_email:school_email, password:password})
+    axios.post('/api/login-student', {school_email":school_email, "password":password})
     
     .then(res =>{
       //  localStorage.setItem(school_email,school_email);
@@ -27,13 +27,13 @@ function Login(event) {
   }
 
   return( 
-    <div className = "background">
+    <div>
       <div>
         <div className = "flex">
           <img className = "logo" src = {logo} ></img>
           <h1 className = "findspace">Findspace</h1>
         </div>
-        <h1 className = "hellomessage">Hello!</h1>
+        <h1 className ="welcome">Welcome to Findspace!</h1>
         <form className = "loginform">
           {/* event.target.value for each input */}
           <TextField className = "logininput" label = "school_email" id = "school_email" onChange = {event => setschool_email(event.target.value)} /><br/>

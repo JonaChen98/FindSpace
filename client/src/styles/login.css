@@ -7,9 +7,9 @@
   background-repeat: no-repeat;
 }
 .hellomessage{  
-  margin-top: 0px;
-  padding-top: 150px;
-  margin-left: 70%;
+  margin-top: -20px;
+  padding-top: 30px;
+  margin-left: 44%;
   font-size: 4vw;
   font-style: normal;
   font-weight: 750;
@@ -19,6 +19,11 @@
 .flex{
   display: flex;
   flex-direction: row;
+}
+.welcome{
+  text-align: center;
+  margin-top: 150px;
+  
 }
 .findspace {
   margin: 0px;
@@ -47,8 +52,14 @@
   margin-top: 40px;
 }
 .loginform{
-  margin-top:  -5vh;
-  margin-left: 62.5vw;
+  padding-left: 30px;
+  padding-top: 200px;
+  padding-bottom: 40px;
+  padding-right: 100px;
+  border-style: solid;
+  border-width: 5px;
+  margin-top:  -20vh;
+  margin-left: 33.5vw;
   width: 23%;
   height: 246px;
   
