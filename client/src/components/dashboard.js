@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { useSnackbar } from 'notistack';
 
 import Pagination from '@material-ui/lab/Pagination';
 import { Button, CardActionArea, CardActions, Typography, Card, CardContent } from '@material-ui/core';
@@ -17,17 +18,22 @@ const Dashboard = (props) => {
     setRes,
     studentBool,
     profReview,
-    profAccepted
+    profAccepted,
+    id,
+    info
   } = props;
+  
+  const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+  
   
   const getProfBtns = (student) => {
     if(profReview) {
       return(
         <CardActions>
-          <Button onClick={() => sendProfRequest(student.id, 1, "accept")}>
+          <Button onClick={() => ProfSendRequest(student.id, id, "accept")}>
             Accept
           </Button>
-          <Button onClick={() => sendProfRequest(student.id, 1, "reject")}>
+          <Button onClick={() => ProfSendRequest(student.id, id, "reject")}>
             Reject
           </Button>
         </CardActions>
@@ -36,7 +42,7 @@ const Dashboard = (props) => {
     else {
       return(
         <CardActions>
-          <Button onClick={() => sendProfRequest(student.id, 1, "cancel")}>
+          <Button onClick={() => ProfSendRequest(student.id, id, "cancel")}>
             Cancel
           </Button>
         </CardActions>
@@ -44,25 +50,29 @@ const Dashboard = (props) => {
     }
   }
   
-  const sendProfRequest = async (studentPKID, professionalPKID, btnAction) => {
+  const ProfSendRequest = async (studentPKID, professionalPKID, btnAction) => {
     switch(btnAction) {
       case "accept":
         let accept_student = await axios.post('/api/accept-student', {
           studentPKID: studentPKID,
-          professionalPKID: professionalPKID
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!accept_student.err) {
           let review_students = await axios.get('/api/review-students', {
             params: {
-              profID: professionalPKID
+              profID: professionalPKID,
             }
           });
+          enqueueSnackbar("Accepted Student!");
           setRes(review_students.data);
         }
         break; 
       case "reject": 
         let reject_student = await axios.post('/api/reject-student', {
-          studentPKID: studentPKID
+          studentPKID: studentPKID,
+          professionalPKID: professionalPKID,
+          profName: info.name
         });
         if(!reject_student.err) {
           let review_students = await axios.get('/api/review-students', {
@@ -70,21 +80,25 @@ const Dashboard = (props) => {
               profID: professionalPKID
             }
           });
+          enqueueSnackbar("Rejected Student");
           setRes(review_students.data);
         }
         break;
-      // case "cancel":
-      //   let cancel_student = await axios.post('/api/cancel-accepted-student', {
-      //     studentPKID: studentPKID
-      //   });
-      //   if(!cancel_student.err) {
-      //     let review_students = await axios.get('/api/review-students', {
-      //       params: {
-      //         profID: professionalPKID
-      //       }
-      //     });
-      //     setRes(review_students.data);
-      //   }
+      case "cancel":
+        let cancel_student = await axios.post('/api/cancel-accepted-student', {
+          studentPKID: studentPKID,
+          professionalPKID: professionalPKID,
+          profName: info.name
+        });
+        if(!cancel_student.err) {
+          let accepted_students = await axios.get('/api/accepted-students', {
+            params: {
+              profID: professionalPKID
+            }
+          });
+          enqueueSnackbar("Cancelled Accepted Student");
+          setRes(accepted_students.data);
+        }
     }
   }
   
@@ -92,7 +106,7 @@ const Dashboard = (props) => {
     if(browseBool) {
       return(
         <CardActions>
-          <Button onClick={() => sendStudentRequest(1, prof.id)}>
+          <Button onClick={() => StudentSendRequest(id, prof.id)}>
             Send A Request
           </Button>
         </CardActions>
@@ -101,7 +115,7 @@ const Dashboard = (props) => {
     else {
       return(
         <CardActions>
-          <Button onClick={() => sendStudentRequest(1, prof.id)}>
+          <Button onClick={() => StudentSendRequest(id, prof.id)}>
             Cancel
           </Button>
         </CardActions>
@@ -109,11 +123,12 @@ const Dashboard = (props) => {
     }
   }
   
-  const sendStudentRequest = async (studentPKID, professionalPKID) => {
+  const StudentSendRequest = async (studentPKID, professionalPKID) => {
     if(browseBool) {
       let select_prof = await axios.post('/api/select-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!select_prof.err) {
         let browse_prof = await axios.get('/api/browse-professionals', {
@@ -121,13 +136,15 @@ const Dashboard = (props) => {
             studentID: studentPKID
           }
         });
+        enqueueSnackbar("Request Sent!");
         setRes(browse_prof.data);
       }
     }
     else if(pendingBool) {
       let cancel_prof = await axios.post('/api/cancel-pending-professional', {
         studentPKID: studentPKID,
-        professionalPKID: professionalPKID
+        professionalPKID: professionalPKID,
+        studentName: info.name
       });
       if(!cancel_prof.err) {
         let pending_profs = await axios.get('/api/pending-professionals', {
@@ -135,7 +152,24 @@ const Dashboard = (props) => {
             studentPKID: studentPKID
           }
         });
+        enqueueSnackbar("Pending Request Cancelled");
         setRes(pending_profs.data);
+      }
+    }
+    else if(acceptedBool) {
+      let cancel_prof = await axios.post('/api/cancel-matched-professional', {
+        studentPKID: studentPKID,
+        professionalPKID: professionalPKID,
+        studentName: info.name
+      });
+      if(!cancel_prof.err) {
+        let accepted_profs = await axios.post('/api/matched-professionals', {
+          params: {
+            studentPKID: studentPKID
+          }
+        });
+        enqueueSnackbar("Accepted Request Cancelled");
+        setRes(accepted_profs.data);
       }
     }
   }
@@ -148,7 +182,7 @@ const Dashboard = (props) => {
           {
             data.map((item) => {
               return(
-                <Card key={item.id}>
+                <Card key={item.id} className="user-card">
                   <CardActionArea>
                     <CardContent>
                       <Typography>
@@ -170,7 +204,7 @@ const Dashboard = (props) => {
             })
           }
         </div>
-        <Pagination count={Math.ceil(totalCards / cardsPerPage)} page={currentPage} onChange={paginate}/>
+        <Pagination count={Math.ceil(totalCards / cardsPerPage)} page={currentPage} onChange={paginate} className="pagination"/>
       </div>
     </div>
   ); 

@@ -5,7 +5,9 @@ const {
   PendingProfessionalsList, 
   MatchedProfessionalList, 
   ReviewStudentsList,
-  AcceptedStudentsList
+  AcceptedStudentsList,
+  ProfessionalNotifications,
+  StudentNotifications
 } = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -114,9 +116,17 @@ router.post("/api/register-student", (req, res) => {
             
             req.session.name = req.body.name;
             req.session.authtoken = token;
+            
+            let student_res = {
+              id: student.dataValues.id,
+              name: student.dataValues.name,
+              school_email: student.dataValues.school_email,
+              major: student.dataValues.major,
+              age: student.dataValues.age,
+            }
     
             res.status(200).send({
-              student: student,
+              student: student_res,
               authtoken: token
             });
           })
@@ -140,10 +150,10 @@ router.post("/api/login-student", (req,res) => {
     }
     //if found create var to hold the password and ID of that studen
     // sessions to hold student name why?
-  }).then(response => {
-    if(response.length > 0) {
-      var resPW = response[0].dataValues.password;
-      var resID = response[0].dataValues.id;
+  }).then(student => {
+    if(student.length > 0) {
+      var resPW = student[0].dataValues.password;
+      var resID = student[0].dataValues.id;
       
       req.session.name = req.body.name;
       // bcrypt compares whether the given password matches with the password or coressponding student
@@ -156,13 +166,22 @@ router.post("/api/login-student", (req,res) => {
       
       req.session.authtoken = token;
       
+      let student_res = {
+        id: student[0].dataValues.id,
+        name: student[0].dataValues.name,
+        school_email: student[0].dataValues.school_email,
+        major: student[0].dataValues.major,
+        age: student[0].dataValues.age,
+      }
+      
       res.status(200).send({
         auth: true,
         token: token,
+        student: student_res
       });
     }
     else {
-      res.status(401).send("User does not exist!")
+      res.status(401).send("User does not exist!");
     }
   });
 })
@@ -175,6 +194,7 @@ router.post("/api/select-professional", async (req, res) => {
     professionalPKID: req.body.professionalPKID,
   });
   
+  // add student in review list 
   let review_students = await ReviewStudentsList.create({
     studentPKID: req.body.studentPKID,
     professionalPKID: req.body.professionalPKID,
@@ -185,12 +205,12 @@ router.post("/api/select-professional", async (req, res) => {
       "id": req.body.studentPKID,
     }
   });
-  
+  // remove prof from browse list 
   let list_of_prof_ids = student[0].dataValues.browseProfessionals;
   let index_of_id = list_of_prof_ids.indexOf(req.body.professionalPKID);
   
   list_of_prof_ids.splice(index_of_id, 1);
-  
+  // update student browse list 
   let student_update = await Student.update({
     browseProfessionals: list_of_prof_ids
   }, {
@@ -199,11 +219,17 @@ router.post("/api/select-professional", async (req, res) => {
     }
   })
   
-  if(pending_profs.err && review_students.err && student.err && student_update.err) {
+  let send_notif_prof = await ProfessionalNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.studentName} sent a request`
+  });
+  
+  if(pending_profs.err && review_students.err && student.err && student_update.err && !send_notif_prof.err) {
     res.status(401).send("Select professional api error");
   }
   else {
-    res.status(200).send("Good to go!");
+    res.status(200).send("Successfully selected Professional");
   }
   
 });
@@ -233,7 +259,19 @@ router.post("/api/cancel-pending-professional", async (req,res) => {
     }
   });
   
-  if(!prof_to_browse.err && !remove_prof.err) {
+  let remove_student = await ReviewStudentsList.destroy({
+    where: {
+      studentPKID: req.body.studentPKID
+    }
+  });
+  
+  let send_notif_prof = await ProfessionalNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.studentName} has cancelled the request`
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err &&!send_notif_prof.err) {
     res.status(200).send("Removed professional from pending list and put back to browsing");
   }
   else {
@@ -265,14 +303,46 @@ router.post("/api/cancel-matched-professional", async (req,res) => {
     }
   });
   
-  if(!prof_to_browse.err && !remove_prof.err) {
-    res.status(200).send("Removed professional from matched list and put back to browsing");
+  let remove_student = await AcceptedStudentsList.destroy({
+    where: {
+      studentPKID: req.body.studentPKID
+    }
+  });
+  
+  let send_notif_prof = await ProfessionalNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.studentName} has cancelled the match`
+  });
+  
+  if(!prof_to_browse.err && !remove_prof.err && !remove_student.err && !send_notif_prof.err) {
+    res.status(200).send("Removed professional from matched list, removed student from accepted students list.");
   }
   else {
     res.status(401).send("Failed to remove professional");
   }
-
 });
+
+router.get("/api/get-student-notifications", async (req, res) => {
+  let notif_objs = await StudentNotifications.findAll({
+    where: {
+      studentPKID: req.query.id
+    }
+  });
+  
+  if(!notif_objs.err) {
+    let notifications = []
+    notif_objs.forEach(notif => {
+      notifications.unshift(notif.message)
+    });
+
+    res.status(200).json(notifications);
+  }
+  else {
+    res.status(401).send("Couldn't get notifications");
+  }
+  
+})
 
 
 

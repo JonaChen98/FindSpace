@@ -12,15 +12,26 @@ const ProfessionalDashboard = () => {
   const [currPage, setCurrPage] = useState(1);
   const [cardsPerPage] = useState(5);
   
+  const [id, setID] = useState(0);
+  
   // filter btns - professional
   const [review, toggleReview] = useState(true);
   const [accepted, toggleAccepted] = useState(false);
   
+  const [info, setInfo] = useState({})
+  const [notifs, setNotifs] = useState([])
+  
   useEffect(() => {
+    let profInfo = localStorage.getItem("profInfo");
+    profInfo = JSON.parse(profInfo);
+    setInfo(profInfo);
+    const { id } = profInfo;
+    setID(id);
+    
     const fetchData = async () => {
       const res = await axios.get('/api/review-students', {
         params: {
-          profID: 1
+          profID: id
         }
       });
       setRes(res.data);
@@ -30,6 +41,16 @@ const ProfessionalDashboard = () => {
   
   useEffect(() => {
     console.log("refresh");
+    // fetch notifications 
+    axios.get("/api/get-prof-notifications", {
+      params: {
+        id: id
+      }
+    }).then(res => {
+      setNotifs(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
   }, [response]);
   
   const fetchReview = () => {
@@ -39,7 +60,7 @@ const ProfessionalDashboard = () => {
       toggleAccepted(false);
       axios.get('/api/review-students', {
         params: {
-          profID: 1
+          profID: id
         }
       })
       .then(res => {
@@ -77,7 +98,7 @@ const ProfessionalDashboard = () => {
   
   return(
     <div className="dashboard-page-container">
-      <Navbar />
+      <Navbar numOfNotifs={notifs.length}/>
       <div className="btn-row">
         <Button 
           variant="contained" 
@@ -103,6 +124,8 @@ const ProfessionalDashboard = () => {
         profReview={review}
         profAccepted={accepted}
         setRes={setRes}
+        id={id}
+        info={info}
       />
     </div>
   );

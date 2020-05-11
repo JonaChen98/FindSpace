@@ -8,12 +8,16 @@ import axios from 'axios';
 import {useHistory} from 'react-router-dom';
 
 
-function Login(event) {
-  const [school_email, setschool_email] = useState("");
-  const [password, setpassword] = useState("");
-    const handleLogin = (event) => {
+function Login() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  
+  const history = useHistory();
+  
+  const handleLogin = (event) => {
     event.preventDefault();
-    axios.post('/api/login-student', {school_email":school_email, "password":password})
+
+    axios.post('/api/login-student', {"email":email, "password":password})
     
     .then(res =>{
       //  localStorage.setItem(school_email,school_email);
@@ -24,6 +28,36 @@ function Login(event) {
 
       console.log("this is the error message:" + err);
     })
+
+    if(email.endsWith("edu")) {
+      axios.post('/api/login-student', {
+        school_email: email, 
+        password: password
+      })
+      .then(res =>{
+        console.log(res.data.student);
+        localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
+        history.push('/student-dashboard');
+      })
+      .catch((err) => {
+        console.log("this is the error message:" + err);
+      })
+    }
+    else {
+      axios.post('/api/login-professional', {
+        email: email, 
+        password: password
+      })
+      .then(res =>{
+        console.log(res.data.professional);
+        localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
+        history.push('/professional-dashboard');
+      })
+      .catch((err) => {
+        console.log("this is the error message:" + err);
+      })
+    }
+
   }
 
   return( 
@@ -36,9 +70,9 @@ function Login(event) {
         <h1 className ="welcome">Welcome to Findspace!</h1>
         <form className = "loginform">
           {/* event.target.value for each input */}
-          <TextField className = "logininput" label = "school_email" id = "school_email" onChange = {event => setschool_email(event.target.value)} /><br/>
-          <TextField className = "logininput" label = "password" id = "password" onChange = {event => setpassword(event.target.value)} /> <br />
-          <input type = "submit" id = "submitbutton" onClick = {handleLogin}/>
+          <TextField className="logininput" label="Email" onChange = {event => setEmail(event.target.value)} /><br/>
+          <TextField className="logininput" label="Password" onChange = {event => setPassword(event.target.value)} /> <br />
+          <input type = "submit" id = "submitbutton" onClick = {(e) => handleLogin(e)}/>
         </form>  
       </div> 
     </div>

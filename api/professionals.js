@@ -5,11 +5,14 @@ const {
   ReviewStudentsList, 
   AcceptedStudentsList, 
   PendingProfessionalsList,
-  MatchedProfessionalsList
+  MatchedProfessionalList,
+  StudentNotifications,
+  ProfessionalNotifications
 } = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
+const S3 = require('aws-sdk/clients/s3');
 
 router.get("/api/professionals", async(req, res, next) => {
   let professional; 
@@ -106,32 +109,24 @@ router.get("/api/pending-professionals", async (req, res, next) => {
 
 
 router.get("/api/matched-professionals", async (req, res, next) => {
-  let matched_prof_list; 
   let matched_professionals = [];
   
-  try {
-    matched_prof_list = await MatchedProfessionalsList.findAll({
-      where: {
-        studentPKID: req.query.studentPKID
-      }
-    });
-  }
-  catch(err) {
-    res.send(err);
-  }
+  let matched_prof_list = await MatchedProfessionalList.findAll({
+    where: {
+      studentPKID: req.query.studentPKID
+    }
+  });
   
-  async function getMatchedProfs() {
+  if(!matched_prof_list.err) {
     for (const item of matched_prof_list) {
       let professional = await Professional.findByPk(item.dataValues.professionalPKID);
       matched_professionals.push(professional.dataValues);
     }
+    res.status(200).json(matched_professionals);
   }
-  
-  if(matched_prof_list != null) {
-    getMatchedProfs();
+  else {
+    res.status(401).send("Failed to get matched professionals");
   }
-  
-  res.status(200).json(matched_professionals);
   
 });
 
@@ -186,8 +181,16 @@ router.post("/api/register-professional", (req, res) => {
             res.status(401).send("Can't find students");
           });
         
+        let prof_res = {
+          "id": professional.dataValues.id,
+          "name": professional.dataValues.name,
+          "email": professional.dataValues.email,
+          "company": professional.dataValues.company,
+          "job": professional.dataValues.job
+        }
+      
         res.status(200).send({
-          professional: professional,
+          professional: prof_res,
           authtoken: token
         });
       })
@@ -201,11 +204,11 @@ router.post("/api/login-professional", (req,res) => {
     where: {
       "email": req.body.email,
     }
-  }).then(response => {
-    if(response.length > 0) {
+  }).then(professional => {
+    if(professional.length > 0) {
 
-      var resPW = response[0].dataValues.password;
-      var resID = response[0].dataValues.id;
+      var resPW = professional[0].dataValues.password;
+      var resID = professional[0].dataValues.id;
       
       var passwordIsValid = bcrypt.compareSync(req.body.password, resPW);
       
@@ -218,9 +221,18 @@ router.post("/api/login-professional", (req,res) => {
       req.session.name = req.body.name;
       req.session.authtoken = token;
       
+      let prof_res = {
+        "id": professional[0].dataValues.id,
+        "name": professional[0].dataValues.name,
+        "email": professional[0].dataValues.email,
+        "company": professional[0].dataValues.company,
+        "job": professional[0].dataValues.job
+      }
+      
       res.status(200).send({
         auth: true,
         token: token,
+        professional: prof_res
       });
     }
     else {
@@ -232,13 +244,14 @@ router.post("/api/login-professional", (req,res) => {
 router.post("/api/accept-student", async (req, res) => {
   // var token = req.headers['x-access-token'];
   // if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+  console.log(req.body.studentPKID, req.body.professionalPKID)
   
   let accepted_student = await AcceptedStudentsList.create({
     studentPKID: req.body.studentPKID,
     professionalPKID: req.body.professionalPKID,
   });
   
-  let matched_prof = await MatchedProfessionalsList.create({
+  let matched_prof = await MatchedProfessionalList.create({
     studentPKID: req.body.studentPKID,
     professionalPKID: req.body.professionalPKID,
   });
@@ -249,7 +262,19 @@ router.post("/api/accept-student", async (req, res) => {
     }
   });
   
-  if(!create_student.err && !matched_prof.err && !remove_student.err) {
+  let remove_prof = await PendingProfessionalsList.destroy({
+    where: {
+      professionalPKID: req.body.professionalPKID
+    }
+  });
+  
+  let send_notif_student = await StudentNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.profName} accepted the request`
+  });
+  
+  if(!accepted_student.err && !matched_prof.err && !remove_student.err && !accepted_student.err && !remove_prof.err && !send_notif_student.err) {
     res.status(200).send("Added student in accepted, added prof to matched list, removed student from review");
   }
   else {
@@ -258,24 +283,149 @@ router.post("/api/accept-student", async (req, res) => {
 
 });
 
-router.post("/api/reject-student", (req, res) => {
-  ReviewStudentsList.destroy({
+router.post("/api/reject-student", async (req, res) => {
+  // remove student from professional's review students list 
+  let remove_student = await ReviewStudentsList.destroy({
     where: {
       studentPKID: req.body.studentPKID
     }
-  }).then(response => {
-    res.status(200).send("Removed student from review student list");
   });
+  
+  // remove professional from student's pending professionals list 
+  let delete_pending_prof = await PendingProfessionalsList.destroy({
+    where: {
+      professionalPKID: req.body.professionalPKID
+    }
+  });
+  
+  // move prof to browsing 
+  let student = await Student.findAll({
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let list_of_prof_ids = student[0].dataValues.browseProfessionals;
+  list_of_prof_ids.push(req.body.professionalPKID);
+  
+  let prof_to_browse = await Student.update({
+    browseProfessionals: list_of_prof_ids
+  }, {
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let send_notif_student = await StudentNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.profName} rejected the request`
+  });
+  
+  if(!remove_student.err && !delete_pending_prof.err && !prof_to_browse.err && !send_notif_student.err) {
+    res.status(200).send("Removed student from review and removed professional from studne'ts pending list");
+  }
 });
 
-router.post("/api/cancel-accepted-student", (req, res) => {
-  AcceptedStudentsList.destroy({
+router.post("/api/cancel-accepted-student", async (req, res) => {
+  // remove student from accepted list 
+  let remove_student = await AcceptedStudentsList.destroy({
     where: {
       studentPKID: req.body.studentPKID
     }
-  }).then(response => {
-    res.status(200).send("Removed student from accepted list");
-  })
+  });
+  
+  // remove professional from student's matched list 
+  let delete_matched_prof = await MatchedProfessionalList.destroy({
+    where: {
+      professionalPKID: req.body.professionalPKID
+    }
+  });
+  
+  // move prof to browsing 
+  let student = await Student.findAll({
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let list_of_prof_ids = student[0].dataValues.browseProfessionals;
+  list_of_prof_ids.push(req.body.professionalPKID);
+  
+  let prof_to_browse = await Student.update({
+    browseProfessionals: list_of_prof_ids
+  }, {
+    where: {
+      id: req.body.studentPKID
+    }
+  });
+  
+  let send_notif_student = await StudentNotifications.create({
+    studentPKID: req.body.studentPKID,
+    professionalPKID: req.body.professionalPKID,
+    message: `${req.body.profName} cancelled the match`
+  });
+  
+  if(!remove_student.err && !delete_matched_prof.err && !prof_to_browse.err && !send_notif_student.err) {
+    res.status(200).send("Removed student from accepted list, removed professional from student's matched list, moved profssional back to browsing");
+  }
+});
+
+router.get("/api/get-prof-notifications", async (req, res) => {
+  let notif_objs = await ProfessionalNotifications.findAll({
+    where: {
+      professionalPKID: req.query.id
+    }
+  });
+  
+  if(!notif_objs.err) {
+    let notifications = []
+    notif_objs.forEach(notif => {
+      notifications.unshift(notif.message)
+    });
+
+    res.status(200).json(notifications);
+  }
+  else {
+    res.status(401).send("Couldn't get notifications");
+  }
+  
+});
+
+const cfDomain = process.env.AWS_CF_DOMAIN;
+const s3 = new S3({
+  accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+  secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+});
+const Bucket = 'bucket-name';
+
+router.put("/api/upload-space-img", async(req, res) => {
+  const fileExtensionMatch = req.files.image.name.match(/\.([a-zA-Z])+$/);
+  const fileExtension = fileExtensionMatch ? fileExtensionMatch[0] : '';
+  const profilePicturePath = `${req.params.id}/${new Date().getTime()}${fileExtension}`;
+  
+  s3.putObject({ Bucket, Body: req.files.image.data, Key: profilePicturePath }, (err, data) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ error: 'unable to upload image to AWS S3' });
+    }
+    
+    // update user - pic url 
+    
+    // knex(db.USER_TABLE_NAME)
+    //   .where(whereClause)
+    //   .update({ profile_picture_url: `https://${cfDomain}/${profilePicturePath}` })
+    //   .then(() => {
+    //     return knex(db.USER_TABLE_NAME).where(whereClause);
+    //   })
+    //   .then((data) => {
+    //     return res.json(data);
+    //   })
+    //   .catch((e) => {
+    //     console.error(e);
+    //     res.status(500).json({ error: 'something weird happened with the API' });
+    //   });
+  });
 })
 
 

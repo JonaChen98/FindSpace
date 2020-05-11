@@ -12,18 +12,29 @@ const StudentDashboard = () => {
   const [currPage, setCurrPage] = useState(1);
   const [cardsPerPage] = useState(5);
   
+  const [id, setID] = useState(0);
+  
   // filter buttons - student
   const [browse, toggleBrowse] = useState(true);
   const [pending, togglePending] = useState(false);
   const [accepted, toggleAccepted] = useState(false);
   
+  const [info, setInfo] = useState({})
+  const [notifs, setNotifs] = useState([])
+  
   const student = true; 
   
   useEffect(() => {
+    let studentInfo = localStorage.getItem("studentInfo");
+    studentInfo = JSON.parse(studentInfo);
+    setInfo(studentInfo);
+    const { id } = studentInfo;
+    setID(id);
+
     const fetchData = async () => {
       const res = await axios.get('/api/browse-professionals', {
         params: {
-          studentID: 1
+          studentID: id
         }
       });
       setRes(res.data);
@@ -33,6 +44,16 @@ const StudentDashboard = () => {
   
   useEffect(() => {
     console.log("refresh");
+    // fetch notifications 
+    axios.get("/api/get-student-notifications", {
+      params: {
+        id: id
+      }
+    }).then(res => {
+      setNotifs(res.data);
+    }).catch(err => {
+      console.log(err);
+    })
   }, [response]);
   
   const fetchBrowse = () => {
@@ -43,7 +64,7 @@ const StudentDashboard = () => {
       toggleAccepted(false);
       axios.get('/api/browse-professionals', {
         params: {
-          studentID: 1
+          studentID: id
         }
       })
       .then(res => {
@@ -68,7 +89,7 @@ const StudentDashboard = () => {
       toggleAccepted(false);
       axios.get('/api/pending-professionals', {
         params: {
-          studentPKID: 1
+          studentPKID: id
         }
       })
       .then(res => {
@@ -93,7 +114,7 @@ const StudentDashboard = () => {
       togglePending(false);
       axios.get('/api/matched-professionals', {
         params: {
-          studentPKID: 1,
+          studentPKID: id,
         }
       })
       .then(res => {
@@ -120,7 +141,7 @@ const StudentDashboard = () => {
   
   return(
     <div className="dashboard-page-container">
-      <Navbar />
+      <Navbar numOfNotifs={notifs.length}/>
       <div className="btn-row">
         <Button 
           variant="contained" 
@@ -155,6 +176,8 @@ const StudentDashboard = () => {
         acceptedBool={accepted}
         setRes={setRes}
         studentBool={student}
+        id={id}
+        info={info}
       />
     </div>
   );
