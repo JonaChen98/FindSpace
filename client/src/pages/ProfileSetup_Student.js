@@ -156,14 +156,11 @@ const ProfileSetupStudent = () => {
 
               <Grid container alignItems="flex-start" spacing={2}>
 
-                <Grid item xs={6}>
+                <Grid item xs={9}>
                   <TextField
                     label="Full name"
-                    // id="standard-full-width"
                     required
                     helperText="Your first and last name"
-                    // style={{ margin: 8 }}
-                    // margin="normal"
                     name="name"
                     fullWidth
                     value={name}
@@ -174,7 +171,7 @@ const ProfileSetupStudent = () => {
                 </div>
               </Grid>
 
-              <Grid item xs={12}>
+              <Grid item xs={9}>
                 <TextField
                     label="School email"
                     helperText="You must register with a school email"
@@ -189,7 +186,7 @@ const ProfileSetupStudent = () => {
                   </div> */}
               </Grid>
               
-              <Grid item xs={12}>
+              <Grid item xs={9}>
                 <TextField
                   label="Password"
                   required
@@ -220,7 +217,7 @@ const ProfileSetupStudent = () => {
                   </div> */}
               </Grid>
               
-              <Grid item xs={6}>
+              <Grid item xs={3}>
                 <TextField 
                   label="Age"
                   required
@@ -234,33 +231,37 @@ const ProfileSetupStudent = () => {
                   {/* {state.ageError} */}
                 {/* </div> */}
               </Grid>
+
               
-             <Grid item xs={12}>
+
+              <Typography paragraph variant="subtitle1" gutterBottom style={{padding:8}}>
+                The below questions help professionals know if you're the right fit for each other:
+              </Typography>
+              
+              <Grid item xs={12}>
+                  <TextField 
+                    label="Briefly describe yourself"
+                    multiline
+                    rowsMax={4}
+                    fullWidth/>
+              </Grid>
+              
+              <Grid item xs={12}>
                 <TextField 
-                  label="Briefly describe yourself"
+                  label="What do you intend to use the desk space if given?"
                   multiline
                   rowsMax={4}
                   fullWidth/>
-            </Grid>
+              </Grid>
 
-            <Grid item xs={12}>
-              <TextField 
-                label="What do you intend to use the desk space if given?"
-                multiline
-                rowsMax={4}
-                fullWidth/>
-            </Grid>
-
-            <Grid item style={{ marginTop: 16 }}>
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-                
-              >
-                Submit
-              </Button>
-            </Grid>
+              <Grid item style={{ marginTop: 16 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit">
+                  Submit
+                </Button>
+              </Grid>
 
           </Grid>
         </Paper>
