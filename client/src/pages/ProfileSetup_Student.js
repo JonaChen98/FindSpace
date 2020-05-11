@@ -1,11 +1,15 @@
 import React, { useState } from 'react';
-import TextField from '@material-ui/core/TextField';
 import Navbar from '../components/navbar';
 import { useHistory } from 'react-router-dom';
-import Button from '@material-ui/core/Button';
 import Footer from '../components/footer';
 import axios from 'axios';
-import '../styles/profilesetup.css';
+import {
+  Typography,
+  TextField,
+  Paper,
+  Grid,
+  Button,
+} from '@material-ui/core';
 
 
 const ProfileSetupStudent = () => {
@@ -51,39 +55,40 @@ const ProfileSetupStudent = () => {
   //     })
   // }
 
-  // const validate = () => {
-  //   let nameError = "";
-  //   let emailError = "";
-  //   let passwordError = "";
-  //   let ageError = "";
-  //   let majorError = "";
 
-  //   if (name) {
-  //     nameError = "Please enter your first and last name.";
-  //   }
+  let nameError = "";
+    let emailError = "";
+    let passwordError = "";
+    let ageError = "";
+    let majorError = "";
+  const validate = () => {
 
-  //   if (email.includes(".edu")){
-  //     emailError = "invalid email";
-  //   }
-  //   if (isNaN(age)){
-  //     ageError = "Enter a number.";
-  //   }
+    if (name) {
+      nameError = "Please enter your first and last name.";
+    }
+
+    if (email.includes(".edu")){
+      emailError = "invalid email";
+    }
+    if (isNaN(age)){
+      ageError = "Enter a number.";
+    }
     
-  //   if (password.length < 8){
-  //     passwordError = "Password must be 8 characters";
-  //   }
+    if (password.length < 8){
+      passwordError = "Password must be 8 characters";
+    }
 
-  //   if (emailError || nameError || passwordError|| ageError || majorError) {
+    if (emailError || nameError || passwordError|| ageError || majorError) {
       
       
-  //     this.setState({ emailError, nameError, passwordError, 
-  //       ageError, majorError });
+      this.setState({ emailError, nameError, passwordError, 
+        ageError, majorError });
         
-  //     return false;
-  //   }
+      return false;
+    }
 
-  //   return true;
-  // };
+    return true;
+  };
 
   
   const handleSubmit = event => {
@@ -129,94 +134,146 @@ const ProfileSetupStudent = () => {
   };
 
 
-    return (
+  return (    
+
     <div>
+      
       <Navbar/>
-        <div  className="center">
-          <form onSubmit={handleSubmit} className="form">
-            <div>
-            <label> Full Name: </label>
-              <TextField
-                name="name"
-                placeholder="name"
-                // value={state.name}
-                onChange={event => setName(event.target.value)}
-              />
-              {/* <div style={{ fontSize: 12, color: "red" }}>
-                {state.nameError}
-              </div> */}
-            </div>
+     
+      <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
+      
+        <Typography variant="h4" align="center" component="h1" gutterBottom>
+          Tell us about yourself.
+        </Typography>
 
-            <div className="text-field">
-              <h4> Age: </h4>
-              <TextField 
-                label="Required*"
-                name="age"
-                placeholder="age"
-                // value={state.age}
-                onChange={event => setAge(event.target.value)}
-                
-              />
+        <Typography paragraph align="center" gutterBottom>
+          Create your account and let professionals get to know who you are.
+        </Typography>
+
+          <form onSubmit={handleSubmit} >
+
+            <Paper style={{ padding: 16 }}>
+
+              <Grid container alignItems="flex-start" spacing={2}>
+
+                <Grid item xs={9}>
+                  <TextField
+                    label="Full name"
+                    required
+                    helperText="Your first and last name"
+                    name="name"
+                    fullWidth
+                    value={name}
+                    onChange={event => setName(event.target.value)}
+                  />
+                <div style={{ fontSize: 12, color: "red" }}>
+                  {nameError}
+                </div>
+              </Grid>
+
+              <Grid item xs={9}>
+                <TextField
+                    label="School email"
+                    helperText="You must register with a school email"
+                    required
+                    name="email"
+                    fullWidth
+                    // value={state.email}
+                    onChange={event => setEmail(event.target.value)}
+                  />
+                  {/* <div style={{ fontSize: 12, color: "red" }}>
+                    {state.emailError}
+                  </div> */}
+              </Grid>
               
-              {/* <div style={{ fontSize: 12, color: "red" }}> */}
-                {/* {state.ageError} */}
-              {/* </div> */}
-            </div>
+              <Grid item xs={9}>
+                <TextField
+                  label="Password"
+                  required
+                  helperText="Must be at least 8 characters"
+                  fullWidth
+                  type="password"
+                  name="password"
+                    // value={state.password}
+                  onChange={event => setPassword(event.target.value)}
+                  />
+                  {/* <div style={{ fontSize: 12, color: "red" }}>
+                    {state.passwordError}
+                  </div> */}
+              </Grid>
 
-            <div>
-            <label> Major: </label>
-            <TextField
-                name="major"
-                placeholder="major"
-                // value={state.major}
-                onChange={event => setMajor(event.target.value)}
-              />
-              {/* <div style={{ fontSize: 12, color: "red" }}>
-                {state.majorError}
-              </div> */}
-            </div>
-            <div>
-            <TextField
-                name="email"
-                fullWidth
-                placeholder="email"
-                // value={state.email}
-                onChange={event => setEmail(event.target.value)}
-              />
-              {/* <div style={{ fontSize: 12, color: "red" }}>
-                {state.emailError}
-              </div> */}
-            </div>
-            <div>
-            <TextField
-                type="password"
-                name="password"
-                placeholder="password"
-                // value={state.password}
-                onChange={event => setPassword(event.target.value)}
-              />
-              {/* <div style={{ fontSize: 12, color: "red" }}>
-                {state.passwordError}
-              </div> */}
-            </div>
-            <div>
-              <h4> Briefly describe yourself</h4>
-                  <TextField id="standard-basic" variant="outlined" />
-              <h4> What do you intend to use the desk space if given?</h4>
-                  <TextField id="standard-basic" variant="outlined" />
-            </div>
-            <Button variant="contained" type="submit" color="primary" style={{justifyContent: "center", alignItems: "center"}}>
-                Submit
-            </Button>
-          </form>
-        </div>
-      
-        
-      {/* <Footer/> */}
-      
+              <Grid item xs={6}>
+                <TextField
+                  label="Major"
+                  required
+                  margin="normal"
+                  helperText="Use undeclared if you do not have a major"
+                  name="major"
+                  // value={state.major}
+                  onChange={event => setMajor(event.target.value)}
+                  />
+                  {/* <div style={{ fontSize: 12, color: "red" }}>
+                    {state.majorError}
+                  </div> */}
+              </Grid>
+              
+              <Grid item xs={3}>
+                <TextField 
+                  label="Age"
+                  required
+                  margin="normal"
+                  name="age"
+                  // value={state.age}
+                  onChange={event => setAge(event.target.value)}
+                />
+                
+                {/* <div style={{ fontSize: 12, color: "red" }}> */}
+                  {/* {state.ageError} */}
+                {/* </div> */}
+              </Grid>
+
+              
+
+              <Typography paragraph variant="subtitle1" gutterBottom style={{padding:8}}>
+                The below questions help professionals know if you're the right fit for each other:
+              </Typography>
+              
+              <Grid item xs={12}>
+                  <TextField 
+                    label="Briefly describe yourself"
+                    multiline
+                    rowsMax={4}
+                    fullWidth/>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <TextField 
+                  label="What do you intend to use the desk space if given?"
+                  multiline
+                  rowsMax={4}
+                  fullWidth/>
+              </Grid>
+
+              <Grid item style={{ marginTop: 16 }}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  type="submit">
+                  Submit
+                </Button>
+              </Grid>
+
+          </Grid>
+        </Paper>
+      </form>
+
     </div>
+    {/* <hr/>
+    <Footer/> */}
+
+  </div>
       
-    );
+  );
 }
 
 // function ProfileSetupStudent() {
