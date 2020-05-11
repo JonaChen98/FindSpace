@@ -2,19 +2,25 @@
 
 .profile-container {
   
+  background-color: #F5F5F5;
   align-self: auto auto;
-  margin-left: 60px;
-  margin-right: 60px;
+  padding-bottom: 50px;
 
 }
 
 .userInfo-container{
   
+  background-color: #FFFFFF;
   text-align: center;
   justify-content: center;
-  margin: 50px;
+  
+  margin-left: 25%;
+  margin-right: 25%;
   display: inline-flexbox;
-  padding-bottom: 100px;
+  padding-bottom: 2%;
+  border: 1px transparent solid;
+  padding-top: 50px;
+  
   
   
 }
@@ -22,8 +28,8 @@
 .profile-image{
   
   width: 100%;
-  height: 350px;
-  border-radius: 50%;
+  height: 300px;
+  border-radius: 100%;
   object-fit: scale-down;
  
 }
@@ -38,21 +44,21 @@
   
 }
 
-.school{
+/*.school{
   
   margin: auto;
   max-width: 200px;
   border-radius: 50px;
  
-}
+}*/
 
-.major{
+/*.major{
   
   margin: auto;
   max-width: 200px;
   border-radius: 50px;
   
-}
+}*/
 
 .phone{
   
@@ -62,14 +68,14 @@
   
 }
 
-.email{
+/*.email{
   
   margin: auto;
   max-width: 100%;
   height: auto;
   border-radius: 20px;
   text-overflow: auto;
-}
+}*/
 
 .qform{
   max-width: 500px;
@@ -121,6 +127,13 @@ h1 {
   width: 50%;
   margin: auto;
   padding: 1rem;
+}
+
+.userInfo-container hr {
+ 
+
+  margin: 50px;
+  
 }
 
 /*.profile-image{
