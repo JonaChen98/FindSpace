@@ -15,6 +15,8 @@ var bcrypt = require('bcryptjs');
 var config = require('../config');
 const S3 = require('aws-sdk/clients/s3');
 
+const { accessKeyId, secretAccessKey, cfDomain } = require('../keys');
+
 router.get("/api/professionals", async(req, res, next) => {
   let professional; 
   
@@ -393,12 +395,11 @@ router.get("/api/get-prof-notifications", async (req, res) => {
 });
 
 // const cfDomain = process.env.AWS_CF_DOMAIN;
-const cfDomain = "us-east-1";
 const s3 = new S3({
   // accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
   // secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
-  accessKeyId: "AKIAJE5DDFEU6BPGYAUQ",
-  secretAccessKey: "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",
+  accessKeyId: accessKeyId,
+  secretAccessKey: secretAccessKey
 });
 const Bucket = 'findspace-webdev';
 
