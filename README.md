@@ -1,13 +1,15 @@
 # FindSpace
+#### Project owners: [Toby Au](https://github.com/tobyau), [Rivka Ligier](https://github.com/R-Ligier), [Jona Chen](https://github.com/JonaChen98), [Rehan Khan]()
 
-## Overview
-Findspace is a platform where unused desk spaces are listed by companies or individuals to be used freely by students. Students browse through available listings and make request to use the desired space.
+## :star: Overview
+Findspace is a platform where unused work/desk spaces are listed by companies or individuals to be used freely by students. Students browse through available listings and make a request to use the desired space.The owner of the listing must then accept the request for the match to occurr.
 
-Deployed to Heroku: [Link](https://webdev-findspace.herokuapp.com/)
+## :rocket: Deployment
+Heroku: [Link](https://webdev-findspace.herokuapp.com/)
 
 <br>
 
-## Technologies
+## :hammer_and_wrench: Built With
 - React
 - React Router Dom 
 - Node
