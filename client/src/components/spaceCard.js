@@ -8,10 +8,7 @@ import officeImg from '../assets/office.png';
 const SpaceCard = ({ props, setRes, id, info, browseBool, pendingBool, acceptedBool }) => {
   const { enqueueSnackbar, closeSnackbar } = useSnackbar();
   
-  const { spaceName, location, time, days, imageURL, professionalName, professionalPKID } = props;
-  
-  // console.log(props);
-  // console.log("image url: ", imageURL);
+  const { spaceName, location, time, days, imageUrl, professionalName, professionalPKID } = props;
   
   const getStudentBtns = () => {
     if(browseBool) {
@@ -91,10 +88,10 @@ const SpaceCard = ({ props, setRes, id, info, browseBool, pendingBool, acceptedB
     <div>
       <Card style={{ display: "flex", marginBottom: 30, paddingRight: 40 }}>
       <CardMedia
-          image={officeImg}
-          style={{ width: 300 }}
-          title="Office Space"
-        />
+        image={imageUrl}
+        style={{ width: 300 }}
+        title="Office Space"
+      />
       <div style={{ display: "flex", flexDirection: "column"}}>
         <CardContent style={{ flex: "1 0 auto", marginLeft: 40 }}>
           <Typography component="h5" variant="h5">
