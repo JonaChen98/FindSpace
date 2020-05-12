@@ -1,5 +1,6 @@
 import React, {useState}from 'react';
 import Navbar from '../components/navbar';
+// import ProfModal from '../components/profmodal';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/footer';
 import axios from 'axios';
@@ -14,31 +15,31 @@ import {
 const ProfileSetupProfessional = () => {
 
 
-  // const history = useHistory();
+  const history = useHistory();
   
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [company, setCompany] = useState("");
-  // const [job, setJob] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [company, setCompany] = useState("");
+  const [job, setJob] = useState("");
 
-  // const signUp = (e) => {
-  //   e.preventDefault();
-  //   axios.post('/api/register-professional', {
-  //       "name": name, 
-  //       "password": password, 
-  //       "email": email,
-  //       "company": company,
-  //       "job": job
-  //     })
-  //     .then(res => {
-  //       localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
-  //       history.push('/professional-dashboard');
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error registering professional");
-  //     })
-  // }
+  const signUp = (e) => {
+    e.preventDefault();
+    axios.post('/api/register-professional', {
+        "name": name, 
+        "password": password, 
+        "email": email,
+        "company": company,
+        "job": job
+      })
+      .then(res => {
+        localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
+        history.push('/professional-dashboard');
+      })
+      .catch((err) => {
+        console.log("Error registering professional");
+      })
+  }
 
   return (
 
@@ -152,9 +153,7 @@ const ProfileSetupProfessional = () => {
               <Button
                 variant="contained"
                 color="primary"
-                type="submit"
-                
-              >
+                type="submit">
                 Submit
               </Button>
             </Grid>

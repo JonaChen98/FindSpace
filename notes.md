@@ -15,3 +15,7 @@ To start postgres cli
 `\dt` -> show tables 
 
 
+```
+heroku pg:reset webdev-findspace
+heroku pg:push findspace postgresql-crystalline-87558 --app webdev-findspace
+```
