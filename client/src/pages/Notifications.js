@@ -14,6 +14,8 @@ const NotificationsPage = () => {
   const [currPage, setCurrPage] = useState(1);
   const [cardsPerPage] = useState(5);
   
+  let dashboardURL = localStorage.getItem("dashboardURL");
+  
   useEffect(() => {
     let profInfo = localStorage.getItem("profInfo");
     let studentInfo = localStorage.getItem("studentInfo");
@@ -60,13 +62,15 @@ const NotificationsPage = () => {
     <div className="notif-page-container">
       <Navbar home={false}/>
       <div>
-        <Link style={{
-          display: "flex",
-          textDecoration: "none",
-          color: "black",
-          marginLeft: 55,
-          marginTop: 50
-        }}
+        <Link 
+          to={dashboardURL}
+          style={{
+            display: "flex",
+            textDecoration: "none",
+            color: "black",
+            marginLeft: 55,
+            marginTop: 50
+          }}
         >
           <ArrowBackIcon />
           <span style={{ marginTop: 3, marginLeft: 8 }}>Back</span>
