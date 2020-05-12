@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useRef } from "react";
+import { useParams } from "react-router-dom";
 import { makeStyles } from '@material-ui/core/styles';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import {
@@ -9,6 +10,7 @@ import {
     Button,
     IconButton,
   } from '@material-ui/core';
+  import axios from 'axios';
 
 
 const useStyles = makeStyles(theme => ({
@@ -36,6 +38,33 @@ export default function SimpleModal() {
 
     const handleOpen = () => { setOpen(true); };
     const handleClose = () => { setOpen(false); };
+    
+    const [spaceName, setSpaceName] = React.useState("");
+    const [location, setLocation] = React.useState("");
+    const [days, setDays] = React.useState([]);
+    const [time, setTime] = React.useState("");
+    
+    const fileInput = useRef();
+    
+    const onSubmitPost = () => {
+        let profInfo = localStorage.getItem("profInfo");
+        profInfo = JSON.parse(profInfo);
+        let id = profInfo.id;
+        
+        if(fileInput.current.files.length > 0) {
+            const formData = new FormData();
+            formData.append("image", fileInput.current.files[0]);
+            formData.append("spaceName", spaceName);
+            formData.append("location", location);
+            formData.append("days", days);
+            formData.append("time", spaceName);
+            
+            axios.post(`/api/${id}/upload-space-img`, formData)
+                .then(res => {
+                    console.log(res.data);
+                })
+        }
+    }
 
     return (
         <div>
@@ -59,8 +88,7 @@ export default function SimpleModal() {
             <Typography paragraph variant="h6" align="center" gutterBottom>
                 Complete the details below to add an unused space.
             </Typography>
-
-                <form>
+            <form encType="multipart/form-data">
                     <Grid container alignItems="flex-start" spacing={2}>
                     
                     
@@ -68,12 +96,12 @@ export default function SimpleModal() {
                         <TextField
                             label="Space nickname"
                             required
-                            helperText="Your first and last name"
+                            helperText="Or company name"
                             name="name"
                             margin="normal"
                             // fullWidth
                             // value={name}
-                            // onChange={event => setName(event.target.value)}
+                            onChange={event => setSpaceName(event.target.value)}
                         />
                         {/* <div style={{ fontSize: 12, color: "red" }}>
                         {nameError}
@@ -87,6 +115,7 @@ export default function SimpleModal() {
                             required
                             margin="normal"
                             name="company name"
+                            onChange={event => setLocation(event.target.value)}
                             />
                             {/* <div style={{ fontSize: 12, color: "red" }}>
                                 {state.majorError}
@@ -101,7 +130,7 @@ export default function SimpleModal() {
                             fullWidth
                             name="company name"
                             // value={state.major}
-                            // onChange={event => setMajor(event.target.value)}
+                            onChange={event => setDays(event.target.value)}
                             />
                             {/* <div style={{ fontSize: 12, color: "red" }}>
                                 {state.majorError}
@@ -109,14 +138,14 @@ export default function SimpleModal() {
                     </Grid>
                     <Grid item xs={9}>
                         <TextField
-                            label="Time ranges this space is available"
+                            label="Time this space is available"
                             helperText=""
                             required
                             margin="normal"
                             fullWidth
                             name="company name"
                             // value={state.major}
-                            // onChange={event => setMajor(event.target.value)}
+                            onChange={event => setTime(event.target.value)}
                             />
                             {/* <div style={{ fontSize: 12, color: "red" }}>
                                 {state.majorError}
@@ -126,26 +155,29 @@ export default function SimpleModal() {
                     <Grid item xs={12}>
                         <label> Upload an image of the space. </label>
                         <br/>
-                        <input accept="image/*" style={{display:'none'}} id="icon-button-file" type="file" />
-                            <label htmlFor="icon-button-file">
+                        <input type="file" ref={fileInput} />
+                            {/* <label htmlFor="icon-button-file">
                                 <IconButton color="inherit" aria-label="upload picture" >
                                     <CloudUploadOutlinedIcon fontSize="large"/>
                                 </IconButton>
-                            </label>
+                            </label> */}
                     </Grid>
 
                     <Grid item style={{ marginTop: 8 }}>
                         <Button
                             variant="contained"
                             color="primary"
-                            type="submit">
+                            onClick={onSubmitPost}
+                        >
                             Post
                         </Button>
                     </Grid>
 
 
                 </Grid>
+                
                 </form>
+                
             </div>
         </Modal>
     </div>

@@ -7,7 +7,8 @@ const {
   PendingProfessionalsList,
   MatchedProfessionalList,
   StudentNotifications,
-  ProfessionalNotifications
+  ProfessionalNotifications,
+  OfficeSpace
 } = require("../models");
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
@@ -389,42 +390,61 @@ router.get("/api/get-prof-notifications", async (req, res) => {
   else {
     res.status(401).send("Couldn't get notifications");
   }
-  
 });
 
-const cfDomain = process.env.AWS_CF_DOMAIN;
+// const cfDomain = process.env.AWS_CF_DOMAIN;
+const cfDomain = "us-east-1";
 const s3 = new S3({
-  accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
-  secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+  // accessKeyId: process.env.AWS_S3_ACCESS_KEY_ID,
+  // secretAccessKey: process.env.AWS_S3_SECRET_ACCESS_KEY,
+  accessKeyId: "AKIAJE5DDFEU6BPGYAUQ",
+  secretAccessKey: "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",
 });
-const Bucket = 'bucket-name';
+const Bucket = 'findspace-webdev';
 
-router.put("/api/upload-space-img", async(req, res) => {
+router.post("/api/:id/upload-space-img", async(req, res) => {
+  const user = await Professional.findAll({
+    where: {
+      id: req.params.id
+    }
+  });
+  if(user.length !== 1) {
+    return res.status(401).json({err: `no user found with id "${req.params.id}"` });
+  }
+  
+  let { spaceName, location, days, time } = req.body; 
+  days = days.split(",");
+  console.log("days: ", days);
+  
+  
   const fileExtensionMatch = req.files.image.name.match(/\.([a-zA-Z])+$/);
   const fileExtension = fileExtensionMatch ? fileExtensionMatch[0] : '';
   const profilePicturePath = `${req.params.id}/${new Date().getTime()}${fileExtension}`;
   
-  s3.putObject({ Bucket, Body: req.files.image.data, Key: profilePicturePath }, (err, data) => {
+  s3.putObject({ Bucket, Body: req.files.image.data, Key: profilePicturePath }, async (err, data) => {
     if (err) {
       console.error(err);
       return res.status(500).json({ error: 'unable to upload image to AWS S3' });
     }
     
-    // update user - pic url 
+    let create_space = await OfficeSpace.create({
+      "spaceName": spaceName,
+      "location": location,
+      "time": time,
+      "days": days,
+      "imageUrl": `https://${cfDomain}/${profilePicturePath}`,
+      "professionalName": user.name,
+      "professionalPKID": user.id
+    });
     
-    // knex(db.USER_TABLE_NAME)
-    //   .where(whereClause)
-    //   .update({ profile_picture_url: `https://${cfDomain}/${profilePicturePath}` })
-    //   .then(() => {
-    //     return knex(db.USER_TABLE_NAME).where(whereClause);
-    //   })
-    //   .then((data) => {
-    //     return res.json(data);
-    //   })
-    //   .catch((e) => {
-    //     console.error(e);
-    //     res.status(500).json({ error: 'something weird happened with the API' });
-    //   });
+    if(!create_space.err) {
+      console.log("Create office space");
+      res.status(200).send("Posted office space!");
+    }
+    else {
+      res.status(401).json({ error: `error creating office space in db`});
+    }
+
   });
 })
 

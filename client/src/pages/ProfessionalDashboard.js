@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import Navbar from '../components/navbar';
 import Dashboard from '../components/dashboard';
 import { Button } from '@material-ui/core';
+import SimpleModal from '../components/profmodal';
 
 import '../styles/dashboard.css';
 import axios from 'axios';
@@ -114,6 +115,7 @@ const ProfessionalDashboard = () => {
         >
           Accepted
         </Button>
+        <SimpleModal />
       </div>
       <Dashboard 
         totalCards={response.length} 
