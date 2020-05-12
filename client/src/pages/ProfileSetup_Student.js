@@ -71,7 +71,8 @@ const ProfileSetupStudent = () => {
       });
       console.log(res.data.student);
       localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
-      let res_name = res.data.student.name.replace(/\s+/g, '');
+      let res_name = res.data.student.name.replace(/\s+/g, '-');
+      localStorage.setItem("dashboardURL", `/${res_name}/student-dashboard`);
       history.push(`/${res_name}/student-dashboard`);
     }
     

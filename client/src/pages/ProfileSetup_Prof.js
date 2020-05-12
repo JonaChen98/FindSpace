@@ -34,9 +34,9 @@ const ProfileSetupProfessional = () => {
       })
       .then(res => {
         localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
-        let name = res.data.professional.name.replace(/\s+/g, '');
-        console.log(name);
-        history.push(`/${name}/professional-dashboard`);
+        let res_name = res.data.professional.name.replace(/\s+/g, '-');
+        localStorage.setItem("dashboardURL", `/${res_name}/professional-dashboard`);
+        history.push(`/${res_name}/professional-dashboard`);
       })
       .catch((err) => {
         console.log("Error registering professional");
