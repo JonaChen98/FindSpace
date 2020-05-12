@@ -17,18 +17,6 @@ function Login() {
   const handleLogin = (event) => {
     event.preventDefault();
 
-    axios.post('/api/login-student', {"email":email, "password":password})
-    
-    .then(res =>{
-      //  localStorage.setItem(school_email,school_email);
-      //  localStorage.setItem(password,password);
-      console.log(res);
-    })
-    .catch((err) => {
-
-      console.log("this is the error message:" + err);
-    })
-
     if(email.endsWith("edu")) {
       axios.post('/api/login-student', {
         school_email: email, 
