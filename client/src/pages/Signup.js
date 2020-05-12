@@ -7,13 +7,9 @@ import Typography from '@material-ui/core/Typography';
 import Professional from '../assets/professional.png';
 import Student from '../assets/student.png';
 import Navbar from '../components/navbar';
-import Footer from '../components/footer';
 import '../styles/signup.css';
 
 const useStyles = makeStyles({
-  // root: {
-  //   maxWidth: 345,
-  // },
   media: {
     height: 140,
   },
@@ -26,16 +22,12 @@ export default function ContainedButtons() {
   return (
   <div>
     <Navbar/>
-
     
     <Typography variant="h4" style={{textAlign:"center", paddingTop:"50px"}}> Tell us who you are.</Typography>
 
-    <div className="container">
+    <div className="container-wrap">
         <div className="student-container">
-          {/* <Typography variant="h5" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-            <b>Student</b>
-          </Typography> */}
-        
+
           <img src={Student} alt="student" className="img"/>
 
             <Typography variant="h6" className="description">
@@ -50,9 +42,6 @@ export default function ContainedButtons() {
           </div>
             
         <div className="prof-container">
-          {/* <Typography variant="h5" style={{display: "flex", justifyContent: "center", alignItems: "center"}}>
-            <b>Professional</b>
-          </Typography> */}
             
           <img src={Professional} alt="student" className="img"/>
           
@@ -70,8 +59,6 @@ export default function ContainedButtons() {
   
       
     </div>
-    <hr/>
-    <Footer/>
   </div>
   
   );

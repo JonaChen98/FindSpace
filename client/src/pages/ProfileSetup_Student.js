@@ -86,7 +86,7 @@ const ProfileSetupStudent = () => {
       
       <Navbar/>
      
-      <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
+      <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
       
         <Typography variant="h4" align="center" component="h1" gutterBottom>
           Tell us about yourself.

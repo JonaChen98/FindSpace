@@ -21,19 +21,20 @@ const Home = () => {
   
   return (
     <div className="home-container">
-      <Navbar/>
+      <Navbar/> 
       
       <div className="header-container">
         <div className="header-left">
+          
           <Typography variant="h3" className="header-title">
            Helping students revolutionize their study space.
            </Typography>
           
-          <Typography variant="h4" className="header-description">
+          <Typography variant="h5" className="header-description">
             Whether you’re an undergraduate or graduate student, 
             discover spaces that inspire your most impactful work
             offered by companies and individuals.
-          </Typography>
+            </Typography>
         </div>
         <img src={headerImage} alt="logo" className="header-img"/>
       </div>
@@ -42,22 +43,18 @@ const Home = () => {
         
         <Typography variant="h3" className="getting-started-title">
           Here's how it works: 
-        </Typography>
+        </Typography> 
         
         <div className="getting-started-content">
         
         <div className="container">
+          
           <div className="text">
-      
-            <Typography variant="h4"> 
-              1. Create your account.
-              
-              <Typography variant="h5">
+            <Typography variant="h4" gutterBottom> 1. Create your account.</Typography>
+              <Typography paragraph variant="h5" >
                 Sign up as a student to browse spaces freely offered or
                 sign up as a professional to join the list of providers.
               </Typography>
-
-            </Typography>
           </div>
 
           <div className="img-container">
@@ -66,19 +63,15 @@ const Home = () => {
         </div>
 
         <div className="container">
+          
           <div className="text">
-      
-            <Typography variant="h4"> 
-              2. Set up your profile.
-
-              <Typography variant="h5">
+            <Typography variant="h4" gutterBottom> 2. Set up your profile. </Typography>
+            <Typography paragraph variant="h5" >
                 As a student, you'll answer a few questions so a professional reviewing
                 your profile can get to know who you are.
 
                 As a professional, you'll answer a few questions so students can have 
                 a better idea of the kind of person you're looking to invite.
-              </Typography>
-            
             </Typography>
           </div>
 
@@ -90,15 +83,12 @@ const Home = () => {
         <div className="container">
           <div className="text">
 
-            <Typography variant="h4"> 
-              3. Browse and request.
-              
-              <Typography variant="h5">
+            <Typography variant="h4" gutterBottom> 3. Browse and request. </Typography>
+            <Typography paragraph variant="h5" >
                 Students have the chance to browse spaces offered by professionals as well as 
                 requesting a desired space.
               </Typography>
             
-            </Typography>
           </div>
 
           <div className="img-container">
@@ -109,14 +99,12 @@ const Home = () => {
         <div className="container">
           <div className="text">
 
-            <Typography variant="h4">
-              4. Review and accept.
-              
-              <Typography variant="h5">
+            <Typography variant="h4" gutterBottom> 4. Review and accept. </Typography>  
+              <Typography paragraph variant="h5" >
                 Professionals will review requests made for their and accept if it's a match.
               </Typography>
             
-            </Typography>
+            
           </div>
 
           <div className="img-container">
@@ -128,15 +116,13 @@ const Home = () => {
 
         <div className="container">
           <div className="text">
-            <Typography variant="h4">
-              5. Connect!
-              
-              <Typography variant="h5">
+            <Typography variant="h4" gutterBottom> 5. Connect! </Typography>
+            <Typography paragraph variant="h5" >
                 Once a match has been made, connect with each other to confirm the time and date
                 for arrangement and any additional logistics.
               </Typography>
             
-            </Typography>
+            
         </div>
         
           <div className="img-container">

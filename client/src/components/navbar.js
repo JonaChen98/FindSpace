@@ -12,7 +12,8 @@ import Badge from '@material-ui/core/Badge';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    flexGrow: 1,
+    paddingTop: 20,
+    flexGrow: 1,    
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -20,6 +21,8 @@ const useStyles = makeStyles((theme) => ({
   title: {
     flexGrow: 1,
     marginLeft: 30,
+    fontSize: 30,
+    fontWeight: 700,
   },
 }));
 
@@ -29,8 +32,8 @@ const NavBtns = (numOfNotifs) => {
   if(location.pathname === "/") {
     return(
       <div>
-        <Button color="inherit" component={Link} to="/login">Login</Button>
-        <Button color="inherit" component={Link} to="/signup">Sign Up</Button>
+        <Button color="inherit" style={{fontSize: 20}} component={Link} to="/login">Login</Button>
+        <Button color="inherit" style={{fontSize: 20}}  component={Link} to="/signup">Sign Up</Button>
       </div>
     );
   }
@@ -81,7 +84,7 @@ const Navbar = ({ numOfNotifs }) => {
   
   return(
     <div className={classes.root}>
-      <AppBar position="static" elevation={0} color='inherit'>
+      <AppBar position="fixed" elevation={0} color='inherit'>
           <Toolbar>
             <Typography variant="h6" className={classes.title}>
               <Link 

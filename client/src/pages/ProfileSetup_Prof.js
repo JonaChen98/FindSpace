@@ -49,7 +49,7 @@ const ProfileSetupProfessional = () => {
       
       <Navbar/>
       
-      <div style={{ padding: 16, margin: 'auto', maxWidth: 600 }}>
+      <div style={{ padding: 16, margin: 'auto', maxWidth: 700 }}>
       
         <Typography variant="h4" align="center" component="h1" gutterBottom>
           Tell us about yourself.
@@ -76,9 +76,7 @@ const ProfileSetupProfessional = () => {
                     // value={name}
                     onChange={event => setName(event.target.value)}
                   />
-                {/* <div style={{ fontSize: 12, color: "red" }}>
-                  {nameError}
-                </div> */}
+                
               </Grid>
 
               <Grid item xs={6}>
