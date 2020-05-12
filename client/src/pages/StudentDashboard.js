@@ -97,12 +97,11 @@ const StudentDashboard = () => {
           setRes([]);
         }
         else {
-          console.log(res.data);
           setRes(res.data);  
         }
       })
       .catch(err => {
-        // console.log(err);
+        console.log("Error fetch pending");
       })
     }
   }
@@ -127,7 +126,7 @@ const StudentDashboard = () => {
         }
       })
       .catch(err => {
-        // console.log(err);
+        console.log("Error fetch accept");
       })
     }
   }
