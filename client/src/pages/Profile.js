@@ -14,7 +14,6 @@ import CardContent from '@material-ui/core/CardContent';
 
 
 const Profile = () => {
-  //const [response, setRes] = useState("");
   
   const [name, setName] = useState("");
   const [school, setSchool] = useState("");
@@ -26,12 +25,6 @@ const Profile = () => {
   // etc... more data points 
   
   // componentdidMount
-
-  //test ProfileInfo display
-  //const myobj = {"name":"John", "school":"hunter", "school_email":"a@a.com", "major":"comp sci", "age":"69"};
-
-  //const myobj2 = {"name":"bob", "company":"google", "email":"a@a.com", "job":"coding"};
-
   
   useEffect(() => {
     
@@ -55,18 +48,6 @@ const Profile = () => {
       }
 
     }, []);
-
-
-    //Test ProfileInfo Display
-    
-    /*useEffect(() => {
-      localStorage.setItem("studentInfo", JSON.stringify(myobj));
-    });*/
-
-     
-    /*useEffect(() => {
-      localStorage.setItem("profInfo", JSON.stringify(myobj2));
-    });*/
     
   
     return(
