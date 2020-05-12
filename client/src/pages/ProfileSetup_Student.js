@@ -20,80 +20,46 @@ const ProfileSetupStudent = () => {
   const [password, setPassword] = useState("");
   const [major, setMajor] = useState("");
   const [age, setAge] = useState(0);
-  
 
-  // onChange = (e) => {
-  //   /*
-  //     Because we named the inputs to match their
-  //     corresponding values in state, it's
-  //     super easy to update the state
-  //   */
-  //   this.setState({ [e.target.name]: e.target.value });
-  // }
 
-  // signUp = (e) => {
-  //   e.preventDefault();
-    // const [name, setName] = useState("");
-    // const [email, setEmail] = useState("");
-    // const [password, setPassword] = useState("");
-    // const [major, setMajor] = useState("");
-    // const [age, setAge] = useState(0);
+
+  // let nameError = "";
+  //   let emailError = "";
+  //   let passwordError = "";
+  //   let ageError = "";
+  //   let majorError = "";
+  // const validate = () => {
+
+  //   if (name) {
+  //     nameError = "Please enter your first and last name.";
+  //   }
+
+  //   if (email.includes(".edu")){
+  //     emailError = "invalid email";
+  //   }
+  //   if (isNaN(age)){
+  //     ageError = "Enter a number.";
+  //   }
     
-  //   axios.post('/api/register-student', {
-  //       name: this.state.name, 
-  //       password: this.state.password, 
-  //       age: this.state.age, 
-  //       school_email: this.state.email, 
-  //       major: this.state.major
-  //     })
-  //     .then(res => {
-  //       localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
-  //      // history.push('/student-dashboard');
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error");
-  //     })
-  // }
+  //   if (password.length < 8){
+  //     passwordError = "Password must be 8 characters";
+  //   }
 
-
-  let nameError = "";
-    let emailError = "";
-    let passwordError = "";
-    let ageError = "";
-    let majorError = "";
-  const validate = () => {
-
-    if (name) {
-      nameError = "Please enter your first and last name.";
-    }
-
-    if (email.includes(".edu")){
-      emailError = "invalid email";
-    }
-    if (isNaN(age)){
-      ageError = "Enter a number.";
-    }
-    
-    if (password.length < 8){
-      passwordError = "Password must be 8 characters";
-    }
-
-    if (emailError || nameError || passwordError|| ageError || majorError) {
+  //   if (emailError || nameError || passwordError|| ageError || majorError) {
       
       
-      this.setState({ emailError, nameError, passwordError, 
-        ageError, majorError });
+  //     this.setState({ emailError, nameError, passwordError, 
+  //       ageError, majorError });
         
-      return false;
-    }
+  //     return false;
+  //   }
 
-    return true;
-  };
+  //   return true;
+  // };
 
   
   const handleSubmit = event => {
     event.preventDefault();
-    // const isValid = this.validate();
     
     const registerStudent = async () => {
       const res = await axios.post("/api/register-student", {
@@ -109,28 +75,6 @@ const ProfileSetupStudent = () => {
     }
     
     registerStudent();
-      
-    // if (isValid) {
-    //   console.log(this.state);
-    //   // clear form
-    //   this.setState(initialState);
-    //   // console.log(this.state.name);
-    //   axios.post('/api/register-student', {
-    //           name: state.name, 
-    //           password: state.password, 
-    //           age: state.age, 
-    //           school_email: state.email, 
-    //           major: state.major
-    //         })
-    //         .then(res => {
-    //           localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
-    //          history.push('/student-dashboard');
-    //         })
-    //         .catch((err) => {
-    //           console.log("Error");
-    //         })
-      
-    // }
   };
 
 
@@ -166,9 +110,9 @@ const ProfileSetupStudent = () => {
                     value={name}
                     onChange={event => setName(event.target.value)}
                   />
-                <div style={{ fontSize: 12, color: "red" }}>
+                {/* <div style={{ fontSize: 12, color: "red" }}>
                   {nameError}
-                </div>
+                </div> */}
               </Grid>
 
               <Grid item xs={9}>
@@ -275,64 +219,5 @@ const ProfileSetupStudent = () => {
       
   );
 }
-
-// function ProfileSetupStudent() {
-//   // const classes = useStyles();
-  
-//   const history = useHistory();
-
-//   const [name, setName] = useState("");
-//   const [email, setEmail] = useState("");
-//   const [password, setPassword] = useState("");
-//   const [major, setMajor] = useState("");
-//   const [age, setAge] = useState(0);
-
-
-
-//   return (
-//     <div>
-//       <Navbar/>
-      
-//       <div className="center">
-
-//       <div>
-//         <h1 style={{textAlign:"center"}}> Tell us about yourself.</h1>
-//         <form onSubmit=noValidate autoComplete="off">
-  
-//             <h4> Full Name: </h4>
-//             <TextField required id="standard-required" name="checkname" label="required" onChange={event => setName(event.target.value)}/>
-//             <h4> Age: </h4>
-//             <TextField required id="margin-none" onChange={event => setAge(event.target.value)}/>
-//             <h4> School Email: </h4>
-//             <TextField required id="margin-none" onChange={event => setEmail(event.target.value)}/>
-//             <h4> Password: </h4>
-//             <TextField id="margin-none" onChange={event => setPassword(event.target.value)}/>
-//             <h4> School Name: </h4>
-//             <TextField id="margin-none"/>
-//             <h4> Major: </h4>
-//             <TextField id="margin-none" onChange={event => setMajor(event.target.value)}/>
-//         </form>
-//       </div>
-    
-//     <div>
-//       <form noValidate autoComplete="off" style={{margin: "auto", width: "50%", padding: "10px"}}>
-//         <h4> Briefly describe yourself</h4>
-//           <TextField id="standard-basic" variant="outlined" />
-//         <h4> What do you intend to use the desk space if given?</h4>
-//           <TextField id="standard-basic" variant="outlined" />
-
-//         <Button variant="contained" type="submit" color="primary" onClick={(e) => signUp(e)} style={{justifyContent: "center", alignItems: "center"}}>
-//             Submit
-//         </Button>
-//       </form>
-//     </div>
-//     </div>
-//     <hr/>
-//     <Footer/>
-    
-//     </div>
-//   );
-          
-// };
 
 export default ProfileSetupStudent;
