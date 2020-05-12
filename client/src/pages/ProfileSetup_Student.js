@@ -71,7 +71,8 @@ const ProfileSetupStudent = () => {
       });
       console.log(res.data.student);
       localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
-      history.push('/student-dashboard');
+      let res_name = res.data.student.name.replace(/\s+/g, '');
+      history.push(`/${res_name}/student-dashboard`);
     }
     
     registerStudent();
@@ -107,7 +108,7 @@ const ProfileSetupStudent = () => {
                     helperText="Your first and last name"
                     name="name"
                     fullWidth
-                    value={name}
+                    // value={name}
                     onChange={event => setName(event.target.value)}
                   />
                 {/* <div style={{ fontSize: 12, color: "red" }}>
@@ -202,7 +203,9 @@ const ProfileSetupStudent = () => {
                 <Button
                   variant="contained"
                   color="primary"
-                  type="submit">
+                  type="submit"
+                  onClick={e => handleSubmit(e)}
+                >
                   Submit
                 </Button>
               </Grid>

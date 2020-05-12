@@ -34,7 +34,9 @@ const ProfileSetupProfessional = () => {
       })
       .then(res => {
         localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
-        history.push('/professional-dashboard');
+        let name = res.data.professional.name.replace(/\s+/g, '');
+        console.log(name);
+        history.push(`/${name}/professional-dashboard`);
       })
       .catch((err) => {
         console.log("Error registering professional");
@@ -72,7 +74,7 @@ const ProfileSetupProfessional = () => {
                     name="name"
                     fullWidth
                     // value={name}
-                    // onChange={event => setName(event.target.value)}
+                    onChange={event => setName(event.target.value)}
                   />
                 {/* <div style={{ fontSize: 12, color: "red" }}>
                   {nameError}
@@ -87,7 +89,7 @@ const ProfileSetupProfessional = () => {
                   margin="normal"
                   name="company name"
                   // value={state.major}
-                  // onChange={event => setMajor(event.target.value)}
+                  onChange={event => setCompany(event.target.value)}
                   />
                   {/* <div style={{ fontSize: 12, color: "red" }}>
                     {state.majorError}
@@ -100,7 +102,7 @@ const ProfileSetupProfessional = () => {
                   margin="normal"
                   name="job title"
                   // value={state.age}
-                  // onChange={event => setAge(event.target.value)}
+                  onChange={event => setJob(event.target.value)}
                 />
                 
                 {/* <div style={{ fontSize: 12, color: "red" }}> */}
@@ -117,7 +119,7 @@ const ProfileSetupProfessional = () => {
                     name="email"
                     fullWidth
                     // value={state.email}
-                    // onChange={event => setEmail(event.target.value)}
+                    onChange={event => setEmail(event.target.value)}
                   />
                   {/* <div style={{ fontSize: 12, color: "red" }}>
                     {state.emailError}
@@ -133,7 +135,7 @@ const ProfileSetupProfessional = () => {
                   type="password"
                   name="password"
                     // value={state.password}
-                  // onChange={event => setPassword(event.target.value)}
+                  onChange={event => setPassword(event.target.value)}
                   />
                   {/* <div style={{ fontSize: 12, color: "red" }}>
                     {state.passwordError}
@@ -153,7 +155,9 @@ const ProfileSetupProfessional = () => {
               <Button
                 variant="contained"
                 color="primary"
-                type="submit">
+                type="submit"
+                onClick={(e) => signUp(e)}
+              >
                 Submit
               </Button>
             </Grid>
