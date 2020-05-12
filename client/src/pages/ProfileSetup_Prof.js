@@ -1,5 +1,6 @@
 import React, {useState}from 'react';
 import Navbar from '../components/navbar';
+// import ProfModal from '../components/profmodal';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/footer';
 import axios from 'axios';
@@ -152,9 +153,7 @@ const ProfileSetupProfessional = () => {
               <Button
                 variant="contained"
                 color="primary"
-                type="submit"
-                
-              >
+                type="submit">
                 Submit
               </Button>
             </Grid>
