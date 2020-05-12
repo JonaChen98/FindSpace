@@ -21,15 +21,18 @@ const Profile = () => {
   const [email, setEmail] = useState("");
   const [major, setMajor] = useState("");
   const [age, setAge] = useState("");
+  const [company, setCompany] = useState("");
+  const [job, setJob] = useState("");
   // etc... more data points 
   
   // componentdidMount
 
   //test ProfileInfo display
-  //const myobj = {"name":"John", "school":"no", "school_email":"a@a.com", "major":"comp sci", "age":"69"};
+  //const myobj = {"name":"John", "school":"hunter", "school_email":"a@a.com", "major":"comp sci", "age":"69"};
 
-  //const myobj2 = {"name":"bob", "company":"yeah no", "email":"a@a.com", "job":"coding"};
+  //const myobj2 = {"name":"bob", "company":"google", "email":"a@a.com", "job":"coding"};
 
+  
   useEffect(() => {
     
       let studentInfo = localStorage.getItem("studentInfo");
@@ -46,13 +49,13 @@ const Profile = () => {
       }
       else if(profInfo){
         setName(profInfo.name);
-        setSchool(profInfo.company);
+        setCompany(profInfo.company);
         setEmail(profInfo.email);
-        setMajor(profInfo.job);
-        setAge(profInfo.age);
+        setJob(profInfo.job);
       }
 
     }, []);
+
 
     //Test ProfileInfo Display
     
@@ -64,9 +67,9 @@ const Profile = () => {
     /*useEffect(() => {
       localStorage.setItem("profInfo", JSON.stringify(myobj2));
     });*/
-
- 
-  return(
+    
+  
+    return(
     <div className="profile-container">
       <div>
         <Navbar />
@@ -89,10 +92,10 @@ const Profile = () => {
         maxWidth='lg'
         />
         <div>
-    {/*<img className="profile-image" src="https://www.thesprucepets.com/thmb/mERLXPcXz4U9G702HlsORXJqZrU=/4231x2380/smart/filters:no_upscale()/adorable-white-pomeranian-puppy-spitz-921029690-5c8be25d46e0fb000172effe.jpg" alt="Avatar"></img>*/}
+        {/*<img className="profile-image" src="https://www.thesprucepets.com/thmb/mERLXPcXz4U9G702HlsORXJqZrU=/4231x2380/smart/filters:no_upscale()/adorable-white-pomeranian-puppy-spitz-921029690-5c8be25d46e0fb000172effe.jpg" alt="Avatar"></img>*/}
         <h1>{name}</h1>
         <hr></hr>
-      </div>
+        </div>
 
         <div className="email">
         <b><p>Email:</p></b>
@@ -100,28 +103,26 @@ const Profile = () => {
         </div>
         <hr></hr>
         <div className="school">
-          <b>{school}</b>
+          <b>{school ? school : null}</b>
+          <b>{company ? company : null}</b>
         </div>
         <hr></hr>
         <div className="major">
-          <b>{major}</b>
+          <b>{major ? major : null}</b>
+          <b>{job ? job : null}</b>
         </div>
         <hr></hr>
         <div className="age">
-          <b><p>Age:</p></b>
-          <b>{age}</b>
+          <b>{age ? age : null}</b>
         </div>
         <Container />
       </div>
 
       <hr></hr>
-              
-      <div>
-        <Footer />
-      </div>
 
     </div>
           );
+  
 }
 
 
