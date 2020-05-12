@@ -20,8 +20,8 @@ const App = () => {
       <Route exact path="/login" component={Login} />
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/signup" component={Signup} />
-      <Route exact path="/student-dashboard" component={StudentDashboard} />
-      <Route exact path="/professional-dashboard" component={ProfessionalDashboard} />
+      <Route exact path="/:name/student-dashboard" component={StudentDashboard} />
+      <Route exact path="/:name/professional-dashboard" component={ProfessionalDashboard} />
       {/* <Route exact path="/profilesetup" component={ProfileSetup} /> */}
       {/* <Route exact path="/dashboard" component={Dashboard} /> */}
       <Route exact path="/profilesetup_student" component={ProfileSetup_Student} />
