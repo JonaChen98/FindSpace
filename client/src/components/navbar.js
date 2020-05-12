@@ -34,7 +34,7 @@ const NavBtns = (numOfNotifs) => {
       </div>
     );
   }
-  else if(location.pathname !== "/signup" && location.pathname !== "/ProfileSetup_Student" && location.pathname !== "/ProfileSetup_Prof") {
+  else if(location.pathname !== "/login" && location.pathname !== "/signup" && location.pathname !== "/ProfileSetup_Student" && location.pathname !== "/ProfileSetup_Prof") {
     return(
       <div style={{ 
         display: "flex",
