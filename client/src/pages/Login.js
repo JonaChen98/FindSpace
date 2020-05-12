@@ -64,15 +64,15 @@ function Login() {
     <div>
       <div>
         <div className = "flex">
-          <img className = "logo" src = {logo} ></img>
-          <h1 className = "findspace">Findspace</h1>
+        <a className="findspace" href = "http://localhost:3000/">Findspace</a>
         </div>
         <h1 className ="welcome">Welcome to Findspace!</h1>
         <form className = "loginform">
           {/* event.target.value for each input */}
           <TextField className="logininput" label="Email" onChange = {event => setEmail(event.target.value)} /><br/>
           <TextField className="logininput" label="Password" onChange = {event => setPassword(event.target.value)} /> <br />
-          <input type = "submit" id = "submitbutton" onClick = {(e) => handleLogin(e)}/>
+          
+          <input type = "submit" id = "submitbutton"  value="Login" onClick = {(e) => handleLogin(e)}/>
         </form>  
       </div> 
     </div>
