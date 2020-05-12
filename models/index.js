@@ -23,6 +23,7 @@ global.db = {
   PendingProfessionalsList: sequelize.import(__dirname + "/pendingProfessionalsList"),
   ProfessionalNotifications: sequelize.import(__dirname + "/professionalNotifications"),
   StudentNotifications: sequelize.import(__dirname + "/studentNotifications"),
+  OfficeSpace: sequelize.import(__dirname + "/officeSpace"),
 };
 
 module.exports = global.db;

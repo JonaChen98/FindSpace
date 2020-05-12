@@ -1,5 +1,6 @@
 import React, {useState}from 'react';
 import Navbar from '../components/navbar';
+// import ProfModal from '../components/profmodal';
 import { useHistory } from 'react-router-dom';
 import Footer from '../components/footer';
 import axios from 'axios';
@@ -14,31 +15,33 @@ import {
 const ProfileSetupProfessional = () => {
 
 
-  // const history = useHistory();
+  const history = useHistory();
   
-  // const [name, setName] = useState("");
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  // const [company, setCompany] = useState("");
-  // const [job, setJob] = useState("");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [company, setCompany] = useState("");
+  const [job, setJob] = useState("");
 
-  // const signUp = (e) => {
-  //   e.preventDefault();
-  //   axios.post('/api/register-professional', {
-  //       "name": name, 
-  //       "password": password, 
-  //       "email": email,
-  //       "company": company,
-  //       "job": job
-  //     })
-  //     .then(res => {
-  //       localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
-  //       history.push('/professional-dashboard');
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error registering professional");
-  //     })
-  // }
+  const signUp = (e) => {
+    e.preventDefault();
+    axios.post('/api/register-professional', {
+        "name": name, 
+        "password": password, 
+        "email": email,
+        "company": company,
+        "job": job
+      })
+      .then(res => {
+        localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
+        let res_name = res.data.professional.name.replace(/\s+/g, '-');
+        localStorage.setItem("dashboardURL", `/${res_name}/professional-dashboard`);
+        history.push(`/${res_name}/professional-dashboard`);
+      })
+      .catch((err) => {
+        console.log("Error registering professional");
+      })
+  }
 
   return (
 
@@ -71,7 +74,7 @@ const ProfileSetupProfessional = () => {
                     name="name"
                     fullWidth
                     // value={name}
-                    // onChange={event => setName(event.target.value)}
+                    onChange={event => setName(event.target.value)}
                   />
                 {/* <div style={{ fontSize: 12, color: "red" }}>
                   {nameError}
@@ -86,7 +89,7 @@ const ProfileSetupProfessional = () => {
                   margin="normal"
                   name="company name"
                   // value={state.major}
-                  // onChange={event => setMajor(event.target.value)}
+                  onChange={event => setCompany(event.target.value)}
                   />
                   {/* <div style={{ fontSize: 12, color: "red" }}>
                     {state.majorError}
@@ -99,7 +102,7 @@ const ProfileSetupProfessional = () => {
                   margin="normal"
                   name="job title"
                   // value={state.age}
-                  // onChange={event => setAge(event.target.value)}
+                  onChange={event => setJob(event.target.value)}
                 />
                 
                 {/* <div style={{ fontSize: 12, color: "red" }}> */}
@@ -116,7 +119,7 @@ const ProfileSetupProfessional = () => {
                     name="email"
                     fullWidth
                     // value={state.email}
-                    // onChange={event => setEmail(event.target.value)}
+                    onChange={event => setEmail(event.target.value)}
                   />
                   {/* <div style={{ fontSize: 12, color: "red" }}>
                     {state.emailError}
@@ -132,7 +135,7 @@ const ProfileSetupProfessional = () => {
                   type="password"
                   name="password"
                     // value={state.password}
-                  // onChange={event => setPassword(event.target.value)}
+                  onChange={event => setPassword(event.target.value)}
                   />
                   {/* <div style={{ fontSize: 12, color: "red" }}>
                     {state.passwordError}
@@ -153,7 +156,7 @@ const ProfileSetupProfessional = () => {
                 variant="contained"
                 color="primary"
                 type="submit"
-                
+                onClick={(e) => signUp(e)}
               >
                 Submit
               </Button>

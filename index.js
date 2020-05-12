@@ -6,6 +6,8 @@ const db = require("./models");
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 
+const fileUpload = require('express-fileupload');
+
 const studentsAPI = require("./api/students");
 const professionalsAPI = require("./api/professionals");
 const Logout = require("./api/logout");
@@ -22,6 +24,7 @@ var sess = {
 const port = process.env.PORT || 4000;
 
 app.use(session(sess));
+app.use(fileUpload());
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'client/build')));

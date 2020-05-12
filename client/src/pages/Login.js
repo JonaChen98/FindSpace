@@ -37,7 +37,9 @@ function Login() {
       .then(res =>{
         console.log(res.data.student);
         localStorage.setItem("studentInfo", JSON.stringify(res.data.student));
-        history.push('/student-dashboard');
+        let res_name = res.data.student.name.replace(/\s+/g, '-');
+        localStorage.setItem("dashboardURL", `/${res_name}/student-dashboard`);
+        history.push(`/${res_name}/student-dashboard`);
       })
       .catch((err) => {
         console.log("this is the error message:" + err);
@@ -51,7 +53,9 @@ function Login() {
       .then(res =>{
         console.log(res.data.professional);
         localStorage.setItem("profInfo", JSON.stringify(res.data.professional));
-        history.push('/professional-dashboard');
+        let res_name = res.data.professional.name.replace(/\s+/g, '-');
+        localStorage.setItem("dashboardURL", `/${res_name}/professional-dashboard`);
+        history.push(`/${res_name}/professional-dashboard`);
       })
       .catch((err) => {
         console.log("this is the error message:" + err);
