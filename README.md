@@ -1,12 +1,14 @@
 # FindSpace
 
+## Overview
+Findspace is a platform where unused desk spaces are listed by companies or individuals to be used freely by students. Students browse through available listings and make request to use the desired space.
+
 Deployed to Heroku: [Link](https://webdev-findspace.herokuapp.com/)
 
 <br>
 
 ## Technologies
 - React
-- Redux
 - React Router Dom 
 - Node
 - Express 
