@@ -42,7 +42,7 @@
 
 /* Container for how it works section */
 .container {
-  /* padding: 15px; */
+  padding: 80px 150px 60px 150px;
   display: flex;
   /* border: 2px solid red; */
 }
