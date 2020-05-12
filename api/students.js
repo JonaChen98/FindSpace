@@ -13,6 +13,7 @@ var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
 
+
 // returns list of students
 router.get("/api/students", async(req, res) => {
   let students; 
@@ -28,29 +29,24 @@ router.get("/api/students", async(req, res) => {
 });
 
 router.get("/api/review-students", async (req, res, next) => {
-  let review_students_list; 
   let review_students = [];
 
-  try {
-    review_students_list = await ReviewStudentsList.findAll({
-      where: {
-        professionalPKID: req.query.profID
-      }
-    });
-  }
-  catch(err) {
-    res.send(err);
-  }
+  let review_students_list = await ReviewStudentsList.findAll({
+    where: {
+      professionalPKID: req.query.profID
+    }
+  });
   
-  async function getReviewStudents() {
+  if(!review_students_list.err) {
     for (const item of review_students_list) {
       let student = await Student.findByPk(item.dataValues.studentPKID);
       review_students.push(student.dataValues);
     }
     res.status(200).json(review_students);
   }
-    
-  getReviewStudents();
+  else {
+    res.status(400).json({ err: 'error getting students from review' });
+  }
 });
 
 
@@ -285,7 +281,7 @@ router.post("/api/cancel-matched-professional", async (req,res) => {
       id: req.body.studentPKID
     }
   });
-  
+
   let list_of_prof_ids = student[0].dataValues.browseProfessionals;
   list_of_prof_ids.push(req.body.professionalPKID);
   

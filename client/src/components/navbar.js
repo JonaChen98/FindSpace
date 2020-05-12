@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
 const NavBtns = (numOfNotifs) => {
   let location = useLocation();
   
-  if(location.pathname == "/") {
+  if(location.pathname === "/") {
     return(
       <div>
         <Button color="inherit" component={Link} to="/login">Login</Button>
@@ -34,7 +34,7 @@ const NavBtns = (numOfNotifs) => {
       </div>
     );
   }
-  else if(location.pathname != "/signup" && location.pathname != "/ProfileSetup_Student" && location.pathname != "/ProfileSetup_Prof") {
+  else if(location.pathname !== "/signup" && location.pathname !== "/ProfileSetup_Student" && location.pathname !== "/ProfileSetup_Prof") {
     return(
       <div style={{ 
         display: "flex",

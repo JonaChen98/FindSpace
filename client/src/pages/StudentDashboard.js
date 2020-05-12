@@ -97,6 +97,7 @@ const StudentDashboard = () => {
           setRes([]);
         }
         else {
+          console.log(res.data);
           setRes(res.data);  
         }
       })

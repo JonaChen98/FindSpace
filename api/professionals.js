@@ -13,8 +13,8 @@ const {
 var jwt = require('jsonwebtoken');
 var bcrypt = require('bcryptjs');
 var config = require('../config');
-const S3 = require('aws-sdk/clients/s3');
 
+const S3 = require('aws-sdk/clients/s3');
 const { accessKeyId, secretAccessKey, cfDomain } = require('../keys');
 
 router.get("/api/professionals", async(req, res, next) => {
@@ -56,62 +56,62 @@ router.get("/api/accepted-students", async (req, res) => {
 })
 
 router.get("/api/browse-professionals", async (req, res) => {
-  // req = { studentID: 1 }
-  let list_of_students;
   let browse_professionals = [];
   
-  try {
-    list_of_students = await Student.findAll({
-      where: {
-        "id": req.query.studentID
-      }
-    });
-  }
-  catch(err) {
-    res.send(err);
-  }
+  let list_of_students = await Student.findAll({
+    where: {
+      "id": req.query.studentID
+    }
+  });
   
-  if(list_of_students != null) {
+  if(!list_of_students.err) {
     let list_of_prof_ids = list_of_students[0].dataValues.browseProfessionals;
     
     for(const id of list_of_prof_ids) {
-      let professional = await Professional.findByPk(id);
-      browse_professionals.push(professional.dataValues);
+      let office_space = await OfficeSpace.findAll({
+        where: {
+          professionalPKID: id
+        }
+      });
+      
+      if(office_space.length > 0) {
+        browse_professionals.push(office_space[0].dataValues);
+      }
     } 
+
+    res.status(200).json(browse_professionals);
   }
-  
-  res.status(200).json(browse_professionals);
-    
 })
 
 router.get("/api/pending-professionals", async (req, res, next) => {
-  let pending_prof_list; 
   let pending_professionals = [];
   
-  try {
-    pending_prof_list = await PendingProfessionalsList.findAll({
-      where: {
-        studentPKID: req.query.studentPKID
-      }
-    });
-  }
-  catch(err) {
-    res.send(err);
-  }
+  let pending_prof_list = await PendingProfessionalsList.findAll({
+    where: {
+      studentPKID: req.query.studentPKID
+    }
+  });
   
-  async function getPendingProfs() {
-    for (const item of pending_prof_list) {
-      let professional = await Professional.findByPk(item.dataValues.professionalPKID);
-      pending_professionals.push(professional.dataValues);
+  if(!pending_prof_list.err) {
+    for (const prof of pending_prof_list) {
+      let office_space = await OfficeSpace.findAll({
+        where: {
+          professionalPKID: prof.dataValues.professionalPKID
+        }
+      });
+      if(office_space.length != 0) {
+        pending_professionals.push(office_space[0].dataValues);
+      }
     }
     res.status(200).json(pending_professionals);
   }
-  
-  getPendingProfs();
+  else {
+    res.status(400).json({ err: 'Error getting pending office spaces' });
+  }
 });
 
 
-router.get("/api/matched-professionals", async (req, res, next) => {
+router.get("/api/matched-professionals", async (req, res) => {
   let matched_professionals = [];
   
   let matched_prof_list = await MatchedProfessionalList.findAll({
@@ -121,9 +121,15 @@ router.get("/api/matched-professionals", async (req, res, next) => {
   });
   
   if(!matched_prof_list.err) {
-    for (const item of matched_prof_list) {
-      let professional = await Professional.findByPk(item.dataValues.professionalPKID);
-      matched_professionals.push(professional.dataValues);
+    for (const prof of matched_prof_list) {
+      let office_space = await OfficeSpace.findAll({
+        where: {
+          professionalPKID: prof.dataValues.professionalPKID
+        }
+      });
+      if(office_space.length != 0) {
+        matched_professionals.push(office_space[0].dataValues);
+      }
     }
     res.status(200).json(matched_professionals);
   }
@@ -149,7 +155,7 @@ router.post("/api/register-professional", (req, res) => {
     }
     else {
       var hashedPassword = bcrypt.hashSync(req.body.password, 8);
-      let profPKID; 
+      
       Professional.create({ 
         "name": req.body.name,
         "password": hashedPassword,
@@ -158,7 +164,6 @@ router.post("/api/register-professional", (req, res) => {
         "job": req.body.job
        }).then(professional => {
         console.log("Created professional in DB");
-        profPKID = professional.dataValues.id;
         
         var token = jwt.sign({ id: professional.dataValues.id }, config.secret, {
           expiresIn: 86400 // expires in 24 hours
@@ -166,23 +171,6 @@ router.post("/api/register-professional", (req, res) => {
         
         req.session.name = req.body.name;
         req.session.authtoken = token;
-        
-        // add pkid to student's prof list 
-        Student.findAll()
-          .then(list_of_students => {
-            list_of_students.forEach(student => {
-              student.dataValues.browseProfessionals.push(profPKID);
-              Student.update({
-                browseProfessionals: student.dataValues.browseProfessionals
-              }, {
-                where: {
-                  id: student.dataValues.id
-                }
-              })
-            })
-          }).catch(err => {
-            res.status(401).send("Can't find students");
-          });
         
         let prof_res = {
           "id": professional.dataValues.id,
@@ -247,7 +235,6 @@ router.post("/api/login-professional", (req,res) => {
 router.post("/api/accept-student", async (req, res) => {
   // var token = req.headers['x-access-token'];
   // if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-  console.log(req.body.studentPKID, req.body.professionalPKID)
   
   let accepted_student = await AcceptedStudentsList.create({
     studentPKID: req.body.studentPKID,
@@ -415,38 +402,57 @@ router.post("/api/:id/upload-space-img", async(req, res) => {
   
   let { spaceName, location, days, time } = req.body; 
   days = days.split(",");
-  console.log("days: ", days);
-  
   
   const fileExtensionMatch = req.files.image.name.match(/\.([a-zA-Z])+$/);
   const fileExtension = fileExtensionMatch ? fileExtensionMatch[0] : '';
-  const profilePicturePath = `${req.params.id}/${new Date().getTime()}${fileExtension}`;
+  const spaceImgPath = `${req.params.id}/${new Date().getTime()}${fileExtension}`;
   
-  s3.putObject({ Bucket, Body: req.files.image.data, Key: profilePicturePath }, async (err, data) => {
-    if (err) {
-      console.error(err);
-      return res.status(500).json({ error: 'unable to upload image to AWS S3' });
-    }
-    
-    let create_space = await OfficeSpace.create({
-      "spaceName": spaceName,
-      "location": location,
-      "time": time,
-      "days": days,
-      "imageUrl": `https://${cfDomain}/${profilePicturePath}`,
-      "professionalName": user.name,
-      "professionalPKID": user.id
+  if(!user.err) {
+    s3.putObject({ Bucket, Body: req.files.image.data, Key: spaceImgPath }, async (err, data) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'unable to upload image to AWS S3' });
+      }
+      
+      let create_space = await OfficeSpace.create({
+        "spaceName": spaceName,
+        "location": location,
+        "time": time,
+        "days": days,
+        "imageUrl": `https://${cfDomain}/${spaceImgPath}`,
+        "professionalName": user[0].dataValues.name,
+        "professionalPKID": user[0].dataValues.id
+      });
+      
+      Student.findAll()
+        .then(list_of_students => {
+          list_of_students.forEach(student => {
+            student.dataValues.browseProfessionals.push(user[0].dataValues.id);
+            Student.update({
+              browseProfessionals: student.dataValues.browseProfessionals
+            }, {
+              where: {
+                id: student.dataValues.id
+              }
+            });
+          })
+        }).catch(err => {
+          res.status(401).send("Can't find students");
+        });
+      
+      if(!create_space.err) {
+        console.log("Create office space");
+        res.status(200).send("Posted office space!");
+      }
+      else {
+        res.status(401).json({ error: `error creating office space in db`});
+      }
     });
-    
-    if(!create_space.err) {
-      console.log("Create office space");
-      res.status(200).send("Posted office space!");
-    }
-    else {
-      res.status(401).json({ error: `error creating office space in db`});
-    }
+  }
+})
 
-  });
+router.get("/api/:id/get-img", async (req, res) => {
+  
 })
 
 
