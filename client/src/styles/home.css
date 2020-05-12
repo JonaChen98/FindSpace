@@ -13,32 +13,36 @@
 
 .header-title {
   padding-top: 30px;
-  margin-bottom: 50px;
+  margin-bottom: 40px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .header-description {
   width: 80%;
   line-height: 2;
-  padding-top: 100px;
+  padding-top: 60px;
+  font-family: 'Roboto', sans-serif;
 }
 
 .getting-started-title {
   text-align: center;
   padding: 50px 0 20px 0;
+  font-weight: 700;
   mix-blend-mode: screen;
   background-color: #F5F5F5;
+  font-family: 'Roboto', sans-serif;
 }
 
 .getting-started-content {
   justify-content: space-evenly;
   mix-blend-mode: screen;
-  padding: 0px 100px 100px 100px;
+  padding: 0px 50px 50px 50px;
   background-color: #F5F5F5;
 }
 
 /* Container for how it works section */
 .container {
-  padding: 20px;
+  /* padding: 15px; */
   display: flex;
   /* border: 2px solid red; */
 }
@@ -48,6 +52,7 @@
   margin-right: 20px;
   justify-content: left;
   text-align: left;
+  font-family: 'Roboto', sans-serif;
   /* border: 2px solid green; */
 }
 .img-container{
