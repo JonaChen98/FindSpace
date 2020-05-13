@@ -16,6 +16,6 @@ To start postgres cli
 
 
 ```
-heroku pg:reset webdev-findspace
+heroku pg:reset DATABASE_URL
 heroku pg:push findspace postgresql-crystalline-87558 --app webdev-findspace
 ```

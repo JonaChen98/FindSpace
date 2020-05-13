@@ -52,12 +52,13 @@ export default function SimpleModal() {
         let id = profInfo.id;
         
         if(fileInput.current.files.length > 0) {
+            console.log("wtf");
             const formData = new FormData();
             formData.append("image", fileInput.current.files[0]);
             formData.append("spaceName", spaceName);
             formData.append("location", location);
             formData.append("days", days);
-            formData.append("time", spaceName);
+            formData.append("time", time);
             
             axios.post(`/api/${id}/upload-space-img`, formData)
                 .then(res => {
