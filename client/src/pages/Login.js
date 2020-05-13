@@ -1,6 +1,8 @@
 import React from 'react';
-import '../styles/login.css';
+// import '../styles/login.css';
 import {useState} from 'react';
+
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import {useHistory} from 'react-router-dom';
 import Navbar from '../components/navbar';
@@ -58,10 +60,8 @@ function Login() {
   return( 
     <div>
       <Navbar/>
-      <div className="wrap">
+      <div style={{padding:"150px 120px 120px 120px",display: 'flex', justifyContent: 'center',textAlign: 'center'}}>
       
-        
-        {/* <h1 className ="welcome">Welcome to Findspace!</h1> */}
         <div style={{padding: 25, margin: 'auto', maxWidth: 600, boxShadow: "1px 1px 30px -8px rgba(224,224,224,1)"}}>
         <Typography variant="h5" align="center" gutterBottom>
             Login to Findspace
@@ -73,30 +73,31 @@ function Login() {
             required
             fullWidth
             type="email"
-            name="password"
             onChange = {event => setEmail(event.target.value)}>
           </TextField>
           <TextField
             label="Password"
             required
             fullWidth
-            type="email"
-            name="password"
+            type="password"
             onChange = {event => setPassword(event.target.value)}>    
           </TextField>
-          <div style={{textAlign:"center", padding: 25}}>
-          <Button 
-            type = "submit" 
-            id = "submitbutton" 
-            value="Login" 
-            variant="contained"
-            color="primary"
-            onClick = {(e) => handleLogin(e)}>
-            Login
-          </Button>
           
-        </div>
-        <Button size="small" color='inherit'>Don't have an account? Sign up here.</Button>
+          <div style={{textAlign:"center", padding: 25}}>
+            <Button 
+              type = "submit" 
+              value="Login" 
+              variant="contained"
+              color="primary"
+              onClick = {(e) => handleLogin(e)}>
+              Login
+            </Button>
+          </div>
+
+          <Button size="small" color='inherit' component={Link} to="/signup">
+            <i>Don't have an account? Sign up here.</i>
+          </Button>
+
         </form>  
         </div>
       </div> 
