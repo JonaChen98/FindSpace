@@ -157,11 +157,11 @@ export default function SimpleModal() {
                         <label> Upload an image of the space. </label>
                         <br/>
                         <input type="file" style={{display:'none'}} ref={fileInput} />
-                            <label htmlFor="icon-button-file" >
+                            {/* <label htmlFor="icon-button-file" >
                                 <IconButton color="inherit" aria-label="upload picture" >
                                     <CloudUploadOutlinedIcon fontSize="large"/>
                                 </IconButton>
-                            </label>
+                            </label> */}
                     </Grid>
 
                     <Grid item style={{ marginTop: 8 }}>
